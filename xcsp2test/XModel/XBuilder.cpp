@@ -9,17 +9,14 @@
 
 namespace cp {
 
-XBuilder::XBuilder(const string file_name, XmlReaderType type)
-	: file_name_(file_name), type_(type) {
-	if (initial()) {
-		switch (type_) {
-		case XRT_BM_PATH:
-			break;
-		case XRT_BM:
-			break;
-		default:
-			break;
-		}
+XBuilder::XBuilder(const string file_name) {
+	if (initial(file_name)) {
+		benchmark_path_ = GetBMFile();
+		del();
+		initial(benchmark_path_);
+	}
+	else {
+		cout << "error" << endl;
 	}
 }
 
@@ -30,8 +27,8 @@ XBuilder::~XBuilder() {
 	}
 }
 
-bool XBuilder::initial() {
-	if (this->file_name_ == "") {
+bool XBuilder::initial(const string s) {
+	if (s == "") {
 		return false;
 	}
 
@@ -47,8 +44,7 @@ bool XBuilder::initial() {
 	parser_->setValidationScheme(XercesDOMParser::Val_Always);
 	parser_->setDoNamespaces(true);
 
-	parser_->parse(file_name_.c_str());
-	//std::cout << file_name << std::endl;
+	parser_->parse(s.c_str());
 	document_ = parser_->getDocument();
 	root_ = document_->getDocumentElement();
 
@@ -145,12 +141,25 @@ void XBuilder::generateConstraints(XModel* model) const {
 	}
 }
 
-void XBuilder::GenerateXModelFromXml(XModel *model) const
-{
-	generateDomains(model);
-	generateVariables(model);
-	generateRelations(model);
-	generateConstraints(model);
+void XBuilder::del() {
+	if (root_) {
+		delete parser_;
+		XMLPlatformUtils::Terminate();
+	}
 }
 
+void XBuilder::GenerateXModelFromXml(XModel *model) {
+	xm_ = model;
+	generateDomains(xm_);
+	generateVariables(xm_);
+	generateRelations(xm_);
+	generateConstraints(xm_);
+}
+
+string XBuilder::path() const {
+	return  benchmark_path_;
+}
+string XBuilder::file_name() const {
+	return file_name_;
+}
 }

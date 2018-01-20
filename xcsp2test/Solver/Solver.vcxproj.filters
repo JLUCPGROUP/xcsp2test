@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xcsp2test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <ClInclude Include="util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="BMPath.xml">
-      <Filter>资源文件</Filter>
-    </Xml>
-    <Xml Include="queens-12_ext.xml">
-      <Filter>资源文件</Filter>
-    </Xml>
+    <ClCompile Include="util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

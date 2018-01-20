@@ -48,9 +48,9 @@ public:
 	/**
 	 * \brief Constructors and initialization
 	 * \param[in] i_file_name	The name of file.
-	 * \param[in] i_type		The type of file, path file or banckmark file.
+	 * \param[in] i_type		The type of file, path file or benchmark file.
 	 */
-	XBuilder(string file_name, XmlReaderType type);
+	XBuilder(string file_name);
 	virtual ~XBuilder();
 
 	/**
@@ -60,8 +60,11 @@ public:
 	 *	-<em>false</em> fail
 	 *	-<em>true</em> succeed
 	 */
-	void GenerateXModelFromXml(XModel * model) const;
+	void GenerateXModelFromXml(XModel * model) ;
 
+	//GenerateXModelFromXml
+	string path() const;
+	string file_name() const;
 	/**
 	 * \brief GetBMFile
 	 * \return Banchmark file path
@@ -70,8 +73,9 @@ public:
 
 private:
 	//NetworkFeatures feature_;		///<Feature of Network
-	//XModel *xm_;				///<Constarint Network pointer
-	string file_name_;			///<XML file name(path)
+	XModel* xm_ = nullptr;				///<Constarint Network pointer
+	string benchmark_path_;			///<XML file name(path)
+	string file_name_;
 	XmlReaderType type_;			///<file type
 	XercesDOMParser *parser_;
 	DOMElement *root_;
@@ -105,8 +109,8 @@ private:
 	//void getNetworkFeature(XMLModel * network);
 
 	//int getMaxArity();
-
-	bool initial();
+	void del();
+	bool initial(const string s);
 
 };
 

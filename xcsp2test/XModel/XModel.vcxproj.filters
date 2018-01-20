@@ -23,10 +23,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="XModel.h">
+    <ClInclude Include="..\includes\XModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XBuilder.h">
+    <ClInclude Include="..\includes\XBuilder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\HModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Timer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -54,17 +54,17 @@ XDom::~XDom() {
 void XDom::show() {
 	cout << id << ": ";
 	for (size_t i = 0; i < vals.size(); ++i) {
-		cout << vals[i];
+		cout << vals[i] << " ";
 	}
 	cout << endl;
 }
 ////////////////////////////////////////////////////////////////
-XVar::XVar(const int id, char* xdom_id) :id(id) {
-	sscanf_s(xdom_id, "D%d", &xdom_id);
+XVar::XVar(const int id, char* xdom_str) :id(id) {
+	sscanf_s(xdom_str, "D%d", &xdom_id);
 }
 
 void XVar::show() const {
-	cout << "id: " << id << "dom_id :" << xdom_id << endl;
+	cout << "id: " << id << " dom_id :" << xdom_id << endl;
 }
 
 XVar::~XVar() {}
@@ -84,6 +84,7 @@ XRel::XRel(const int id, const int arity, const int size, const char* sem, char*
 		break;
 	}
 	tuples.resize(size, vector<int>(arity));
+	generate_tuples();
 }
 
 XRel::~XRel() {
@@ -121,9 +122,9 @@ void XRel::generate_tuples() {
 }
 
 ////////////////////////////////////////////////////////////////
-XCon::XCon(const int id, char* rel_id, const int arity, char* scope_str) :
+XCon::XCon(const int id, char* rel_str, const int arity, char* scope_str) :
 	id(id), arity(arity) {
-	sscanf_s(rel_id, "R%d", &rel_id);
+	sscanf_s(rel_str, "R%d", &rel_id);
 	scope.resize(arity);
 	char* context = scope_str;
 	const char seps[] = " V";
@@ -132,6 +133,14 @@ XCon::XCon(const int id, char* rel_id, const int arity, char* scope_str) :
 		char * ptr = strtok_s(context, seps, &context);
 		scope[i] = atoi(ptr);
 	}
+}
+
+void XCon::show() {
+	cout << "id: " << id << " rel_id: " << rel_id << " arity: " << arity << endl;
+	cout << "scope: ";
+	for (auto t : scope)
+		cout << t << " ";
+	cout << endl;
 }
 
 XCon::~XCon() {
@@ -171,8 +180,23 @@ void XModel::add(const int id, const int arity, const int size, const char* sem,
 	rels.push_back(rel);
 }
 
-void XModel::add(const int id, char* rel_id, const int arity, char* scope_str) {
-	XCon* con = new XCon(id, rel_id, arity, scope_str);
+void XModel::add(const int id, char* rel_str, const int arity, char* scope_str) {
+	XCon* con = new XCon(id, rel_str, arity, scope_str);
 	cons.push_back(con);
+}
+
+void XModel::show() {
+	cout << "-------------------domains-------------------" << endl;
+	for (auto& i : doms)
+		i->show();
+	cout << "-------------------variables-------------------" << endl;
+	for (auto& i : vars)
+		i->show();
+	cout << "-------------------relations-------------------" << endl;
+	for (auto& i : rels)
+		i->show();
+	cout << "-------------------constraints-------------------" << endl;
+	for (auto& i : cons)
+		i->show();
 }
 }

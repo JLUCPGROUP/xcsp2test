@@ -34,7 +34,7 @@ class XVar {
 public:
 	const int id;
 	int xdom_id = -1;
-	XVar::XVar(const int id, char* xdom_id);
+	XVar::XVar(const int id, char* xdom_str);
 	void show() const;
 	~XVar();
 };
@@ -60,7 +60,8 @@ public:
 	int rel_id = -1;
 	const int arity;
 	vector<int> scope;
-	XCon(const int id, char* rel_id, const int arity, char* scope_str);
+	XCon(const int id, char* rel_str, const int arity, char* scope_str);
+	void show();
 	~XCon();
 };
 
@@ -76,6 +77,7 @@ public:
 	void add(const int id, char* xdom_id);
 	void add(const int id, const int arity, const int size, const char* sem, char* ts_str);
 	void add(const int id, char* rel_id, const int arity, char* scope_str);
+	void show();
 	//int max_domain_size;
 	//int max_arity;
 };

@@ -6,28 +6,17 @@
 */
 
 #pragma once
-
-#define _EXPORTING
-#ifdef _EXPORTING
-#define API_DECLSPEC __declspec(dllexport)
-#else
-#define API_DECLSPEC __declspec(dllimport)
-#endif
-
-#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
 #include <functional>
 #include <cmath>
-#include <map>
 #include <numeric>
 #include <valarray>
+#include <iostream>
 
-
-
-namespace cudacp {
+namespace cp {
 
 const int MAX_VALUE = INT_MAX - 4096;
 const int MAX_OPT = INT_MIN + 4096;
@@ -147,7 +136,7 @@ static func_map int_expr_map = {
 
 using namespace std;
 
-class API_DECLSPEC HVar {
+class HVar {
 public:
 	int id;
 	int uid;
@@ -163,7 +152,7 @@ public:
 	void Show();
 };
 
-class API_DECLSPEC HTab {
+class HTab {
 public:
 	int id;
 	vector<HVar*> scope;
@@ -182,10 +171,10 @@ public:
 private:
 	//临时变量
 	vector<int> tmp_t_;
-	API_DECLSPEC friend ostream& operator<<(ostream &os, const vector<HVar*>& a);
+	friend ostream& operator<<(ostream &os, const vector<HVar*>& a);
 };
 
-class API_DECLSPEC HModel {
+class HModel {
 public:
 	vector<HVar*> vars;
 	vector<HTab*> tabs;
@@ -198,8 +187,9 @@ public:
 	virtual ~HModel();
 	int AddVar(const string name, const int min_val, const int max_val);
 	int AddVar(const string name, vector<int>& v);
-	int AddTab(const bool sem, vector<vector<int>>& ts, vector<HVar*>& scp, const bool STD = false);
+	int AddTab(const bool sem, vector<vector<int>>& ts, vector<int>& scp);
 	int AddTab(const bool sem, vector<vector<int>>& ts, vector<string>& scp);
+	int AddTab(const bool sem, vector<vector<int>>& ts, vector<HVar*>& scp, const bool STD = false);
 	int AddTab(const string expr);
 	int AddTabAsPrevious(HTab* t, vector<string>& scp);
 	int max_domain_size() const { return mds_; }
@@ -229,5 +219,5 @@ private:
 	int var_uid_ = MAX_VALUE;
 };
 
-} /* namespace cudacp */
+} /* namespace cp */
 

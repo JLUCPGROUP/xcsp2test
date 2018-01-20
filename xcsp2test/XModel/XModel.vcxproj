@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HModel.cpp" />
     <ClCompile Include="XBuilder.cpp" />
     <ClCompile Include="XModel.cpp" />
   </ItemGroup>

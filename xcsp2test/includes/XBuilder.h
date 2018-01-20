@@ -16,6 +16,7 @@
 #include <xercesc/dom/DOMTreeWalker.hpp>
 #include <string>
 #include "XModel.h"
+#include "HModel.h"
 
 using namespace xercesc_3_1;
 
@@ -60,7 +61,8 @@ public:
 	 *	-<em>false</em> fail
 	 *	-<em>true</em> succeed
 	 */
-	void GenerateXModelFromXml(XModel * model) ;
+	void GenerateXModelFromXml(XModel * xm) ;
+	void GenerateHModel(HModel* hm);
 
 	//GenerateXModelFromXml
 	string path() const;
@@ -109,7 +111,7 @@ private:
 	//void getNetworkFeature(XMLModel * network);
 
 	//int getMaxArity();
-	void del();
+	void del() const;
 	bool initial(const string s);
 
 };

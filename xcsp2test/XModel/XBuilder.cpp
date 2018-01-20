@@ -141,7 +141,7 @@ void XBuilder::generateConstraints(XModel* model) const {
 	}
 }
 
-void XBuilder::del() {
+void XBuilder::del() const {
 	if (root_) {
 		delete parser_;
 		XMLPlatformUtils::Terminate();
@@ -150,10 +150,20 @@ void XBuilder::del() {
 
 void XBuilder::GenerateXModelFromXml(XModel *model) {
 	xm_ = model;
-	generateDomains(xm_);
-	generateVariables(xm_);
-	generateRelations(xm_);
-	generateConstraints(xm_);
+	generateDomains(model);
+	generateVariables(model);
+	generateRelations(model);
+	generateConstraints(model);
+}
+
+void XBuilder::GenerateHModel(HModel* hm) {
+	xm_ = new XModel();
+	GenerateXModelFromXml(xm_);
+	for (auto& v : xm_->vars)
+		hm->AddVar("", xm_->doms[v->xdom_id]->vals);
+	for (auto c : xm_->cons)
+		hm->AddTab(xm_->rels[c->rel_id]->semantics, xm_->rels[c->rel_id]->tuples, c->scope);
+	delete xm_;
 }
 
 string XBuilder::path() const {

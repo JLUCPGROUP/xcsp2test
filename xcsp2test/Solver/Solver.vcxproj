@@ -145,10 +145,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="util.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="Solver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="util.cpp" />
+    <ClCompile Include="AC.cpp" />
+    <ClCompile Include="AC3.cpp" />
+    <ClCompile Include="AC3bit.cpp" />
+    <ClCompile Include="FC.cpp" />
+    <ClCompile Include="MAC.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="RNSQ.cpp" />
+    <ClCompile Include="SAC1.cpp" />
+    <ClCompile Include="SAC3.cpp" />
+    <ClCompile Include="Search.cpp" />
+    <ClCompile Include="Solver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

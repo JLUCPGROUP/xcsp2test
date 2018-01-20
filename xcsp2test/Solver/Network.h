@@ -91,12 +91,13 @@ typedef vector<bitset<BITSIZE>> bitSetVector;
 
 class IntVar {
 public:
-	IntVar::IntVar(XVar* v, XDom* d, const int vs_size);
+	IntVar(HVar* v, const int vs_size);
+	IntVar(const int id, vector<int>& v);
 	~IntVar() {};
 	void RemoveValue(const int a, const int p = 0);
 	void ReduceTo(const int a, const int p = 0);
 	void AddValue(const int a, const int  p = 0);
-	void RestoreUpTo(const int p);
+	//void RestoreUpTo(const int p);
 	int value(const int idx) const { return vals_[idx]; }
 	int size(const int p) const;
 	int capacity() const { return init_size_; }
@@ -115,28 +116,22 @@ public:
 	void show(const int p);
 	inline tuple<int, int> get_bit_index(const int idx) const;
 	vector<int>& values() { return vals_; }
-	void GetDelete(const int src, const int dest, bitSetVector& del_vals);
-	int NewLevel();
+	int GetDelete(const int src, const int dest, bitSetVector& del_vals);
+	int new_level(int src);
+	void copy(const int src, const int dest);
 protected:
 	int id_;
-	int uid;
-	string name_ = "";
 	int init_size_;
-	int curr_size_;
 	int value_ = -1;
 	u64 stamp_ = 0;
-	//bool assigned_ = false;
 	vector<bool> assigned_;
-	int last_limit_;
+	int limit_;
 	int num_bit_;
-	int top_ = 0;
-	int level = -1;
 	vector<int> vals_;
 	unordered_map<int, int> val_map;
 	vector<int> anti_map;
 	vector<bitSetVector> bit_doms_;
 	bitSetVector bit_tmp_;
-	vector<int> level_;
 	static int get_value(const int i, const int j);
 	vector<u64> tmp_;
 };
@@ -155,11 +150,11 @@ public:
 	int a() const { return a_; }
 	bool op() const { return aop_; }
 	void flip();
-	IntVal next() const;
+	IntVal next(const int p) const;
 	bool operator==(const IntVal& rhs);
 	bool operator!=(const IntVal& rhs);
 	friend std::ostream& operator<< (std::ostream &os, IntVal &v_val);
-	tuple<int, int> get_bit_index();
+	tuple<int, int> get_bit_index() const;
 	~IntVal() {};
 protected:
 	IntVar* v_;
@@ -175,10 +170,10 @@ public:
 	//Tabular(const int id, const std::vector<IntVar *>& scope, vector<vector<int>>& ts, const int len);
 	bool sat(vector<int> &t) const;
 	~Tabular() {}
-	void GetFirstValidTuple(IntVal& v_a, vector<int>& t);
-	void GetNextValidTuple(IntVal& v_a, vector<int>& t);
+	void GetFirstValidTuple(IntVal& v_a, vector<int>& t, const int p);
+	void GetNextValidTuple(IntVal& v_a, vector<int>& t, const int p);
 	int index(IntVar* v) const;
-	bool IsValidTuple(vector<int>& t);
+	bool IsValidTuple(vector<int>& t, const int p);
 	int id() const { return id_; }
 	void stamp(const int s) { stamp_ = s; }
 	int stamp() const { return stamp_; }
@@ -271,19 +266,25 @@ public:
 	unordered_map<IntVar*, vector<IntVar* >> neighborhood;
 	//unordered_map<IntVar*, vector<IntVar*>> neighborhood;
 	Network(HModel* h);
-	static void GetFirstValidTuple(IntConVal & c_val, vector<int>& t);
-	static void GetNextValidTuple(IntConVal & c_val, vector<int>& t);
+	static void GetFirstValidTuple(IntConVal & c_val, vector<int>& t, const int p);
+	static void GetNextValidTuple(IntConVal & c_val, vector<int>& t, const int p);
 
 	//  由于所有变量的域长度不一定相同 所以这里的c-value值不一定真实存在
 	int GetIntConValIndex(IntConVal & c_val) const;
 	int GetIntConValIndex(const int c_id, const int v_id, const int a);
 	IntConVal GetIntConVal(int index);
-	void RestoreUpto(const int level);
+	int top() const { return top_; }
+	int tmp() const { return tmp_; }
+	//void RestoreUpto(const int level);
+	int NewLevel(const int src);
+	int BackLevel(const int src);
+	void CopyLevel(const int src, const int dest);
+	//int NewTmpLevel();
 	int max_arity() const { return max_arity_; }
 	int max_domain_size() const { return max_dom_size_; }
 	int max_bitDom_size() const { return max_bitDom_size_; }
 	vector<IntVar*> get_neighbor(IntVar* v);
-	void show();
+	void show(const int p);
 	~Network();
 private:
 	vector<IntVar*> get_scope(HTab* t);
@@ -294,6 +295,8 @@ private:
 	const int max_bitDom_size_;
 	const int num_vars_;
 	const int num_tabs_;
+	int top_ = 0;
+	int tmp_ = 0;
 };
 
 }

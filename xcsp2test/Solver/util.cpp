@@ -55,7 +55,8 @@ namespace cp {
 //}
 
 
-IntVar::IntVar(XVar* v, const int vs_size) :id_(v->id),init_size_() {
+IntVar::IntVar(XVar* v, XDom* d, const int vs_size) :
+	id_(v->id), init_size_(d->vals.size()) {
 	int j = 0;
 	const int size = max_val - min_val + 1;
 	vals.resize(size);

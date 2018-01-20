@@ -91,7 +91,7 @@ typedef vector<bitset<BITSIZE>> bitSetVector;
 
 class IntVar {
 public:
-	IntVar(XVar* v, const int vs_size);
+	IntVar::IntVar(XVar* v, XDom* d, const int vs_size);
 	~IntVar() {};
 	void RemoveValue(const int a, const int p = 0);
 	void ReduceTo(const int a, const int p = 0);
@@ -139,6 +139,161 @@ protected:
 	vector<int> level_;
 	static int get_value(const int i, const int j);
 	vector<u64> tmp_;
+};
+
+class IntVal {
+public:
+	//int v;
+	IntVal() : v_(nullptr), a_(-2) {};
+	IntVal(IntVar* v, const int a, const bool aop = true) :v_(v), a_(a), aop_(aop) {};
+
+	const IntVal& operator=(const IntVal& rhs);
+	IntVar* v() const { return v_; }
+	void v(IntVar* v) { v_ = v; }
+	void a(const int a) { a_ = a; }
+	int vid() const { return v_->id(); }
+	int a() const { return a_; }
+	bool op() const { return aop_; }
+	void flip();
+	IntVal next() const;
+	bool operator==(const IntVal& rhs);
+	bool operator!=(const IntVal& rhs);
+	friend std::ostream& operator<< (std::ostream &os, IntVal &v_val);
+	tuple<int, int> get_bit_index();
+	~IntVal() {};
+protected:
+	IntVar* v_;
+	int a_;
+	bool aop_ = true;
+};
+
+static const IntVal Nil_Val(nullptr, -1);
+
+class Tabular {
+public:
+	Tabular(HTab* t, const vector<IntVar*> scp);
+	//Tabular(const int id, const std::vector<IntVar *>& scope, vector<vector<int>>& ts, const int len);
+	bool sat(vector<int> &t) const;
+	~Tabular() {}
+	void GetFirstValidTuple(IntVal& v_a, vector<int>& t);
+	void GetNextValidTuple(IntVal& v_a, vector<int>& t);
+	int index(IntVar* v) const;
+	bool IsValidTuple(vector<int>& t);
+	int id() const { return id_; }
+	void stamp(const int s) { stamp_ = s; }
+	int stamp() const { return stamp_; }
+	size_t arity;
+	vector<IntVar *>scope;
+	const vector<vector<int>>& tuples() const { return tuples_; }
+	float weight;
+private:
+	int id_;
+	vector<vector<int>>& tuples_;
+	u64 stamp_ = 0;
+};
+
+class arc {
+public:
+	arc() {}
+	arc(Tabular* c, IntVar* v) :c_(c), v_(v) {}
+	virtual ~arc() {}
+
+	Tabular* c() const { return c_; }
+	void c(Tabular* val) { c_ = val; }
+
+	int c_id() const { return c_->id(); }
+	int v_id() const { return v_->id(); }
+
+	const arc& operator=(arc& rhs) {
+		c_ = rhs.c_;
+		v_ = rhs.v_;
+
+		return *this;
+	}
+
+	friend std::ostream& operator<< (std::ostream &os, arc &c_x) {
+		os << "(" << c_x.c_->id() << ", " << c_x.v_->id() << ")";
+		return os;
+	}
+
+	IntVar* v() const { return v_; }
+	void v(IntVar* val) { v_ = val; }
+private:
+	Tabular* c_;
+	IntVar* v_;
+};
+
+
+class IntConVal {
+public:
+	IntConVal() {}
+	IntConVal(Tabular* c, IntVar *v, const  int a) : c_(c), v_(v), a_(a) {}
+	IntConVal(Tabular* c, IntVal& va) :c_(c), v_(va.v()), a_(va.a()) {}
+	IntConVal(arc& rc, const int a) :c_(rc.c()), v_(rc.v()), a_(a) {}
+
+	virtual ~IntConVal() {}
+
+	Tabular* c() const { return c_; }
+	void c(Tabular* c) { c_ = c; }
+
+
+	IntVar* v() const { return v_; }
+	void v(IntVar* val) { v_ = val; }
+
+	int a() const { return a_; }
+	void a(const int val) { a_ = val; }
+
+	arc get_arc() const { return arc(c_, v_); }
+	IntVal get_v_value() const { return IntVal(v_, a_); }
+
+	int get_var_index()const { return c_->index(v_); }
+
+	const IntConVal& operator=(const IntConVal& rhs);
+
+	int GetVarIndex() const { return c_->index(v_); };
+
+	friend std::ostream& operator<< (std::ostream &os, IntConVal &c_val) {
+		os << "(" << c_val.c_->id() << ", " << c_val.v_->id() << ", " << c_val.a_ << ")";
+		return os;
+	}
+
+private:
+	Tabular* c_;
+	IntVar* v_;
+	int a_;
+};
+
+class Network {
+public:
+	vector<IntVar*> vars;
+	vector<Tabular*> tabs;
+	unordered_map<IntVar*, vector<Tabular*>> subscription;
+	unordered_map<IntVar*, vector<IntVar* >> neighborhood;
+	//unordered_map<IntVar*, vector<IntVar*>> neighborhood;
+	Network(HModel* h);
+	static void GetFirstValidTuple(IntConVal & c_val, vector<int>& t);
+	static void GetNextValidTuple(IntConVal & c_val, vector<int>& t);
+
+	//  由于所有变量的域长度不一定相同 所以这里的c-value值不一定真实存在
+	int GetIntConValIndex(IntConVal & c_val) const;
+	int GetIntConValIndex(const int c_id, const int v_id, const int a);
+	IntConVal GetIntConVal(int index);
+	void RestoreUpto(const int level);
+	int max_arity() const { return max_arity_; }
+	int max_domain_size() const { return max_dom_size_; }
+	int max_bitDom_size() const { return max_bitDom_size_; }
+	vector<IntVar*> get_neighbor(IntVar* v);
+	void show();
+	~Network();
+private:
+	vector<IntVar*> get_scope(HTab* t);
+	void get_scope(HTab* t, vector<IntVar*> scp);
+	HModel *hm_;
+	const int max_arity_;
+	const int max_dom_size_;
+	const int max_bitDom_size_;
+	const int num_vars_;
+	const int num_tabs_;
 };
 
 }

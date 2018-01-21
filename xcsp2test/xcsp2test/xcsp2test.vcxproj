@@ -150,12 +150,17 @@
     <ClCompile Include="xcsp2test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Solver\Solver.vcxproj">
+      <Project>{033279f8-57f9-4941-b4c2-9a6a2de2b0c9}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.vcxproj">
       <Project>{01c125e8-1bac-484f-9f4b-838fc1b012d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="BMPath.xml" />
+    <Xml Include="BMPath.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="queens-12_ext.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

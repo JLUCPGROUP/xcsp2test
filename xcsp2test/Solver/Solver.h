@@ -211,8 +211,8 @@ protected:
 	//pro_que<T> q;
 	//arc_que Q;
 	int level_ = 0;
-	virtual bool revise(arc& c_x);
-	virtual bool seek_support(IntConVal& c_val);
+	virtual bool revise(arc& c_x, const int level = 0);
+	virtual bool seek_support(IntConVal& c_val, const int level = 0);
 	//void inital_q_arc();
 	//private:
 	//	void inital_Q_arc();
@@ -233,7 +233,7 @@ public:
 	AC3bit(Network *m);
 	virtual ~AC3bit() {};
 protected:
-	virtual bool seek_support(IntConVal& c_val) override;
+	virtual bool seek_support(IntConVal& c_val, const int p) override;
 	int max_bitDom_size_;
 	vector<vector<bitset<BITSIZE>>> bitSup_;
 };
@@ -300,22 +300,22 @@ protected:
 	AssignedStack I_;
 };
 
-class RNSQ :public AC3bit {
-public:
-	RNSQ(Network *m);
-	ConsistencyState conditionFC(IntVar* v, const int level = 0);
-	ConsistencyState neiborAC(vector<IntVar*>& x_evt, IntVar* x, const int level = 0);
-	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
-protected:
-	unordered_map<IntVar*, bitSetVector> neibor_;
-	bool is_neibor(IntVar* x, IntVar* v);
-	var_que q_nei_;
-	var_que q_var_;
-	void insert_(var_que& q, IntVar* v);
-	bool in_neibor_exp(Tabular* t, IntVar* x);
-	bool in_neibor(Tabular* t, IntVar* x);
-	bool has_sigleton_domain_neibor(IntVar* x) const;
-};
+//class RNSQ :public AC3bit {
+//public:
+//	RNSQ(Network *m);
+//	ConsistencyState conditionFC(IntVar* v, const int level = 0);
+//	ConsistencyState neiborAC(vector<IntVar*>& x_evt, IntVar* x, const int level = 0);
+//	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+//protected:
+//	unordered_map<IntVar*, bitSetVector> neibor_;
+//	bool is_neibor(IntVar* x, IntVar* v);
+//	var_que q_nei_;
+//	var_que q_var_;
+//	void insert_(var_que& q, IntVar* v);
+//	bool in_neibor_exp(Tabular* t, IntVar* x);
+//	bool in_neibor(Tabular* t, IntVar* x);
+//	bool has_sigleton_domain_neibor(IntVar* x) const;
+//};
 
 class MAC {
 public:
@@ -341,34 +341,34 @@ private:
 	VarHeu h_;
 };
 
-class Search {
-public:
-	Search(Network *n, const LookAhead look_ahead, const LookBack look_back, const Consistency consistency);
-	//SearchStatistics enforce(const int time_limits);
-	virtual ~Search();
-	int sol_count() const { return sol_count_; }
-	void sol_count(const int val) { sol_count_ = val; }
-	virtual vector<IntVal> HandleEmptyDomain(IntVar* v);
-	//virtual vector<IntVal> CheckConsistencyAfterAssignment(IntVar *v);
-	//virtual vector<IntVal> CheckConsistencyAfterRefutati(IntVar *v);
-	virtual void UndoAssignment(IntVal v_a);
-
-private:
-	int sol_count_ = 0;
-	Network *n_;
-	AC* ac_;
-	vector<IntVar*> x_evt_;
-	//VarEvt* x_evt_;
-	Consistency c_type_;
-	vector<IntVal> nogood;
-	AssignedStack I;
-	IntVal select_v_value() const;
-	bool consistent_;
-	bool finished_ = false;
-	SearchStatistics statistics_;
-	LookAhead la_;
-	LookBack lb_;
-	DeleteExplanation expl;
-};
+//class Search {
+//public:
+//	Search(Network *n, const LookAhead look_ahead, const LookBack look_back, const Consistency consistency);
+//	//SearchStatistics enforce(const int time_limits);
+//	virtual ~Search();
+//	int sol_count() const { return sol_count_; }
+//	void sol_count(const int val) { sol_count_ = val; }
+//	virtual vector<IntVal> HandleEmptyDomain(IntVar* v);
+//	//virtual vector<IntVal> CheckConsistencyAfterAssignment(IntVar *v);
+//	//virtual vector<IntVal> CheckConsistencyAfterRefutati(IntVar *v);
+//	virtual void UndoAssignment(IntVal v_a);
+//
+//private:
+//	int sol_count_ = 0;
+//	Network *n_;
+//	AC* ac_;
+//	vector<IntVar*> x_evt_;
+//	//VarEvt* x_evt_;
+//	Consistency c_type_;
+//	vector<IntVal> nogood;
+//	AssignedStack I;
+//	IntVal select_v_value() const;
+//	bool consistent_;
+//	bool finished_ = false;
+//	SearchStatistics statistics_;
+//	LookAhead la_;
+//	LookBack lb_;
+//	DeleteExplanation expl;
+//};
 
 }

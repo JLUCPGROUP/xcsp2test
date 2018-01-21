@@ -22,8 +22,8 @@ MAC::MAC(Network * n, const ACAlgorithm ac_algzm, VarHeu h) :
 	case A_FC_bit:
 		ac_ = new FCbit(n_);
 		break;
-	case A_RNSQ:
-		ac_ = new RNSQ(n_);
+		//case A_RNSQ:
+		//	ac_ = new RNSQ(n_);
 		break;
 	default:
 		break;
@@ -107,7 +107,7 @@ SearchStatistics MAC::enforce(const int time_limits) {
 		//cout << v_a << endl;
 		I.push(v_a);
 		++statistics_.num_positive;
-		n_->NewLevel(I.size());
+		n_->NewLevel(I.size() - 1);
 		v_a.v()->ReduceTo(v_a.a(), I.size());
 		x_evt_.push_back(v_a.v());
 		consistent_ = ac_->enforce(x_evt_, I.size()).state;

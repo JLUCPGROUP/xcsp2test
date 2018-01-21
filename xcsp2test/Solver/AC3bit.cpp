@@ -25,12 +25,12 @@ AC3bit::AC3bit(Network * m) :
 	}
 }
 
-bool AC3bit::seek_support(IntConVal& c_val) {
+bool AC3bit::seek_support(IntConVal& c_val,const int p) {
 	const int idx = m_->GetIntConValIndex(c_val);
 	for (IntVar *y : c_val.c()->scope)
 		if (y->id() != c_val.v()->id())
-			for (int i = 0; i < y->bitDom().size(); ++i)
-				if ((bitSup_[idx][i] & y->bitDom()[i]).any())
+			for (int i = 0; i < y->bitDom(p).size(); ++i)
+				if ((bitSup_[idx][i] & y->bitDom(p)[i]).any())
 					return true;
 
 	return false;

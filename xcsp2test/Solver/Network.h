@@ -92,7 +92,7 @@ typedef vector<bitset<BITSIZE>> bitSetVector;
 class IntVar {
 public:
 	IntVar(HVar* v, const int vs_size);
-	IntVar(const int id, vector<int>& v);
+	//IntVar(const int id, vector<int>& v);
 	~IntVar() {};
 	void RemoveValue(const int a, const int p = 0);
 	void ReduceTo(const int a, const int p = 0);
@@ -128,12 +128,12 @@ protected:
 	int limit_;
 	int num_bit_;
 	vector<int> vals_;
-	unordered_map<int, int> val_map;
-	vector<int> anti_map;
+	//unordered_map<int, int> val_map;
+	//vector<int> anti_map;
 	vector<bitSetVector> bit_doms_;
 	bitSetVector bit_tmp_;
 	static int get_value(const int i, const int j);
-	vector<u64> tmp_;
+	//vector<u64> tmp_;
 };
 
 class IntVal {

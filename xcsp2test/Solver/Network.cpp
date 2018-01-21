@@ -64,31 +64,30 @@ IntVar::IntVar(HVar* v, const int num_vars) :
 	num_bit_(ceil(static_cast<float>(v->vals.size()) / BITSIZE)),
 	vals_(v->vals) {
 	bit_tmp_.resize(num_bit_, ULLONG_MAX);
-	if (limit_)
-		bit_tmp_.back() <<= BITSIZE - limit_;
-
-	bit_doms_.resize(num_vars + 1, bit_tmp_);
+	if (limit_ == BITSIZE)
+		bit_tmp_.back() >>= BITSIZE - limit_;
+	bit_doms_.resize(num_vars + 3, bit_tmp_);
+	assigned_.resize(num_vars + 1, false);
 }
 
-IntVar::IntVar(const int id, vector<int>& v) :
-	id_(id),
-	init_size_(v.size()),
-	limit_(v.size() % BITSIZE),
-	num_bit_(ceil(static_cast<float>(v.size()) / BITSIZE)),
-	anti_map(v) {
-	vals_.resize(init_size_);
-	bit_tmp_.resize(num_bit_, ULLONG_MAX);
-	if (limit_)
-		bit_tmp_.back() <<= BITSIZE - limit_;
-	//for (int i = 0; i < init_size_; ++i) {
-	//	auto idx = get_bit_index(i);
-	//	bit_tmp_[get<0>(idx)].set(get<1>(idx));
-	//}
-	for (size_t i = 0; i < vals_.size(); ++i) {
-		val_map[v[i]] = i;
-		vals_[i] = i;
-	}
-}
+//IntVar::IntVar(const int id, vector<int>& v) :
+//	id_(id),
+//	init_size_(v.size()),
+//	limit_(v.size() % BITSIZE),
+//	num_bit_(ceil(static_cast<float>(v.size()) / BITSIZE))) {
+//	//vals_.resize(init_size_);
+//	//bit_tmp_.resize(num_bit_, ULLONG_MAX);
+//	//if (limit_)
+//	//	bit_tmp_.back() >>= BITSIZE - limit_;
+//	////for (int i = 0; i < init_size_; ++i) {
+//	////	auto idx = get_bit_index(i);
+//	////	bit_tmp_[get<0>(idx)].set(get<1>(idx));
+//	////}
+//	//for (size_t i = 0; i < vals_.size(); ++i) {
+//	//	val_map[v[i]] = i;
+//	//	vals_[i] = i;
+//	//}
+//}
 
 void IntVar::RemoveValue(const int a, const int p) {
 	const auto index = get_bit_index(a);
@@ -188,6 +187,11 @@ int IntVar::new_level(const int src) {
 void IntVar::copy(const int src, const int dest) {
 	bit_doms_[dest].assign(bit_doms_[src].begin(), bit_doms_[src].end());
 }
+
+int IntVar::get_value(const int i, const int j) {
+	return i*BITSIZE + j;
+}
+
 ///////////////////////////////////////////////////////////////
 const IntVal & IntVal::operator=(const IntVal & rhs) {
 	v_ = rhs.v_;
@@ -313,7 +317,7 @@ Network::Network(HModel* h) :
 	for (auto v : vars)
 		neighborhood[v] = get_neighbor(v);
 
-	tmp_ = vars.size() + 1;
+	tmp_ = vars.size() + 2;
 }
 
 void Network::GetFirstValidTuple(IntConVal& c_val, vector<int>& t, const int p) {
@@ -382,6 +386,8 @@ vector<IntVar*> Network::get_neighbor(IntVar* v) {
 void Network::show(const int p) {
 	for (auto v : vars)
 		v->show(p);
+	//for (auto t : tabs)
+	//	t->show(p);
 }
 
 Network::~Network() {

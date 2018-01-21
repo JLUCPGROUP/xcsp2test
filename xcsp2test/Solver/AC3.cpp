@@ -168,32 +168,32 @@ ConsistencyState AC3::enforce(vector<IntVar*>& x_evt, const int level) {
 //	return cs;
 //}
 
-bool AC3::revise(arc& c_x) {
-	const int num_elements = c_x.v()->size(level_);
-	int a = c_x.v()->head(level_);
+bool AC3::revise(arc& c_x, const int p) {
+	const int num_elements = c_x.v()->size(p);
+	int a = c_x.v()->head(p);
 
 	while (a != Limits::INDEX_OVERFLOW) {
-		if (!seek_support(IntConVal(c_x, a))) {
-			c_x.v()->RemoveValue(a, level_);
+		if (!seek_support(IntConVal(c_x, a), p)) {
+			c_x.v()->RemoveValue(a, p);
 			//std::cout << "(" << c_x.v_id() << ", " << a << ")" << std::endl;
 			++cs.num_delete;
 			++delete_;
 		}
-		a = c_x.v()->next(a, level_);
+		a = c_x.v()->next(a, p);
 	}
 
-	return num_elements != c_x.v()->size(level_);
+	return num_elements != c_x.v()->size(p);
 }
 
-bool AC3::seek_support(IntConVal & c_val) {
-	m_->GetFirstValidTuple(c_val, tmp_tuple_, level_);
+bool AC3::seek_support(IntConVal & c_val, const int p) {
+	m_->GetFirstValidTuple(c_val, tmp_tuple_, p);
 	//cout << "c-value" << c_val << endl;
 	while (Existed(tmp_tuple_)) {
 		//cout << "tuple: " << tmp_tuple_[0] << "," << tmp_tuple_[1] << endl;
 		if (c_val.c()->sat(tmp_tuple_))
 			return true;
 		else
-			m_->GetNextValidTuple(c_val, tmp_tuple_, level_);
+			m_->GetNextValidTuple(c_val, tmp_tuple_, p);
 	}
 	return false;
 }

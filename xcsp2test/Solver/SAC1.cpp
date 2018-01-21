@@ -45,19 +45,19 @@ bool SAC1::enforce(vector<IntVar*> x_evt, const int level) {
 		modified = false;
 		for (auto x : n_->vars) {
 			for (auto a : x->values()) {
-				if (x->have(a)) {
+				if (x->have(a, level)) {
 					//cout << "(" << x->id() << "," << a << ")" << endl;
-					x->ReduceTo(a, level + 1);
-					x->assign(true);
+					n_->CopyLevel(level, n_->tmp());
+					x->ReduceTo(a, n_->tmp());
+					x->assign(true, n_->tmp());
 					x_evt_.push_back(x);
-					result = ac_->enforce(x_evt_, level + 1).state;
+					result = ac_->enforce(x_evt_, n_->tmp()).state;
 					x_evt_.clear();
 
 					if (!result) {
 						//cout << "delete: (" << x->id() << "," << a << ")" << endl;
 						++del_;
-						n_->RestoreUpto(level);
-						x->assign(false);
+						x->assign(false, level);
 						x->RemoveValue(a, level);
 						x_evt_.push_back(x);
 						cs = ac_->enforce(x_evt_, level);
@@ -72,8 +72,7 @@ bool SAC1::enforce(vector<IntVar*> x_evt, const int level) {
 						break;
 					}
 					else {
-						x->assign(false);
-						n_->RestoreUpto(level);
+						x->assign(false, level);
 					}
 				}
 			}

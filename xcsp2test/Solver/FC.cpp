@@ -3,18 +3,18 @@ namespace cp {
 FC::FC(Network* n) :AC3(n) {
 
 }
-ConsistencyState FC::enforce(vector<IntVar*>& x_evt, const int level) {
-	level_ = level;
+ConsistencyState FC::enforce(vector<IntVar*>& x_evt, const int p) {
+	level_ = p;
 	delete_ = 0;
-	cs.level = level;
+	cs.level = p;
 	cs.num_delete = 0;
-	if (level > 0 && x_evt[0]->assigned()) {
+	if (p > 0 && x_evt[0]->assigned(p)) {
 		IntVar* v = x_evt[0];
 		for (auto c : m_->subscription[v])
 			for (auto y : c->scope)
-				if (!y->assigned() && y != v)
-					if (revise(arc(c, y)))
-						if (y->faild()) {
+				if (!y->assigned(p) && y != v)
+					if (revise(arc(c, y), p))
+						if (y->faild(p)) {
 							cs.tab = c;
 							cs.var = y;
 							cs.state = false;
@@ -30,18 +30,18 @@ FCbit::FCbit(Network* n) :AC3bit(n) {
 
 }
 
-ConsistencyState FCbit::enforce(vector<IntVar*>& x_evt, const int level) {
-	level_ = level;
+ConsistencyState FCbit::enforce(vector<IntVar*>& x_evt, const int p) {
+	level_ = p;
 	delete_ = 0;
-	cs.level = level;
+	cs.level = p;
 	cs.num_delete = 0;
-	if (level > 0 && x_evt[0]->assigned()) {
+	if (p > 0 && x_evt[0]->assigned(p)) {
 		IntVar* v = x_evt[0];
 		for (auto c : m_->subscription[v])
 			for (auto y : c->scope)
-				if (!y->assigned() && y != v)
-					if (revise(arc(c, y)))
-						if (y->faild()) {
+				if (!y->assigned(p) && y != v)
+					if (revise(arc(c, y), p))
+						if (y->faild(p)) {
 							cs.state = false;
 							return cs;
 						}

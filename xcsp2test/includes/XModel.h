@@ -7,7 +7,6 @@
 #include <iostream>
 using namespace std;
 
-typedef unsigned long long u64;
 typedef unsigned u32;
 //typedef
 //typedef tuple<int, int> IntTuple;

@@ -1,0 +1,1 @@
+dll path: Path=%Path%;$(SolutionDir)bin

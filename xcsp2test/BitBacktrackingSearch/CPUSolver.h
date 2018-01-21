@@ -27,7 +27,7 @@ const u32 M0[32] = {
 	0xFFFFFF7F, 0xFFFFFFBF, 0xFFFFFFDF, 0xFFFFFFEF,
 	0xFFFFFFF7, 0xFFFFFFFB, 0xFFFFFFFD, 0xFFFFFFFE
 };
-typedef unsigned _int64 u64;
+typedef unsigned long long u64;
 //最大论域的int表示大小
 enum ByteSize {
 	u1to32,
@@ -165,24 +165,20 @@ public:
 		deg.resize(vs_size, 0);
 		wdeg.resize(vs_size, vector<int64_t>(vs_size, 1));
 
-		for (size_t i = 0; i < hm->vars.size(); i++) {
-			const HVar* v = hm->vars[i];
-			for (IntVarValues j(v); j(); ++j) {
-				//bd[i] |= M1[j.val()];
-				bd[i][j.val()] = 1;
-				GModel *s = static_cast<GModel*>(gm->clone());
-				rel(*s, s->vs[i] == j.val());
-				s->status();
-				for (size_t k = 0; k < s->vs.size(); k++) {
-					const IntVar vv = s->vs[k];
-					for (IntVarValues l(vv); l(); ++l)
-						bsd[i][j.val()][k][l.val()] = 1;
-				}
-				delete s;
+		for (int i = 0; i < hm->vars.size(); ++i) {
+			for (int j = 0; j < hm->vars[i]->vals.size(); ++j) {
+				bd[i][j] = 1;
 			}
 		}
 
-		nei = gm->neighborhoods;
+		for (auto c : hm->tabs) {
+			for (auto t : c->tuples) {
+				bsd[c->scope[0]->id][t[0]][c->scope[1]->id].set(t[1]);
+				bsd[c->scope[1]->id][t[1]][c->scope[0]->id].set(t[0]);
+			}
+		}
+
+		nei = hm->neighborhoods;
 		for (int i = 0; i < vs_size; ++i) {
 			for (int j = 0; j < vs_size; ++j) {
 				deg[i] += nei[i][j].size();
@@ -314,11 +310,12 @@ public:
 		s_[0].assign(r_.begin(), r_.end());
 		++top_;
 	}
+
 	void initial(HModel* hm, AssignedStack* I) {
 		I_ = I;
-		bm_.initial(gm);
-		vs_size_ = gm->vs.size();
-		mds_ = gm->mds;
+		bm_.initial(hm);
+		vs_size_ = hm->vars.size();
+		mds_ = hm->max_domain_size();
 		r_ = bm_.bd;
 		s_.resize(vs_size_ + 1, vector<T>(vs_size_, 0));
 		s_[0].assign(r_.begin(), r_.end());
@@ -648,14 +645,14 @@ template<class T>
 class CPUSolver {
 public:
 	AssignedStack I;
-	CPUSolver(GModel* gm, const int64_t start_time = 0) :gm_(gm), start_time(start_time) {
+	CPUSolver(GModel* gm, const int64_t start_time = 0) : start_time(start_time) {
 		Timer t;
-		I.initial(gm_);
-		n.initial(gm_, &I);
+		I.initial(gm);
+		n.initial(gm, &I);
 		statistics.build_time = t.elapsed();
 	}
 
-	CPUSolver(HModel* hm, const int64_t start_time = 0) :gm_(gm), start_time(start_time) {
+	CPUSolver(HModel* hm, const int64_t start_time = 0) : start_time(start_time) {
 		Timer t;
 		I.initial(hm);
 		n.initial(hm, &I);
@@ -683,7 +680,7 @@ public:
 			SearchState state = n.push_back(val);
 
 			if ((state == S_BRANCH) && I.full()) {
-				//cout << I << endl;
+				cout << I << endl;
 				++statistics.num_sol;
 				statistics.solve_time = t.elapsed();
 				//state = S_FAILED;
@@ -727,7 +724,7 @@ public:
 				if (I.full()) {
 					++statistics.num_sol;
 					statistics.solve_time = t.elapsed();
-					//cout << I << endl;
+					cout << I << endl;
 					return statistics;
 				}
 				else {
@@ -749,7 +746,7 @@ public:
 	NetworkStack<T> n;
 
 private:
-	GModel* gm_;
+	//GModel* gm_;
 	int64_t start_time;
 	SearchStatistics statistics;
 };
@@ -792,6 +789,40 @@ SearchStatistics binary_search(GModel *gm, Heuristic::Var varh, Heuristic::Val v
 	//const SearchStatistics statistics = s.MAC(varh, valh, time_limit);
 	const SearchStatistics statistics = s.search(varh, valh, time_limit, Heuristic::DS_NB, nei);
 	return statistics;
+}
+
+template<class T>
+SearchStatistics binary_search(HModel *hm, Heuristic::Var varh, Heuristic::Val valh, const int64_t time_limit, bool nei, const int64_t start_time = 0) {
+	CPUSolver<T> s(hm, start_time);
+	//const SearchStatistics statistics = s.MAC(varh, valh, time_limit);
+	const SearchStatistics statistics = s.search(varh, valh, time_limit, Heuristic::DS_NB, nei);
+	return statistics;
+}
+
+static SearchStatistics StartSearch(HModel* hm, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, const int64_t start_time = 0) {
+	switch (GetBitSetSize(hm->max_domain_size())) {
+	case u1to32:
+		return binary_search<bitset<32>>(hm, varh, valh, time_limit, nei, start_time);
+	case u33to64:
+		return binary_search<bitset<64>>(hm, varh, valh, time_limit, nei, start_time);
+	case u65to96:
+		return binary_search<bitset<96>>(hm, varh, valh, time_limit, nei, start_time);
+	case u97to128:
+		return binary_search<bitset<128>>(hm, varh, valh, time_limit, nei, start_time);
+	case u129to160:
+		return binary_search<bitset<160>>(hm, varh, valh, time_limit, nei, start_time);
+	case u161to192:
+		return binary_search<bitset<192>>(hm, varh, valh, time_limit, nei, start_time);
+	case u193to224:
+		return binary_search<bitset<224>>(hm, varh, valh, time_limit, nei, start_time);
+	case u225to256:
+		return binary_search<bitset<256>>(hm, varh, valh, time_limit, nei, start_time);
+	default:
+		cout << "out of limit!!" << endl;
+		SearchStatistics s;
+		s.build_time = -1;
+		return s;
+	}
 }
 
 static SearchStatistics StartSearch(GModel *gm, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, const int64_t start_time = 0) {

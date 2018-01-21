@@ -148,6 +148,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="nbs_nei.cpp" />
+    <ClCompile Include="nbs_nei_folder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="BMPath.xml" />

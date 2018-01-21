@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="folder.cpp" />
     <ClCompile Include="xcsp2test.cpp" />
   </ItemGroup>
   <ItemGroup>

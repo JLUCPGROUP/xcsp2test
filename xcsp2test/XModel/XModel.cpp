@@ -78,7 +78,7 @@ XRel::XRel(const int id, const int arity, const int size, const char* sem, char*
 		semantics = SEM_CONFLICT;
 		break;
 	case 8:
-		semantics = SEM_CONFLICT;
+		semantics = SEM_SUPPORT;
 		break;
 	default:
 		break;

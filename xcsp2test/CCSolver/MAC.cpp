@@ -105,9 +105,9 @@ SearchStatistics MAC::enforce(const int time_limits) {
 
 		IntVal v_a = select_v_value(I.size());
 		//cout << v_a << endl;
+		n_->NewLevel(I.size());
 		I.push(v_a);
 		++statistics_.num_positive;
-		n_->NewLevel(I.size() - 1);
 		v_a.v()->ReduceTo(v_a.a(), I.size());
 		x_evt_.push_back(v_a.v());
 		consistent_ = ac_->enforce(x_evt_, I.size()).state;
@@ -122,9 +122,7 @@ SearchStatistics MAC::enforce(const int time_limits) {
 
 		while (!consistent_ && !I.empty()) {
 			v_a = I.pop();
-			//cout << " != " << v_a << endl;
-			//n_->BackLevel();
-
+			n_->BackTo(I.size());
 			v_a.v()->RemoveValue(v_a.a(), I.size());
 			++statistics_.num_negative;
 			x_evt_.push_back(v_a.v());

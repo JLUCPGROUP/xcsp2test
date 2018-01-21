@@ -15,8 +15,8 @@ typedef unsigned u32;
 * \brief 表约束语义
 */
 enum Semantices {
-	SEM_SUPPORT,		///<支持
-	SEM_CONFLICT		///<冲突
+	SEM_CONFLICT = 0,		///<冲突
+	SEM_SUPPORT = 1		///<支持
 };
 
 namespace cp {

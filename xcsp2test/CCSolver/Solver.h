@@ -179,7 +179,7 @@ public:
 	AC(Network *m, const LookAhead look_ahead, const LookBack look_back);
 	virtual ~AC() {};
 	//virtual bool enforce(VarEvt* x_evt, const int level = 0) = 0;
-	virtual ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) = 0;
+	virtual ConsistencyState enforce(vector<IntVar*>& x_evt, const int level) = 0;
 	//virtual ConsistencyState enforce_arc(vector<IntVar*>& x_evt, const int level) = 0;
 	ConsistencyState cs;
 	//void q_insert(IntVar* v);
@@ -203,7 +203,7 @@ public:
 	AC3(Network *m);
 	virtual ~AC3() {};
 	//bool enforce(VarEvt* x_evt, const int level = 0) override;
-	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level) override;
 	//ConsistencyState enforce_arc(vector<IntVar*>& x_evt, const int level = 0) override;
 	//SearchError se;
 
@@ -211,8 +211,8 @@ protected:
 	//pro_que<T> q;
 	//arc_que Q;
 	int level_ = 0;
-	virtual bool revise(arc& c_x, const int level = 0);
-	virtual bool seek_support(IntConVal& c_val, const int level = 0);
+	virtual bool revise(arc& c_x, const int level);
+	virtual bool seek_support(IntConVal& c_val, const int level);
 	//void inital_q_arc();
 	//private:
 	//	void inital_Q_arc();
@@ -221,7 +221,7 @@ protected:
 class FC :public AC3 {
 public:
 	FC(Network* n);
-	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level) override;
 private:
 	//int max_bitDom_size_;
 	//vector<vector<bitset<BITSIZE>>> bitSup_;
@@ -241,7 +241,7 @@ protected:
 class FCbit :public AC3bit {
 public:
 	FCbit(Network* n);
-	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level) override;
 private:
 	//int max_bitDom_size_;
 	//vector<vector<bitset<BITSIZE>>> bitSup_;

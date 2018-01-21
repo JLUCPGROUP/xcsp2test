@@ -117,6 +117,8 @@ public:
 	inline tuple<int, int> get_bit_index(const int idx) const;
 	vector<int>& values() { return vals_; }
 	int GetDelete(const int src, const int dest, bitSetVector& del_vals);
+	void BackTo(const int dest);
+	void ClearLevel(const int p);
 	int new_level(int src);
 	void copy(const int src, const int dest);
 protected:
@@ -128,6 +130,7 @@ protected:
 	int limit_;
 	int num_bit_;
 	vector<int> vals_;
+	int top_;
 	//unordered_map<int, int> val_map;
 	//vector<int> anti_map;
 	vector<bitSetVector> bit_doms_;
@@ -277,7 +280,7 @@ public:
 	int tmp() const { return tmp_; }
 	//void RestoreUpto(const int level);
 	int NewLevel(const int src);
-	int BackLevel(const int src);
+	void BackTo(const int dest);
 	void CopyLevel(const int src, const int dest);
 	//int NewTmpLevel();
 	int max_arity() const { return max_arity_; }

@@ -9,11 +9,15 @@
 
 namespace cp {
 
-XBuilder::XBuilder(const string file_name) {
-	if (initial(file_name)) {
+XBuilder::XBuilder(const string file_name, const XmlReaderType type) {
+	const bool res = initial(file_name);
+	if (res&& type == XRT_BM_PATH) {
 		benchmark_path_ = GetBMFile();
 		del();
 		initial(benchmark_path_);
+	}
+	else if (res&& type == XRT_BM) {
+		benchmark_path_ = file_name;
 	}
 	else {
 		cout << "error" << endl;

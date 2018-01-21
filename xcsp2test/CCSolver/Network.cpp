@@ -64,7 +64,7 @@ IntVar::IntVar(HVar* v, const int num_vars) :
 	num_bit_(ceil(static_cast<float>(v->vals.size()) / BITSIZE)),
 	vals_(v->vals) {
 	bit_tmp_.resize(num_bit_, ULLONG_MAX);
-	if (limit_ == BITSIZE)
+	if (limit_ != BITSIZE)
 		bit_tmp_.back() >>= BITSIZE - limit_;
 	bit_doms_.resize(num_vars + 3, bit_tmp_);
 	assigned_.resize(num_vars + 1, false);
@@ -159,6 +159,7 @@ void IntVar::show(const int p) {
 	for (auto a : vals_)
 		if (have(a, p))
 			cout << a << " ";
+	cout << assigned_[p];
 	cout << endl;
 }
 
@@ -178,14 +179,26 @@ int IntVar::GetDelete(const int src, const int dest, bitSetVector& del_vals) {
 	return size;
 }
 
+void IntVar::BackTo(const int dest) {
+	for (int i = dest; i <= top_; ++i)
+		assigned_[i] = false;
+}
+
+void IntVar::ClearLevel(const int p) {
+	bit_doms_[p].assign(num_bit_, 0);
+	assigned_[p] = false;
+}
+
 int IntVar::new_level(const int src) {
 	//bit_doms_[(src + 1)].assign(bit_doms_[src].begin(), bit_doms_[src].end());
 	copy(src, src + 1);
+	top_ = src;
 	return (src + 1);
 }
 
 void IntVar::copy(const int src, const int dest) {
 	bit_doms_[dest].assign(bit_doms_[src].begin(), bit_doms_[src].end());
+	assigned_[dest] = assigned_[src];
 }
 
 int IntVar::get_value(const int i, const int j) {
@@ -354,8 +367,9 @@ int Network::NewLevel(const int src) {
 	return top_;
 }
 
-int Network::BackLevel(const int src) {
-	return top_ = src;
+void Network::BackTo(const int p) {
+	for (auto v : vars)
+		v->BackTo(p);
 }
 
 void Network::CopyLevel(const int src, const int dest) {

@@ -110,7 +110,7 @@ ConsistencyState AC3::enforce(vector<IntVar*>& x_evt, const int level) {
 								aa = true;
 
 						if ((y != x) || aa)
-							if (revise(arc(c, y))) {
+							if (revise(arc(c, y), level)) {
 								if (y->faild(level)) {
 									cs.tab = c;
 									cs.var = y;
@@ -175,7 +175,7 @@ bool AC3::revise(arc& c_x, const int p) {
 	while (a != Limits::INDEX_OVERFLOW) {
 		if (!seek_support(IntConVal(c_x, a), p)) {
 			c_x.v()->RemoveValue(a, p);
-			//std::cout << "(" << c_x.v_id() << ", " << a << ")" << std::endl;
+			//cout << "(" << c_x.v_id() << ", " << a << ")" << endl;
 			++cs.num_delete;
 			++delete_;
 		}
@@ -187,6 +187,9 @@ bool AC3::revise(arc& c_x, const int p) {
 
 bool AC3::seek_support(IntConVal & c_val, const int p) {
 	m_->GetFirstValidTuple(c_val, tmp_tuple_, p);
+	if (c_val.c()->id() == 200 && c_val.v()->id() == 25) {
+		cout << 123 << endl;
+	}
 	//cout << "c-value" << c_val << endl;
 	while (Existed(tmp_tuple_)) {
 		//cout << "tuple: " << tmp_tuple_[0] << "," << tmp_tuple_[1] << endl;

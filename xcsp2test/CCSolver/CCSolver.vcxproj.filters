@@ -15,15 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Network.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Solver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Network.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RNSQ.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SAC1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SAC3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Search.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Solver.cpp">
@@ -44,17 +48,13 @@
     <ClCompile Include="MAC.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RNSQ.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SAC1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SAC3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Search.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Network.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

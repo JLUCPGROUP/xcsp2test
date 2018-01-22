@@ -15,7 +15,7 @@ static void Exclude(vector<int>& tuple) {
 	tuple[0] = INT_MAX;
 }
 
-const u64 MASK1_64[64] = {
+const uint64_t MASK1_64[64] = {
 	0x8000000000000000, 0x4000000000000000, 0x2000000000000000, 0x1000000000000000,
 	0x0800000000000000, 0x0400000000000000, 0x0200000000000000, 0x0100000000000000,
 	0x0080000000000000, 0x0040000000000000, 0x0020000000000000, 0x0010000000000000,
@@ -34,7 +34,7 @@ const u64 MASK1_64[64] = {
 	0x0000000000000008, 0x0000000000000004, 0x0000000000000002, 0x0000000000000001,
 };
 
-const u64 MASK0_64[64] = {
+const uint64_t MASK0_64[64] = {
 	0x7FFFFFFFFFFFFFFF, 0xBFFFFFFFFFFFFFFF, 0xDFFFFFFFFFFFFFFF, 0xEFFFFFFFFFFFFFFF,
 	0xF7FFFFFFFFFFFFFF, 0xFBFFFFFFFFFFFFFF, 0xFDFFFFFFFFFFFFFF, 0xFEFFFFFFFFFFFFFF,
 	0xFF7FFFFFFFFFFFFF, 0xFFBFFFFFFFFFFFFF, 0xFFDFFFFFFFFFFFFF, 0xFFEFFFFFFFFFFFFF,
@@ -125,7 +125,7 @@ protected:
 	int id_;
 	int init_size_;
 	int value_ = -1;
-	u64 stamp_ = 0;
+	uint64_t stamp_ = 0;
 	vector<bool> assigned_;
 	int limit_;
 	int num_bit_;
@@ -136,7 +136,7 @@ protected:
 	vector<bitSetVector> bit_doms_;
 	bitSetVector bit_tmp_;
 	static int get_value(const int i, const int j);
-	//vector<u64> tmp_;
+	//vector<uint64_t> tmp_;
 };
 
 class IntVal {
@@ -187,7 +187,7 @@ public:
 private:
 	int id_;
 	vector<vector<int>>& tuples_;
-	u64 stamp_ = 0;
+	uint64_t stamp_ = 0;
 };
 
 class arc {

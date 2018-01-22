@@ -23,14 +23,36 @@ enum LookAhead {
 enum VarHeu {
 	DOM, DOM_WDEG
 };
+namespace Heuristic {
+enum Var {
+	VRH_LEX,
+	VRH_DOM_MIN,
+	VRH_VWDEG,
+	VRH_DOM_DEG_MIN,
+	VRH_DOM_WDEG_MIN
+};
+
+enum Val {
+	VLH_MIN,
+	VLH_MIN_DOM,
+	VLH_MIN_INC,
+	VLH_MAX_INC,
+	VLH_VWDEG
+};
+
+enum DecisionScheme {
+	DS_BI,
+	DS_NB
+};
+};
 
 struct SearchStatistics {
-	u64 num_sol = 0;
-	u64 num_positive = 0;
-	u64 num_negative = 0;
-	u64 nodes = 0;
-	u64 build_time = 0;
-	u64 solve_time = 0;
+	uint64_t num_sol = 0;
+	uint64_t num_positive = 0;
+	uint64_t num_negative = 0;
+	uint64_t nodes = 0;
+	uint64_t build_time = 0;
+	uint64_t solve_time = 0;
 	bool time_out = false;
 	//int n_deep = 0;
 };
@@ -189,9 +211,9 @@ protected:
 	//vector<IntVar*> q_;
 	var_que q_;
 	Network *m_;
-	vector<u64> stamp_var_;
-	vector<u64> stamp_tab_;
-	u64 t_ = 0;
+	vector<uint64_t> stamp_var_;
+	vector<uint64_t> stamp_tab_;
+	uint64_t t_ = 0;
 	vector<int> tmp_tuple_;
 	int delete_ = 0;
 	LookAhead la_;
@@ -319,7 +341,7 @@ protected:
 
 class MAC {
 public:
-	MAC(Network *n, ACAlgorithm ac_algzm, VarHeu h);
+	MAC(Network *n, ACAlgorithm ac_algzm, const Heuristic::Var varh, const Heuristic::Val valh);
 	SearchStatistics enforce(const int time_limits);
 	//SearchStatistics enforce_fc(const int time_limits);
 	virtual ~MAC();
@@ -335,10 +357,13 @@ private:
 	ACAlgorithm ac_algzm_;
 	AssignedStack I;
 	IntVal select_v_value(const int p) const;
+	int select_val(const IntVar* v, const int p) const;
+	IntVar* select_var(const int p) const;
 	bool consistent_;
 	bool finished_ = false;
 	SearchStatistics statistics_;
-	VarHeu h_;
+	Heuristic::Var varh_;
+	Heuristic::Val valh_;
 };
 
 //class Search {

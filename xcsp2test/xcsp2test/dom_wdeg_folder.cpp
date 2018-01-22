@@ -41,12 +41,12 @@ int main(const int argc, char ** argv) {
 
 	for (const auto f : files) {
 		cout << f << endl;
-		XBuilder builder(f, XRT_BM_PATH);
+		XBuilder builder(f, XRT_BM);
 		HModel* hm = new HModel();
 		builder.GenerateHModel(hm);
 		Network* n = new Network(hm);
 
-		MAC mac(n, A_FC_bit, DOM);
+		MAC mac(n, AC_3bit, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN);
 		const SearchStatistics statistics = mac.enforce(TimeLimit);
 		solve_time.push_back(statistics.solve_time);
 		positive.push_back(statistics.num_positive);

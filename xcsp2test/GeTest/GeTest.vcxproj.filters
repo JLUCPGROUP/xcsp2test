@@ -15,22 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xcsp2test.cpp">
+    <Xml Include="BMPath.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SAC1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="dom_folder.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="dom_wdeg_folder.cpp">
+    <ClCompile Include="GModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="folder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="BMPath.xml">
-      <Filter>资源文件</Filter>
-    </Xml>
-    <Xml Include="queens-12_ext.xml">
-      <Filter>资源文件</Filter>
-    </Xml>
+    <ClInclude Include="SAC1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildGModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

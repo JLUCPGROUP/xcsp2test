@@ -28,7 +28,7 @@
 //
 //	vector<string> files;
 //	getFilesAll(X_PATH + argv[1], files);
-//
+//	vector<u64> SAC_times;
 //	vector<u64> build_times;
 //	vector<u64> search_times;
 //	vector<u64> nodes;
@@ -38,15 +38,34 @@
 //		XBuilder builder(f, XRT_BM);
 //		HModel* hm = new HModel();
 //		builder.GenerateHModel(hm);
-//
-//		const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//		//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//		//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//		build_times.push_back(statistics.build_time);
-//		search_times.push_back(statistics.solve_time);
-//		nodes.push_back(statistics.nodes);
-//		
+//		GModel* gm = new GModel();
+//		BuildGModel(hm, gm);
+//		SAC1 sac1(gm);
+//		Timer t;
+//		const bool result = sac1.enforce();
+//		const int64_t sac_time = t.elapsed();
+//		SAC_times.push_back(sac_time);
+//		if (result) {
+//			//sat sac
+//			//const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//			//const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//			const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//			build_times.push_back(statistics.build_time);
+//			search_times.push_back(statistics.solve_time);
+//			nodes.push_back(statistics.nodes);
+//		}
+//		else {
+//			build_times.push_back(0);
+//			search_times.push_back(0);
+//			nodes.push_back(0);
+//		}
+//		delete gm;
 //		delete hm;
+//	}
+//
+//	cout << "---------------SAC_times---------------" << endl;
+//	for (u64 i : SAC_times) {
+//		cout << i << endl;
 //	}
 //	cout << "---------------build_times---------------" << endl;
 //	for (u64 i : build_times) {

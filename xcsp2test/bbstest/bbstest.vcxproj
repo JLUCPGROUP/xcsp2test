@@ -147,7 +147,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bbs_folder.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="nbs_folder.cpp" />
     <ClCompile Include="nbs_nei.cpp" />
     <ClCompile Include="nbs_nei_folder.cpp" />
   </ItemGroup>

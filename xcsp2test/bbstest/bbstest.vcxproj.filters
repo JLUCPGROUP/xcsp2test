@@ -24,6 +24,12 @@
     <ClCompile Include="nbs_nei_folder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="nbs_folder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="bbs_folder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="BMPath.xml">

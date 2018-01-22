@@ -120,10 +120,17 @@ void XBuilder::generateRelations(XModel* model) const {
 			node->getAttributes()->getNamedItem(XMLString::transcode("semantics"))->getTextContent());
 		const int size = XMLString::parseInt(
 			node->getAttributes()->getNamedItem(XMLString::transcode("nbTuples"))->getTextContent());
-		char* ts_str = XMLString::transcode(node->getFirstChild()->getNodeValue());
-		model->add(i, arity, size, semantics, ts_str);
-		XMLString::release(&semantics);
-		XMLString::release(&ts_str);
+		if (size != 0) {
+			char* ts_str = XMLString::transcode(node->getFirstChild()->getNodeValue());
+			model->add(i, arity, size, semantics, ts_str);
+			XMLString::release(&ts_str);
+		}
+		else
+		{
+			model->add(i, arity, size, semantics, "");
+		}
+			XMLString::release(&semantics);
+
 	}
 }
 

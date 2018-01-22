@@ -81,7 +81,7 @@ private:
 	XmlReaderType type_;			///<file type
 	XercesDOMParser *parser_;
 	DOMElement *root_;
-	DOMDocument *document_;
+	xercesc_3_1::DOMDocument *document_;
 
 	/**
 	 * \brief createDomain

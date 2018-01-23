@@ -23,6 +23,7 @@ enum LookAhead {
 enum VarHeu {
 	DOM, DOM_WDEG
 };
+
 namespace Heuristic {
 enum Var {
 	VRH_LEX,

@@ -694,7 +694,7 @@ public:
 			while (!(state == S_BRANCH) && !I.empty()) {
 				val = I.pop();
 				val.flip();
-				++statistics.nodes;
+				//++statistics.nodes;
 				state = n.push_back(val);
 			}
 

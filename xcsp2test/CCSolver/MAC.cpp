@@ -249,7 +249,7 @@ IntVal MAC::select_v_value(const int p) const {
 	//default:;
 	//}
 	IntVar* v = select_var(p);
-	int a = select_val(v, p);
+	const int a = select_val(v, p);
 	IntVal val(v, a);
 	return val;
 }
@@ -268,12 +268,22 @@ IntVar* MAC::select_var(const int p) const {
 	}
 								 break;
 	case Heuristic::VRH_LEX:
-		var = n_->vars[p];
+		var = n_->vars[I.size() + 1];
 		break;
 	case Heuristic::VRH_VWDEG: break;
-	case Heuristic::VRH_DOM_DEG_MIN: break;
+	case Heuristic::VRH_DOM_DEG_MIN:
+	{
+		for (auto v : n_->vars)
+			if (!v->assigned(p)) {
+				const int dom_deg = v->size(p) / n_->neighborhood[v].size();
+				if (dom_deg < min_size) {
+					min_size = dom_deg;
+					var = v;
+				}
+			}
+	}break;
 	case Heuristic::VRH_DOM_WDEG_MIN:
-		
+
 		for (auto x : n_->vars) {
 			if (!x->assigned(p)) {
 				double x_w = 0.0;

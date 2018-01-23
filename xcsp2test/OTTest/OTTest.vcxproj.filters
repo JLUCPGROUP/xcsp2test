@@ -15,7 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="haystacks-11_ext.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+    <Xml Include="BMPath.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="folder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="deg_folder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

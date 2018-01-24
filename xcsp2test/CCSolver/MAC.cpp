@@ -271,8 +271,7 @@ IntVar* MAC::select_var(const int p) const {
 		var = n_->vars[I.size() + 1];
 		break;
 	case Heuristic::VRH_VWDEG: break;
-	case Heuristic::VRH_DOM_DEG_MIN:
-	{
+	case Heuristic::VRH_DOM_DEG_MIN: {
 		for (auto v : n_->vars)
 			if (!v->assigned(p)) {
 				const int dom_deg = v->size(p) / n_->neighborhood[v].size();
@@ -282,12 +281,12 @@ IntVar* MAC::select_var(const int p) const {
 				}
 			}
 	}break;
-	case Heuristic::VRH_DOM_WDEG_MIN:
-
+	case Heuristic::VRH_DOM_WDEG_MIN: {
 		for (auto x : n_->vars) {
 			if (!x->assigned(p)) {
 				double x_w = 0.0;
 				double x_dw = 0.0;
+
 				for (auto c : n_->subscription[x]) {
 					int cnt = 0;
 					for (auto y : c->scope)
@@ -301,6 +300,7 @@ IntVar* MAC::select_var(const int p) const {
 					x_dw = -1;
 				else
 					x_dw = x->size(p) / x_w;
+
 				if (x_dw < min_size) {
 					min_size = x_dw;
 					var = x;
@@ -308,6 +308,7 @@ IntVar* MAC::select_var(const int p) const {
 			}
 		}
 		break;
+	}
 	default:
 		var = nullptr;
 		break;

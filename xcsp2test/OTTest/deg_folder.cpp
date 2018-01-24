@@ -34,7 +34,11 @@ public:
 		int64 id = -1;
 		double min_domain_size = DBL_MAX;
 		for (int64 i = 0; i < size_; ++i) {
+			if (deg[i] == 0)
+				return selected_var;
+
 			IntVar* const var = vars_[i];
+			//cout << i << " " << var->Size() << " " << deg[i] << endl;
 			const double dom_deg = var->Size() / deg[i];
 			if (!var->Bound() && dom_deg < min_domain_size) {
 				selected_var = var;

@@ -94,7 +94,9 @@ inline static tuple<int, int> GetBitIdx(const int idx) {
 	get<1>(a) = idx % BITSIZE;
 	return a;
 }
-
+inline static int GetValue(const int i, const int j) {
+	return  i*BITSIZE + j;
+}
 typedef vector<bitset<BITSIZE>> bitSetVector;
 
 class IntVar {

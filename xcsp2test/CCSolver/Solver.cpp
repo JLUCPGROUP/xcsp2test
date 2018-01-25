@@ -82,7 +82,9 @@ bool AssignedStack::full() const { return size() == max_size_; }
 bool AssignedStack::empty() const { return vals_.empty(); }
 IntVal AssignedStack::operator[](const int i) const { return vals_[i]; }
 IntVal AssignedStack::at(const int i) const { return vals_[i]; }
-void AssignedStack::clear() { vals_.clear(); }
+void AssignedStack::clear() {
+	vals_.clear(); asnd_.assign(asnd_.size(), false);
+}
 
 void AssignedStack::del(const IntVal val) {
 	remove(vals_.begin(), vals_.end(), val);

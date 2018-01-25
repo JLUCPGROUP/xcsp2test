@@ -314,39 +314,46 @@ protected:
 class Qsac {
 public:
 	Qsac() {};
-	Qsac(Network* n, const VarHeu h);
+	Qsac(Network* n);
 	~Qsac() {};
-	void initial(Network* n, const VarHeu h);
+	void create(Network* n);
+	void initial(const int p);
 	void push(IntVal val);
-	IntVal pop();
+	IntVal pop(const Heuristic::Var varh, const Heuristic::Val valh, const int p);
 	bool empty() const;
-	int size(IntVar* v) const;
-	void update();
-	bool vars_assigned();
-	void reset();
-	bool vars_assigned(AssignedStack& I) const;
-	bool in(IntVal v);
+	int size(const IntVar* v) const;
+	void update(const int p);
+	//bool vars_assigned();
+	//void reset();
+	void show();
+	bool all_assigned(AssignedStack& I) const;
+	bool have(IntVal v);
+	bool have(IntVar* var, int a);
 	//void delete_vals();
 protected:
-	int head(IntVar* v) const;
-	IntVal select_v_value() const;
+	int head(const IntVar* v) const;
+	IntVal select_IntVal(const Heuristic::Var varh, const Heuristic::Val valh, const int p);
+	IntVar* select_var(const Heuristic::Var varh, const int p) const;
+	int select_val(const Heuristic::Val valh, IntVar* v, const int p);
 	vector<bitSetVector> bitDoms_;
 	Network* n_;
 	VarHeu h_;
 	int num_bit_vars_;
-	vector<bitset<BITSIZE>> vars_assigned_;
-	vector<bitset<BITSIZE>> vars_assigned_old_;
-	vector<bitset<BITSIZE>> tmp_empty_;
+	//vector<bitset<BITSIZE>> vars_assigned_;
+	//vector<bitset<BITSIZE>> vars_assigned_old_;
+	//vector<bitset<BITSIZE>> tmp_empty_;
+
 };
 
 class SAC3 :public SAC1 {
 public:
-	SAC3(Network* n, ACAlgorithm a, const VarHeu h);
+	SAC3(Network* n, ACAlgorithm a, const Heuristic::Var varh, const Heuristic::Val valh);
 	bool enforce(vector<IntVar*> x_evt, const int level) override;
 protected:
 	IntVal BuildBranch();
 	Qsac q_;
-	VarHeu h_;
+	Heuristic::Var varh_;
+	Heuristic::Val valh_;
 	AssignedStack I_;
 };
 

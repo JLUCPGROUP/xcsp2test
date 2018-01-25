@@ -159,7 +159,7 @@ void IntVar::show(const int p) {
 	for (auto a : vals_)
 		if (have(a, p))
 			cout << a << " ";
-	cout << assigned_[p];
+	cout << "[" << assigned_[p] << "]";
 	cout << endl;
 }
 
@@ -373,6 +373,8 @@ void Network::BackTo(const int p) {
 }
 
 void Network::CopyLevel(const int src, const int dest) {
+	if (src == dest)
+		return;
 	for (auto v : vars)
 		v->copy(src, dest);
 }

@@ -23,8 +23,8 @@ MAC::MAC(Network * n, const ACAlgorithm ac_algzm, const Heuristic::Var varh, con
 	case A_FC_bit:
 		ac_ = new FCbit(n_);
 		break;
-		//case A_RNSQ:
-		//	ac_ = new RNSQ(n_);
+	case A_NSAC:
+		ac_ = new NSAC(n_);
 		break;
 	default:
 		break;
@@ -123,6 +123,7 @@ SearchStatistics MAC::enforce(const int time_limits) {
 
 		while (!consistent_ && !I.empty()) {
 			v_a = I.pop();
+			//cout << "!" << v_a << endl;
 			n_->BackTo(I.size());
 			v_a.v()->RemoveValue(v_a.a(), I.size());
 			++statistics_.num_negative;

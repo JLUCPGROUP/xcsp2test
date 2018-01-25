@@ -1,11 +1,14 @@
 ﻿#pragma once
 #include "Network.h"
 #include "Timer.h"
+#include <queue>
+#include <functional>
+
 
 namespace cp {
 
 enum ACAlgorithm {
-	AC_1, AC_2, AC_3, AC_4, AC_6, AC_7, AC_2001, AC_3bit, AC_3rm, STR_1, STR_2, STR_3, A_FC, A_FC_bit, A_RNSQ
+	AC_1, AC_2, AC_3, AC_4, AC_6, AC_7, AC_2001, AC_3bit, AC_3rm, STR_1, STR_2, STR_3, A_FC, A_FC_bit, A_NSAC
 };
 enum Consistency {
 	C_AC3, C_AC4, C_AC2001, C_AC3bit, C_AC3rm, C_STR1, C_STRC2, C_STR3, C_FC
@@ -196,6 +199,30 @@ private:
 	int size_;
 };
 
+//class var_priority_queue {
+//public:
+//	int& have(const IntVar* v) { return vid_set_[v->id()]; };
+//	var_priority_queue(){};
+//	//var_que(Network* n);
+//	virtual ~var_priority_queue() {};
+//
+//	//void initial(Network* n);
+//	//void DeleteQue();
+//	bool have(IntVar* v);
+//	bool empty() const;
+//	void initial(const int size);
+//	//bool full() const;
+//	void push(IntVar* v);
+//	IntVar* pop();
+//	void clear();
+//	int max_size() const;
+//	int size() const;
+//
+//private:
+//	priority_queue<IntVar*> m_data_;
+//	vector<int> vid_set_;
+//};
+
 class AC {
 public:
 	AC(Network *m);
@@ -339,6 +366,21 @@ protected:
 //	bool in_neibor(Tabular* t, IntVar* x);
 //	bool has_sigleton_domain_neibor(IntVar* x) const;
 //};
+
+class NSAC :public AC3bit {
+public:
+	NSAC(Network *m);
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+	int revise_NSAC(IntVar* v, IntVar* x, const int level);
+	bool full_NSAC(IntVar* v, IntVar* x, const int level);
+protected:
+	unordered_map<IntVar*, bitSetVector> neibor_;
+	bool is_neibor(IntVar* x, IntVar* v);
+	var_que q_nei_;
+	var_que q_var_;
+	//void insert_(var_que& q, IntVar* v);
+	bool deletion = false;
+};
 
 class MAC {
 public:

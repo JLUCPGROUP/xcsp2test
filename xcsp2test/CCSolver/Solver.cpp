@@ -229,4 +229,22 @@ int var_que::max_size() const {
 int var_que::size() const {
 	return size_;
 }
+///////////////////////////////////////////////////////////
+//bool var_priority_queue::have(IntVar* v) {
+//	return vid_set_[v->id()];
+//}
+//
+//bool var_priority_queue::empty() const {
+//	return m_data_.empty();
+//}
+//
+//void var_priority_queue::initial(const int size) {
+//	vid_set_.resize(size, 0);
+//
+//}
+//
+//void var_priority_queue::push(IntVar* v) {
+//	m_data_.push(v);
+//	vid_set_[v->id()] = 1;
+//}
 }

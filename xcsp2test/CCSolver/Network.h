@@ -87,6 +87,14 @@ const int BITSIZE = 64;
 //	int size_;
 //	int limit_;
 //};
+
+inline static tuple<int, int> GetBitIdx(const int idx) {
+	tuple<int, int> a;
+	get<0>(a) = idx / BITSIZE;
+	get<1>(a) = idx % BITSIZE;
+	return a;
+}
+
 typedef vector<bitset<BITSIZE>> bitSetVector;
 
 class IntVar {
@@ -156,6 +164,7 @@ public:
 	IntVal next(const int p) const;
 	bool operator==(const IntVal& rhs);
 	bool operator!=(const IntVal& rhs);
+	//bool operator<(const IntVar &v);
 	friend std::ostream& operator<< (std::ostream &os, IntVal &v_val);
 	tuple<int, int> get_bit_index() const;
 	~IntVal() {};
@@ -282,6 +291,7 @@ public:
 	int NewLevel(const int src);
 	void BackTo(const int dest);
 	void CopyLevel(const int src, const int dest);
+	void ClearLevel(const int p);
 	//int NewTmpLevel();
 	int max_arity() const { return max_arity_; }
 	int max_domain_size() const { return max_dom_size_; }

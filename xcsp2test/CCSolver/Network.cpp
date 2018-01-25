@@ -67,7 +67,7 @@ IntVar::IntVar(HVar* v, const int num_vars) :
 	if (limit_ != BITSIZE)
 		bit_tmp_.back() >>= BITSIZE - limit_;
 	bit_doms_.resize(num_vars + 3, bit_tmp_);
-	assigned_.resize(num_vars + 1, false);
+	assigned_.resize(num_vars + 3, false);
 }
 
 //IntVar::IntVar(const int id, vector<int>& v) :
@@ -375,6 +375,11 @@ void Network::BackTo(const int p) {
 void Network::CopyLevel(const int src, const int dest) {
 	for (auto v : vars)
 		v->copy(src, dest);
+}
+
+void Network::ClearLevel(const int p) {
+	for (auto v : vars)
+		v->ClearLevel(p);
 }
 
 //int Network::NewTmpLevel()

@@ -302,11 +302,12 @@ public:
 	SAC1(Network* n, ACAlgorithm a);
 	virtual bool enforce(vector<IntVar*> x_evt, const int level);
 	virtual ~SAC1();
+	int del() const { return del_; }
+	AC* ac_;
 protected:
 	int del_ = 0;
 	int level_;
 	Network* n_;
-	AC* ac_;
 	ACAlgorithm ac_algzm_;
 	vector<IntVar*> x_evt_;
 };

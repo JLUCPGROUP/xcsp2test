@@ -266,8 +266,7 @@ IntVar* MAC::select_var(const int p) const {
 					min_size = v->size(p);
 					var = v;
 				}
-	}
-								 break;
+	} return var;
 	case Heuristic::VRH_LEX:
 		var = n_->vars[I.size() + 1];
 		break;
@@ -281,7 +280,7 @@ IntVar* MAC::select_var(const int p) const {
 					var = v;
 				}
 			}
-	}break;
+	}return var;
 	case Heuristic::VRH_DOM_WDEG_MIN: {
 		for (auto x : n_->vars) {
 			if (!x->assigned(p)) {
@@ -308,8 +307,7 @@ IntVar* MAC::select_var(const int p) const {
 				}
 			}
 		}
-		break;
-	}
+	} return var;
 	default:
 		var = nullptr;
 		break;

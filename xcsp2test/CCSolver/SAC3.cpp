@@ -147,6 +147,7 @@ int Qsac::select_val(const Heuristic::Val valh, IntVar* v, const int p) {
 IntVar* Qsac::select_var(const Heuristic::Var varh, const int p) const {
 	IntVar* v = nullptr;
 	double min_size = DBL_MAX;
+	double max_size = DBL_MIN;
 	switch (varh) {
 		//case DOM: {
 		//	double min_size = DBL_MAX;
@@ -190,22 +191,56 @@ IntVar* Qsac::select_var(const Heuristic::Var varh, const int p) const {
 		//default:;
 	case Heuristic::VRH_LEX: break;
 	case Heuristic::VRH_DOM_MIN: {
+		//for (auto x : n_->vars)
+		//	if (!x->assigned(p))
+		//		if (x->size(p) < min_size&&size(x) > 0) {
+		//			min_size = x->size(p);
+		//			v = x;
+		//		}
+
 		for (auto x : n_->vars)
 			if (!x->assigned(p))
-				if (x->size(p) < min_size&&size(x) > 0) {
-					min_size = x->size(p);
+				if (x->size(p) < max_size&&size(x) > 0) {
+					max_size = x->size(p);
 					v = x;
 				}
-	}break;
+	}return v;
 	case Heuristic::VRH_VWDEG: break;
 	case Heuristic::VRH_DOM_DEG_MIN: break;
-	case Heuristic::VRH_DOM_WDEG_MIN: break;
+	case Heuristic::VRH_DOM_WDEG_MIN:/* {
+		cout << "122" << endl;
+		for (auto x : n_->vars) {
+			if (!x->assigned(p)) {
+				double x_w = 0.0;
+				double x_dw = 0.0;
+
+				for (auto c : n_->subscription[x]) {
+					int cnt = 0;
+					for (auto y : c->scope)
+						if (!y->assigned(p))
+							++cnt;
+					if (cnt > 1)
+						x_w += c->weight;
+				}
+
+				if (x->size(p) == 1 || x_w == 0)
+					x_dw = -1;
+				else
+					x_dw = x->size(p) / x_w;
+
+				if (x_dw < min_size) {
+					min_size = x_dw;
+					v = x;
+				}
+			}
+		}
+	} return v;*/break;
 	default:;
 	}
 	return v;
 }
 
-SAC3::SAC3(Network* n, ACAlgorithm a, const Heuristic::Var varh, const Heuristic::Val valh) :
+SAC3::SAC3(Network* n, const ACAlgorithm a, const Heuristic::Var varh, const Heuristic::Val valh) :
 	SAC1(n, a),
 	varh_(varh),
 	valh_(valh) {
@@ -216,6 +251,7 @@ SAC3::SAC3(Network* n, ACAlgorithm a, const Heuristic::Var varh, const Heuristic
 bool SAC3::enforce(vector<IntVar*> x_evt, const int level) {
 	level_ = level;
 	ConsistencyState cs = ac_->enforce(n_->vars, level);
+	del_ += cs.num_delete;
 	bool result = cs.state;
 	auto modified = false;
 	x_evt_.clear();
@@ -231,6 +267,7 @@ bool SAC3::enforce(vector<IntVar*> x_evt, const int level) {
 			//此处assigned 要处下理下
 			if (val != Nil_Val) {
 				val.v()->RemoveValue(val.a(), level_);
+				del_++;
 				x_evt_.push_back(val.v());
 				cs = ac_->enforce(x_evt_, level_);
 				result = cs.state;
@@ -258,7 +295,7 @@ IntVal SAC3::BuildBranch() {
 
 	do {
 		val = q_.pop(varh_, valh_, n_->tmp());
-		//cout << val << endl;
+		cout << val << endl;
 		val.v()->ReduceTo(val.a(), n_->tmp());
 		val.v()->assign(true, n_->tmp());
 		I_.push(val);

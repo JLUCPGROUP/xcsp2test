@@ -8,7 +8,7 @@
 namespace cp {
 
 enum ACAlgorithm {
-	AC_1, AC_2, AC_3, AC_4, AC_6, AC_7, AC_2001, AC_3bit, AC_3rm, STR_1, STR_2, STR_3, A_FC, A_FC_bit, A_NSAC
+	CA_AC1, CA_AC2, AC_3, AC_4, AC_6, AC_7, AC_2001, AC_3bit, AC_3rm, STR_1, STR_2, STR_3, A_FC, A_FC_bit, A_NSAC, CA_LMRPC_BIT
 };
 enum Consistency {
 	C_AC3, C_AC4, C_AC2001, C_AC3bit, C_AC3rm, C_STR1, C_STRC2, C_STR3, C_FC
@@ -297,6 +297,34 @@ private:
 	//vector<vector<bitset<BITSIZE>>> bitSup_;
 };
 
+//class residues {
+//public:
+//	residues(Network *nt);
+//	~residues();
+//
+//	IntTuple& operator[](const IntConVal &c_val) const {
+//		return *data_[c_val.c()->id()][c_val.GetVarIndex()][c_val.a()];
+//	}
+//
+//	IntTuple& at(const IntConVal &c_val);
+//
+//private:
+//	Network *nt_;
+//	IntTuple ****data_;
+//	vector<vector<vector<vector<int>>>> data_
+//};
+//
+//class AC3rm :
+//	public AC3 {
+//public:
+//	AC3rm(Network * nt);
+//	virtual ~AC3rm();
+//
+//protected:
+//	virtual bool seek_support(IntConVal& c_val) override;
+//	residues* res_;
+//};
+
 class SAC1 {
 public:
 	SAC1(Network* n, ACAlgorithm a);
@@ -388,6 +416,18 @@ protected:
 	var_que q_var_;
 	//void insert_(var_que& q, IntVar* v);
 	bool deletion = false;
+};
+
+class lMaxRPC :public AC3bit {
+public:
+	lMaxRPC(Network *m);
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
+	bool have_no_PC_support(IntVar* x, const int a, IntVar* y);
+	bool have_PC_wit(IntVar* x, const int a, IntVar* y, const int b, IntVar* z);
+protected:
+	var_que q_var_;
+	unordered_map<IntVar*, bitSetVector> neibor_;
+	vector<vector<Tabular*>> nei_;
 };
 
 class MAC {

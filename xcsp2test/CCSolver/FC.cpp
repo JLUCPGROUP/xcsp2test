@@ -50,4 +50,6 @@ ConsistencyState FCbit::enforce(vector<IntVar*>& x_evt, const int p) {
 	cs.state = true;
 	return cs;
 }
+
+
 }

@@ -114,6 +114,7 @@ public:
 	bool assigned(const int p) const { return assigned_[p]; }
 	void assign(const bool a, const int p) { assigned_[p] = a; }
 	int next(const int a, const int p) const;
+	void next_value(int& a, const int p);
 	int prev(const int a, const int p) const;
 	bool have(const int a, const int p) const;
 	int head(const int p) const;
@@ -278,6 +279,7 @@ public:
 	vector<Tabular*> tabs;
 	unordered_map<IntVar*, vector<Tabular*>> subscription;
 	unordered_map<IntVar*, vector<IntVar* >> neighborhood;
+	vector<vector<IntVar*>> nei_;
 	//unordered_map<IntVar*, vector<IntVar*>> neighborhood;
 	Network(HModel* h);
 	static void GetFirstValidTuple(IntConVal & c_val, vector<int>& t, const int p);

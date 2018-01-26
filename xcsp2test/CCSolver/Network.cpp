@@ -122,6 +122,16 @@ int IntVar::next(const int a, const int p) const {
 	return Limits::INDEX_OVERFLOW;
 }
 
+void IntVar::next_value(int& a, const int p) {
+	++a;
+	for (; a < init_size_; ++a) {
+		const auto index = get_bit_index(a);
+		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
+			return;
+	}
+	a = Limits::INDEX_OVERFLOW;
+}
+
 int IntVar::prev(const int a, const int p) const {
 	for (int i = (a - 1); i >= 0; --i) {
 		const auto index = get_bit_index(i);
@@ -312,7 +322,7 @@ Network::Network(HModel* h) :
 
 	vars.reserve(num_vars_);
 	tabs.reserve(num_tabs_);
-
+	nei_.resize(num_vars_);
 	for (auto hv : hm_->vars) {
 		IntVar *v = new IntVar(hv, num_vars_);
 		vars.push_back(v);
@@ -327,8 +337,10 @@ Network::Network(HModel* h) :
 		for (auto v : t->scope)
 			subscription[v].push_back(t);
 
-	for (auto v : vars)
+	for (auto v : vars) {
 		neighborhood[v] = get_neighbor(v);
+		nei_[v->id()] = neighborhood[v];
+	}
 
 	tmp_ = vars.size() + 2;
 }

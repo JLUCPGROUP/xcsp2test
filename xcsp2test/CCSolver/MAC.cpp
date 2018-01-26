@@ -2,6 +2,7 @@
 using namespace std;
 namespace cp {
 
+
 MAC::MAC(Network * n, const ACAlgorithm ac_algzm, const Heuristic::Var varh, const Heuristic::Val valh) :
 	n_(n),
 	ac_algzm_(ac_algzm),
@@ -25,6 +26,9 @@ MAC::MAC(Network * n, const ACAlgorithm ac_algzm, const Heuristic::Var varh, con
 		break;
 	case A_NSAC:
 		ac_ = new NSAC(n_);
+		break;
+	case CA_LMRPC_BIT:
+		ac_ = new lMaxRPC(n_);
 		break;
 	default:
 		break;

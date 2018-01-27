@@ -15,56 +15,12 @@ lMaxRPC::lMaxRPC(Network * m) :AC3bit(m) {
 }
 
 ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
-	level_ = level;
-	q_var_.clear();
-	for (auto i : x_evt) {
-		for (auto a : i->values()) {
-			if (i->have(a, level_)) {
-				for (auto j : m_->neighborhood[i]) {
-					if (have_no_PC_support(i, a, j)) {
-						i->RemoveValue(a, level_);
-						if (!i->faild(level_)) {
-							q_var_.push(i);
-						}
-						else {
-							cs.state = false;
-							return cs;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	while (!q_var_.empty()) {
-		auto j = q_var_.pop();
-		for (auto i : m_->neighborhood[j]) {
-			for (auto a : i->values()) {
-				if (i->have(a, level_)) {
-					if (have_no_PC_support(i, a, j)) {
-						i->RemoveValue(a, level_);
-						if (!i->faild(level_)) {
-							q_var_.push(i);
-						}
-						else {
-							cs.state = false;
-							return cs;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	cs.state = true;
-	return cs;	
-
 	//level_ = level;
 	//q_var_.clear();
 	//for (auto i : x_evt) {
 	//	for (auto a : i->values()) {
 	//		if (i->have(a, level_)) {
-	//			for (auto j : m_->nei_[i->id()]) {
+	//			for (auto j : m_->neighborhood[i]) {
 	//				if (have_no_PC_support(i, a, j)) {
 	//					i->RemoveValue(a, level_);
 	//					if (!i->faild(level_)) {
@@ -81,8 +37,8 @@ ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
 	//}
 
 	//while (!q_var_.empty()) {
-	//	const auto j = q_var_.pop();
-	//	for (auto i : m_->nei_[j->id()]) {
+	//	auto j = q_var_.pop();
+	//	for (auto i : m_->neighborhood[j]) {
 	//		for (auto a : i->values()) {
 	//			if (i->have(a, level_)) {
 	//				if (have_no_PC_support(i, a, j)) {
@@ -101,7 +57,51 @@ ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
 	//}
 
 	//cs.state = true;
-	//return cs;
+	//return cs;	
+
+	level_ = level;
+	q_var_.clear();
+	for (auto i : x_evt) {
+		for (auto a : i->values()) {
+			if (i->have(a, level_)) {
+				for (auto j : m_->nei_[i->id()]) {
+					if (have_no_PC_support(i, a, j)) {
+						i->RemoveValue(a, level_);
+						if (!i->faild(level_)) {
+							q_var_.push(i);
+						}
+						else {
+							cs.state = false;
+							return cs;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	while (!q_var_.empty()) {
+		const auto j = q_var_.pop();
+		for (auto i : m_->nei_[j->id()]) {
+			for (auto a : i->values()) {
+				if (i->have(a, level_)) {
+					if (have_no_PC_support(i, a, j)) {
+						i->RemoveValue(a, level_);
+						if (!i->faild(level_)) {
+							q_var_.push(i);
+						}
+						else {
+							cs.state = false;
+							return cs;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	cs.state = true;
+	return cs;
 }
 
 bool lMaxRPC::have_no_PC_support(IntVar* i, const int a, IntVar* j) {

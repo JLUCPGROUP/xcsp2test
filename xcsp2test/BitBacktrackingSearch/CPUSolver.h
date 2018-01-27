@@ -459,13 +459,16 @@ public:
 		case  Heuristic::VRH_LEX:
 			return I_->size();
 
-		case Heuristic::VRH_DOM_DEG_MIN:
-		{
+		case Heuristic::VRH_DOM_DEG_MIN: {
 			double smt = DBL_MAX;
+			double cnt;
 			int idx = 0;
 			for (size_t i = 0; i < vs_size_; ++i) {
 				if (!I_->assiged(i)) {
-					const double cnt = double(s_[top_ - 1][i].count()) / bm_.deg[i];
+					if (bm_.deg[i] == 0)
+						cnt = -1;
+					else
+						cnt = double(s_[top_ - 1][i].count()) / bm_.deg[i];
 					if (cnt < smt) {
 						smt = cnt;
 						idx = i;

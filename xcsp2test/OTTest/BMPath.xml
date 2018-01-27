@@ -7,7 +7,7 @@
     <!--<BMFile id ="0">E:\Projects\benchmarks\driver\driverlogw-01c-sat_ext.xml</BMFile>-->
     <!--<BMFile id ="0">XMLFileNeg2.xml</BMFile>-->
     <!--<BMFile id ="0">XMLFileNeg.xml</BMFile>-->
-    <BMFile id ="0">E:\Projects\benchmarks\BH-4-4\BlackHole-4-4-e-0_ext.xml</BMFile>
+    <BMFile id ="0">E:/Projects/benchmarks/lard/lard-83-83.xml</BMFile>
     <!--<BMFile id ="0">E:/Projects/benchmarks/ModelRB/frb30-15/frb30-15/frb30-15-1_ext.xml</BMFile>-->
   </BMFiles>
 </BenchMark>

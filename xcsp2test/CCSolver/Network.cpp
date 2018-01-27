@@ -142,6 +142,8 @@ int IntVar::prev(const int a, const int p) const {
 }
 
 bool IntVar::have(const int a, const int p) const {
+	if (a == Limits::INDEX_OVERFLOW)
+		return false;
 	const auto index = get_bit_index(a);
 	return bit_doms_[p][get<0>(index)].test(get<1>(index));
 }

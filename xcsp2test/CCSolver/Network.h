@@ -146,7 +146,7 @@ protected:
 	//vector<int> anti_map;
 	vector<bitSetVector> bit_doms_;
 	bitSetVector bit_tmp_;
-	static int get_value(const int i, const int j);
+	static inline int get_value(const int i, const int j);
 	//vector<uint64_t> tmp_;
 };
 

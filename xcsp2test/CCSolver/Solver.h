@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include <queue>
 #include <functional>
+#include <set>
+#include <unordered_set>
 
 
 namespace cp {
@@ -314,16 +316,16 @@ private:
 //	vector<vector<vector<vector<int>>>> data_
 //};
 //
-//class AC3rm :
-//	public AC3 {
-//public:
-//	AC3rm(Network * nt);
-//	virtual ~AC3rm();
-//
-//protected:
-//	virtual bool seek_support(IntConVal& c_val) override;
-//	residues* res_;
-//};
+class AC3rm :
+	public AC3 {
+public:
+	AC3rm(Network * nt);
+	virtual ~AC3rm() {};
+
+protected:
+	bool seek_support(IntConVal& c_val, const int p) override;
+	vector<vector<int>> res_;
+};
 
 class SAC1 {
 public:
@@ -426,8 +428,12 @@ public:
 	bool have_PC_wit(IntVar* x, const int a, IntVar* y, const int b, IntVar* z);
 protected:
 	var_que q_var_;
-	unordered_map<IntVar*, bitSetVector> neibor_;
+	//unordered_map<IntVar*, bitSetVector> neibor_;
 	vector<vector<Tabular*>> nei_;
+	//vector<vector<unordered_set<IntVar*>>> pc_nei_;
+	vector<vector<vector<IntVar*>>> pc_nei_;
+	vector<int> last_pc;
+	vector<int> last_ac;
 };
 
 class MAC {

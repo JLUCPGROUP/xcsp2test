@@ -18,6 +18,9 @@ MAC::MAC(Network * n, const ACAlgorithm ac_algzm, const Heuristic::Var varh, con
 	case AC_3bit:
 		ac_ = new AC3bit(n_);
 		break;
+	case AC_3rm:
+		ac_ = new AC3rm(n_);
+		break;
 	case A_FC:
 		ac_ = new FC(n_);
 		break;

@@ -175,14 +175,14 @@ protected:
 
 class var_que {
 public:
-	int& have(const IntVar* v) { return vid_set_[v->id()]; };
+	//int& have(const IntVar* v) { return vid_set_[v->id()]; };
 	var_que() {}
 	//var_que(Network* n);
 	virtual ~var_que() {};
 
 	//void initial(Network* n);
 	//void DeleteQue();
-	bool have(IntVar* v);
+	//bool have(IntVar* v);
 	bool empty() const;
 	void initial(const int size);
 	bool full() const;
@@ -194,7 +194,7 @@ public:
 
 private:
 	vector<IntVar*> m_data_;
-	vector<int> vid_set_;
+	vector<bool> vid_set_;
 	size_t max_size_;
 	int m_front_;
 	int m_rear_;

@@ -36,50 +36,6 @@ lMaxRPC::lMaxRPC(Network * m) :AC3bit(m) {
 }
 
 ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
-	//level_ = level;
-	//q_var_.clear();
-	//for (auto i : x_evt) {
-	//	for (auto a : i->values()) {
-	//		if (i->have(a, level_)) {
-	//			for (auto j : m_->neighborhood[i]) {
-	//				if (have_no_PC_support(i, a, j)) {
-	//					i->RemoveValue(a, level_);
-	//					if (!i->faild(level_)) {
-	//						q_var_.push(i);
-	//					}
-	//					else {
-	//						cs.state = false;
-	//						return cs;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	//while (!q_var_.empty()) {
-	//	auto j = q_var_.pop();
-	//	for (auto i : m_->neighborhood[j]) {
-	//		for (auto a : i->values()) {
-	//			if (i->have(a, level_)) {
-	//				if (have_no_PC_support(i, a, j)) {
-	//					i->RemoveValue(a, level_);
-	//					if (!i->faild(level_)) {
-	//						q_var_.push(i);
-	//					}
-	//					else {
-	//						cs.state = false;
-	//						return cs;
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	//cs.state = true;
-	//return cs;	
-
 	level_ = level;
 	q_var_.clear();
 	for (auto i : x_evt) {
@@ -128,13 +84,6 @@ ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
 bool lMaxRPC::have_no_PC_support(IntVar* i, const int a, IntVar* j) {
 	const auto c = nei_[i->id()][j->id()];
 	const auto idx1 = m_->GetIntConValIndex(c->id(), i->id(), a);
-	//if (j->have(last_pc[idx1], level_))
-	//	return false;
-	//int v;
-	//if (last_pc[idx1] != Limits::INDEX_OVERFLOW)
-	//	v = last_pc[idx1] + 1;
-	//else
-		//v = j->head(level_);
 
 	for (int b = j->head(level_); b != Limits::INDEX_OVERFLOW; j->next_value(b, level_)) {
 		int PCWitness = true;

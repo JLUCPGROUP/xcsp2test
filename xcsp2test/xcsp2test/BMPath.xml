@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <BenchMark>
   <BMFiles nbBMFiles = "1">
-    <!--<BMFile id ="0">E:/Projects/benchmarks/queen_ext/queens_004.xml</BMFile>-->
+    <!--<BMFile id ="0">E:/Projects/benchmarks/queen_ext/queens_020.xml</BMFile>-->
     <!--<BMFile id ="0">queens-12_ext.xml</BMFile>-->
     <BMFile id ="0">E:\Projects\benchmarks\qa_ext\queenAttacking-5_ext.xml</BMFile>
     <!--<BMFile id ="0">E:\Projects\benchmarks\rlfapScensMod_ext\scen3-f11_ext.xml</BMFile>-->

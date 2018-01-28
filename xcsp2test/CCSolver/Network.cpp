@@ -150,10 +150,18 @@ bool IntVar::have(const int a, const int p) const {
 
 int IntVar::head(const int p) const {
 	for (int i = 0; i < num_bit_; ++i)
-		if (bit_doms_[p][i].any())
-			for (int j = 0; j < BITSIZE; ++j)
-				if (bit_doms_[p][i].test(j))
-					return get_value(i, j);
+		if (bit_doms_[p][i].any()) {
+			uint64_t b = bit_doms_[p][i].to_ullong();
+			int a;
+			__asm bsf eax, b
+			__asm mov a, eax
+			return a;
+		}
+	//for (int j = 0; j < BITSIZE; ++j) {
+
+	//	if (bit_doms_[p][i].test(j))
+	//		return get_value(i, j);
+	//}
 	return Limits::INDEX_OVERFLOW;
 }
 
@@ -362,8 +370,8 @@ int Network::GetIntConValIndex(IntConVal& c_val) const {
 }
 
 int Network::GetIntConValIndex(const int c_id, const int v_id, const int a) {
-	IntConVal c_a(tabs[c_id], vars[v_id], a);
-	return GetIntConValIndex(c_a);
+	const auto tid = tabs[c_id]->index(vars[v_id]);
+	return  c_id * max_arity_ * max_dom_size_ + tid * max_dom_size_ + a;
 }
 
 IntConVal Network::GetIntConVal(const int index) {

@@ -179,10 +179,6 @@ arc arc_que::pop() throw(std::bad_exception) {
 	return tmp;
 }
 /////////////////////////////////////////////////////////////////////////
-bool var_que::have(IntVar* v) {
-	return vid_set_[v->id()];
-}
-
 bool var_que::empty() const {
 	return m_front_ == m_rear_;
 }
@@ -201,18 +197,18 @@ bool var_que::full() const {
 }
 
 void var_que::push(IntVar* v) {
-	if (have(v))
+	if (vid_set_[v->id()])
 		return;
 	m_data_[m_rear_] = v;
 	m_rear_ = (m_rear_ + 1) % max_size_;
-	vid_set_[v->id()] = 1;
+	vid_set_[v->id()] = true;
 	++size_;
 }
 
 IntVar* var_que::pop() {
 	IntVar* tmp = m_data_[m_front_];
 	m_front_ = (m_front_ + 1) % max_size_;
-	vid_set_[tmp->id()] = 0;
+	vid_set_[tmp->id()] = false;
 	--size_;
 	return tmp;
 }
@@ -221,7 +217,7 @@ void var_que::clear() {
 	m_front_ = 0;
 	m_rear_ = 0;
 	size_ = 0;
-	vid_set_.assign(vid_set_.size(), 0);
+	vid_set_.assign(vid_set_.size(), false);
 }
 
 int var_que::max_size() const {

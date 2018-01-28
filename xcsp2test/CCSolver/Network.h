@@ -88,13 +88,13 @@ const int BITSIZE = 64;
 //	int limit_;
 //};
 
-inline static tuple<int, int> GetBitIdx(const int idx) {
+inline tuple<int, int> GetBitIdx(const int idx) {
 	tuple<int, int> a;
 	get<0>(a) = idx / BITSIZE;
 	get<1>(a) = idx % BITSIZE;
 	return a;
 }
-inline static int GetValue(const int i, const int j) {
+inline int GetValue(const int i, const int j) {
 	return  i*BITSIZE + j;
 }
 typedef vector<bitset<BITSIZE>> bitSetVector;
@@ -169,7 +169,7 @@ public:
 	bool operator!=(const IntVal& rhs);
 	//bool operator<(const IntVar &v);
 	friend std::ostream& operator<< (std::ostream &os, IntVal &v_val);
-	tuple<int, int> get_bit_index() const;
+	inline tuple<int, int> get_bit_index() const;
 	~IntVal() {};
 protected:
 	IntVar* v_;
@@ -286,8 +286,8 @@ public:
 	static void GetNextValidTuple(IntConVal & c_val, vector<int>& t, const int p);
 
 	//  由于所有变量的域长度不一定相同 所以这里的c-value值不一定真实存在
-	int GetIntConValIndex(IntConVal & c_val) const;
-	int GetIntConValIndex(const int c_id, const int v_id, const int a);
+	inline int GetIntConValIndex(IntConVal & c_val) const;
+	inline int GetIntConValIndex(const int c_id, const int v_id, const int a);
 	IntConVal GetIntConVal(int index);
 	int top() const { return top_; }
 	int tmp() const { return tmp_; }

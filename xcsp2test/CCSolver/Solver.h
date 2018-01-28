@@ -444,7 +444,7 @@ public:
 	virtual ~MAC();
 	int sol_count() const { return sol_count_; }
 	void sol_count(const int val) { sol_count_ = val; }
-
+	bool solution_check() const;
 private:
 	int sol_count_ = 0;
 	Network *n_;

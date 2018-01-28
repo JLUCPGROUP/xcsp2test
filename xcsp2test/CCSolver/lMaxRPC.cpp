@@ -85,17 +85,15 @@ ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
 	for (auto i : x_evt) {
 		for (int a = i->head(level_); a != Limits::INDEX_OVERFLOW; i->next_value(a, level_)) {
 			for (auto j : m_->nei_[i->id()]) {
-				if (!j->assigned(level_)) {
-					if (have_no_PC_support(i, a, j)) {
-						i->RemoveValue(a, level_);
-						if (!i->faild(level_)) {
-							q_var_.push(i);
-						}
-						else {
-							++nei_[i->id()][j->id()]->weight;
-							cs.state = false;
-							return cs;
-						}
+				if (have_no_PC_support(i, a, j)) {
+					i->RemoveValue(a, level_);
+					if (!i->faild(level_)) {
+						q_var_.push(i);
+					}
+					else {
+						++nei_[i->id()][j->id()]->weight;
+						cs.state = false;
+						return cs;
 					}
 				}
 			}
@@ -105,20 +103,18 @@ ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
 	while (!q_var_.empty()) {
 		const auto j = q_var_.pop();
 		for (auto i : m_->nei_[j->id()]) {
-			if (!i->assigned(level_)) {
-				for (int a = i->head(level_); a != Limits::INDEX_OVERFLOW; i->next_value(a, level_)) {
-					const auto c = nei_[i->id()][j->id()];
-					const auto idx = m_->GetIntConValIndex(c->id(), i->id(), a);
-					if (j->have(last_pc[idx], level_) && have_no_PC_support(i, a, j)) {
-						i->RemoveValue(a, level_);
-						if (!i->faild(level_)) {
-							q_var_.push(i);
-						}
-						else {
-							++c->weight;
-							cs.state = false;
-							return cs;
-						}
+			for (int a = i->head(level_); a != Limits::INDEX_OVERFLOW; i->next_value(a, level_)) {
+				const auto c = nei_[i->id()][j->id()];
+				const auto idx = m_->GetIntConValIndex(c->id(), i->id(), a);
+				if (j->have(last_pc[idx], level_) && have_no_PC_support(i, a, j)) {
+					i->RemoveValue(a, level_);
+					if (!i->faild(level_)) {
+						q_var_.push(i);
+					}
+					else {
+						++c->weight;
+						cs.state = false;
+						return cs;
 					}
 				}
 			}

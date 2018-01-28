@@ -46,7 +46,7 @@
 //		builder.GenerateHModel(hm);
 //		Network* n = new Network(hm);
 //
-//		MAC mac(n, AC_3bit, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN);
+//		MAC mac(n, CA_LMRPC_BIT, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN);
 //		const SearchStatistics statistics = mac.enforce(TimeLimit);
 //		solve_time.push_back(statistics.solve_time);
 //		positive.push_back(statistics.num_positive);

@@ -210,6 +210,20 @@ MAC::~MAC() {
 	//delete I;
 }
 
+bool MAC::solution_check() const {
+	n_->CopyLevel(0, n_->tmp());
+	bool res = false;
+	for (int i = 0; i < I.size(); ++i) {
+		auto v = I[i].v();
+		auto a = I[i].a();
+		v->ReduceTo(a, n_->tmp());
+		res = ac_->enforce(n_->vars, n_->tmp()).state;
+	}
+	n_->ClearLevel(n_->tmp());
+
+	return res;
+}
+
 IntVal MAC::select_v_value(const int p) const {
 	//IntVar* v = n_->vars[I->size()];
 	//return IntVal(v, v->head());
@@ -281,7 +295,11 @@ IntVar* MAC::select_var(const int p) const {
 	case Heuristic::VRH_DOM_DEG_MIN: {
 		for (auto v : n_->vars)
 			if (!v->assigned(p)) {
-				const int dom_deg = v->size(p) / n_->neighborhood[v].size();
+				int dom_deg;
+				if (n_->neighborhood[v].size() == 0)
+					dom_deg = -1;
+				else
+					dom_deg = v->size(p) / n_->neighborhood[v].size();
 				if (dom_deg < min_size) {
 					min_size = dom_deg;
 					var = v;

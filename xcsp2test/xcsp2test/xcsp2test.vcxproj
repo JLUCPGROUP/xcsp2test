@@ -152,6 +152,7 @@
     <ClCompile Include="code.cpp" />
     <ClCompile Include="dom_folder.cpp" />
     <ClCompile Include="dom_wdeg_folder.cpp" />
+    <ClCompile Include="lm_domtest.cpp" />
     <ClCompile Include="sac1_test.cpp" />
     <ClCompile Include="sac3_test.cpp" />
     <ClCompile Include="find_shit.cpp" />

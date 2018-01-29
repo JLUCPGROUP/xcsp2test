@@ -178,6 +178,9 @@ arc arc_que::pop() throw(std::bad_exception) {
 
 	return tmp;
 }
+
+
+
 /////////////////////////////////////////////////////////////////////////
 bool var_que::empty() const {
 	return m_front_ == m_rear_;
@@ -227,6 +230,38 @@ int var_que::max_size() const {
 int var_que::size() const {
 	return size_;
 }
+
+void var_pri_que::initial(const int size) {
+	vid_set_.resize(size, false);
+}
+
+void var_pri_que::push(IntVar* v) {
+	if (!vid_set_[v->id()])
+		q_.push(v);
+	else
+		vid_set_[v->id()] = true;
+}
+
+IntVar* var_pri_que::pop() {
+	IntVar* v = q_.top();
+	vid_set_[v->id()] = false;
+	q_.pop();
+	return v;
+}
+
+void var_pri_que::clear() {
+	q_ = priority_queue<IntVar*, vector<IntVar*>, cmp>();
+	vid_set_.assign(vid_set_.size(), false);
+}
+
+int var_pri_que::size() const {
+	return q_.size();
+}
+
+bool var_pri_que::empty() const {
+	return q_.empty();
+}
+
 ///////////////////////////////////////////////////////////
 //bool var_priority_queue::have(IntVar* v) {
 //	return vid_set_[v->id()];

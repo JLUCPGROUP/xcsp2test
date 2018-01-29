@@ -128,6 +128,25 @@ private:
 	int m_front_;
 	int m_rear_;
 };
+struct cmp {
+	bool operator() (const IntVar* a, const  IntVar* b) const {
+		return a->top_size > b->top_size;
+	}
+};
+class var_pri_que {
+public:
+	var_pri_que() {};
+	~var_pri_que() {};
+	void initial(const int size);
+	void push(IntVar* v);
+	IntVar* pop();
+	void clear();
+	int size() const;
+	bool empty() const;
+protected:
+	priority_queue<IntVar*, vector<IntVar*>, cmp> q_;
+	vector<bool> vid_set_;
+};
 
 class AssignedStack {
 public:
@@ -430,6 +449,7 @@ public:
 	bool have_PC_wit(IntVar* x, const int a, IntVar* y, const int b, IntVar* z);
 protected:
 	var_que q_var_;
+	//var_pri_que q_var_;
 	//unordered_map<IntVar*, bitSetVector> neibor_;
 	vector<vector<Tabular*>> nei_;
 	//vector<vector<unordered_set<IntVar*>>> pc_nei_;

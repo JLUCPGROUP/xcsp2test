@@ -92,6 +92,7 @@ IntVar::IntVar(HVar* v, const int num_vars) :
 void IntVar::RemoveValue(const int a, const int p) {
 	const auto index = GetBitIdx(a);
 	bit_doms_[p][get<0>(index)].reset(get<1>(index));
+	--top_size;
 }
 
 void IntVar::ReduceTo(const int a, const int p) {
@@ -99,11 +100,13 @@ void IntVar::ReduceTo(const int a, const int p) {
 	for (auto& v : bit_doms_[p])
 		v.reset();
 	bit_doms_[p][get<0>(index)].set(get<1>(index));
+	top_size = 0;
 }
 
 void IntVar::AddValue(const int a, const int p) {
 	const auto index = GetBitIdx(a);
 	bit_doms_[p][get<0>(index)].set(get<1>(index));
+	++top_size;
 }
 
 int IntVar::size(const int p) const {
@@ -114,21 +117,46 @@ int IntVar::size(const int p) const {
 }
 
 int IntVar::next(const int a, const int p) const {
-	for (int i = (a + 1); i < init_size_; ++i) {
-		const auto index = GetBitIdx(i);
-		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
-			return i;
-	}
+	//for (int i = (a + 1); i < init_size_; ++i) {
+	//	const auto index = GetBitIdx(i);
+	//	if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
+	//		return i;
+	//}
+	auto index = GetBitIdx(a);
+	bitset<BITSIZE> b = (bit_doms_[p][get<0>(index)] >> get<1>(index)) >> 1;
+	if (b.any())
+		return a + FirstOne(b) + 1;
+
+	for (size_t i = get<0>(index) + 1; i < num_bit_; ++i)
+		if (bit_doms_[p][i].any())
+			return GetValue(i, FirstOne(bit_doms_[p][i]));
 	return Limits::INDEX_OVERFLOW;
 }
 
 void IntVar::next_value(int& a, const int p) {
-	++a;
-	for (; a < init_size_; ++a) {
-		const auto index = GetBitIdx(a);
-		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
-			return;
+	//++a;
+	//for (; a < init_size_; ++a) {
+	//	const auto index = GetBitIdx(a);
+	//	if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
+	//		return;
+	//}
+	//a = Limits::INDEX_OVERFLOW;
+
+	auto index = GetBitIdx(a++);
+	bitset<BITSIZE> b = bit_doms_[p][get<0>(index)];
+	b >>= get<1>(index);
+	b >>= 1;
+
+	if (b.any()) {
+		a += FirstOne(b);
+		return;
 	}
+
+	for (size_t i = get<0>(index) + 1; i < num_bit_; ++i)
+		if (bit_doms_[p][i].any()) {
+			a = GetValue(i, FirstOne(bit_doms_[p][i]));
+			return;
+		}
 	a = Limits::INDEX_OVERFLOW;
 }
 
@@ -157,10 +185,9 @@ int IntVar::head(const int p) const {
 	//		}
 	//	}
 
-	for (size_t i = 0; i < num_bit_; i++) {
-		const uint64_t bd = bit_doms_[p][i].to_ullong();
-		if (bd)
-			return GetValue(i, FirstOne(bd));
+	for (size_t i = 0; i < num_bit_; ++i) {
+		if (bit_doms_[p][i].any())
+			return GetValue(i, FirstOne(bit_doms_[p][i]));
 	}
 	return Limits::INDEX_OVERFLOW;
 }
@@ -183,6 +210,7 @@ void IntVar::show(const int p) {
 	cout << endl;
 }
 
+
 //tuple<int, int> IntVar::get_bit_index(const int idx) const {
 //	tuple<int, int> a;
 //	get<0>(a) = idx / BITSIZE;
@@ -202,10 +230,12 @@ int IntVar::GetDelete(const int src, const int dest, bitSetVector& del_vals) {
 void IntVar::BackTo(const int dest) {
 	for (int i = dest; i <= top_; ++i)
 		assigned_[i] = false;
+	top_ = dest;
+	top_size = size(top_);
 }
 
 void IntVar::ClearLevel(const int p) {
-	bit_doms_[p].assign(num_bit_, 0);
+	//bit_doms_[p].assign(num_bit_, 0);
 	assigned_[p] = false;
 }
 

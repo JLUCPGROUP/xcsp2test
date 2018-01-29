@@ -24,7 +24,7 @@
     <ClInclude Include="GModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SAC1.h">
+    <ClInclude Include="SAC1o.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="GModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SAC1.cpp">
+    <ClCompile Include="SAC1o.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

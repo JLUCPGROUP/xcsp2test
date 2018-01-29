@@ -154,12 +154,17 @@
     <ClInclude Include="BuildGModel.h" />
     <ClInclude Include="CPUSolver.h" />
     <ClInclude Include="GModel.h" />
-    <ClInclude Include="SAC1.h" />
+    <ClInclude Include="SAC1o.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CPUSolver.cpp" />
     <ClCompile Include="GModel.cpp" />
-    <ClCompile Include="SAC1.cpp" />
+    <ClCompile Include="SAC1o.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCSolver\CCSolver.vcxproj">
+      <Project>{d3826658-1f48-42f8-8b3b-19be4ea41d28}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

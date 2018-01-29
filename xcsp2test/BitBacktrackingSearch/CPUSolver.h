@@ -260,13 +260,13 @@ const BIntVal OutLastNode = BIntVal(-2, -4);
 //	int curr_ = -1;
 //};
 
-class AssignedStack {
+class BAssignedStack {
 public:
-	AssignedStack() {};
+	BAssignedStack() {};
 
 	void initial(GModel* m);
 	void initial(HModel* m);
-	~AssignedStack() {};
+	~BAssignedStack() {};
 	void push(BIntVal& v_a);
 	BIntVal pop();
 	BIntVal top() const;
@@ -278,8 +278,8 @@ public:
 	BIntVal at(const int i) const;
 	void clear();
 	bool assiged(const int v) const;
-	friend std::ostream& operator<< (std::ostream &os, AssignedStack &I);
-	friend std::ostream& operator<< (std::ostream &os, AssignedStack* I);
+	friend std::ostream& operator<< (std::ostream &os, BAssignedStack &I);
+	friend std::ostream& operator<< (std::ostream &os, BAssignedStack* I);
 	vector<int> solution();
 protected:
 	vector<BIntVal> vals_;
@@ -304,7 +304,7 @@ template< class T>
 class NetworkStack {
 public:
 	NetworkStack() {};
-	void initial(GModel* gm, AssignedStack* I) {
+	void initial(GModel* gm, BAssignedStack* I) {
 		I_ = I;
 		bm_.initial(gm);
 		vs_size_ = gm->vs.size();
@@ -315,7 +315,7 @@ public:
 		++top_;
 	}
 
-	void initial(HModel* hm, AssignedStack* I) {
+	void initial(HModel* hm, BAssignedStack* I) {
 		I_ = I;
 		bm_.initial(hm);
 		vs_size_ = hm->vars.size();
@@ -638,7 +638,7 @@ private:
 	//计算删值后网络bitDom的中间变量
 	vector<T> r_;
 	//赋值栈
-	AssignedStack *I_;
+	BAssignedStack *I_;
 	//网络栈
 	vector<vector<T>> s_;
 	T tmp_;
@@ -651,7 +651,7 @@ private:
 template<class T>
 class CPUSolver {
 public:
-	AssignedStack I;
+	BAssignedStack I;
 	CPUSolver(GModel* gm, const int64_t start_time = 0) : start_time(start_time) {
 		Timer t;
 		I.initial(gm);

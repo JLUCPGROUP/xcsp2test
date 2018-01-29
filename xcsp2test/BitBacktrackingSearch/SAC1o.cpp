@@ -1,24 +1,25 @@
 /*
- * SAC1.cpp
+ * SAC1G.cpp
  *
  *  Created on: 2016年11月17日
  *      Author: leezear
  */
 
-#include "SAC1.h"
+#include "SAC1o.h"
 using namespace Gecode;
 namespace cp {
-SAC1::SAC1(GModel* model) :
+
+SAC1G::SAC1G(GModel* model) :
 	model(model) {
 	// TODO Auto-generated constructor stub
 
 }
 
-SAC1::~SAC1() {
+SAC1G::~SAC1G() {
 	// TODO Auto-generated destructor stub
 }
 
-bool SAC1::enforce() const {
+bool SAC1G::enforce() const {
 	bool modified = false;
 	SpaceStatus status = model->status();
 
@@ -54,7 +55,7 @@ bool SAC1::enforce() const {
 	return true;
 }
 //
-//bool SAC1::enforce() const {
+//bool SAC1G::enforce() const {
 //	bool modified = false;
 //	SpaceStatus status = model->status();
 //
@@ -89,7 +90,7 @@ bool SAC1::enforce() const {
 //}
 
 
-//bool SAC1::enforce() const
+//bool SAC1G::enforce() const
 //{
 //	bool modified = false;
 //	SpaceStatus status = model->status();

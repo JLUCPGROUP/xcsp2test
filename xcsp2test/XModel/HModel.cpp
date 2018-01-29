@@ -322,6 +322,9 @@ vector<HTab*> HModel::solution_check(vector<int>& sol) {
 		tuple.clear();
 	}
 
+	if (conflict_constraints.empty()) 
+		cout << "pass!" << endl;
+
 	return conflict_constraints;
 }
 

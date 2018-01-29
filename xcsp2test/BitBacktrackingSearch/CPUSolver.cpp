@@ -2,19 +2,19 @@
 using namespace std;
 
 namespace cp {
-void AssignedStack::initial(GModel* m) {
+void BAssignedStack::initial(GModel* m) {
 	max_size_ = m->vs.size();
 	vals_.resize(m->vs.size());
 	asnd_.resize(m->vs.size(), false);
 };
 
-void AssignedStack::initial(HModel* m) {
+void BAssignedStack::initial(HModel* m) {
 	max_size_ = m->vars.size();
 	vals_.resize(m->vars.size());
 	asnd_.resize(m->vars.size(), false);
 };
 
-void AssignedStack::push(BIntVal& v_a) {
+void BAssignedStack::push(BIntVal& v_a) {
 	//const int pre = top_ - 1;
 	////进入的是positive decision 当前栈顶是negative decision
 	//if (pre >= 0 && (!vals_[pre].aop) && v_a.aop) {
@@ -28,21 +28,21 @@ void AssignedStack::push(BIntVal& v_a) {
 	//}
 };
 
-BIntVal AssignedStack::pop() {
+BIntVal BAssignedStack::pop() {
 	--top_;
 	asnd_[vals_[top_].v] = false;
 	return vals_[top_];
 }
 
-BIntVal AssignedStack::top() const { return vals_[top_]; };
-int AssignedStack::size() const { return top_; }
-int AssignedStack::capacity() const { return max_size_; }
-bool AssignedStack::full() const { return top_ == max_size_; }
-bool AssignedStack::empty() const { return top_ == 0; }
-BIntVal AssignedStack::operator[](const int i) const { return vals_[i]; };
-BIntVal AssignedStack::at(const int i) const { return vals_[i]; }
+BIntVal BAssignedStack::top() const { return vals_[top_]; };
+int BAssignedStack::size() const { return top_; }
+int BAssignedStack::capacity() const { return max_size_; }
+bool BAssignedStack::full() const { return top_ == max_size_; }
+bool BAssignedStack::empty() const { return top_ == 0; }
+BIntVal BAssignedStack::operator[](const int i) const { return vals_[i]; };
+BIntVal BAssignedStack::at(const int i) const { return vals_[i]; }
 
-vector<int> AssignedStack::solution() {
+vector<int> BAssignedStack::solution() {
 	if (size() == 0) {
 		return vector<int>();
 	}
@@ -53,16 +53,16 @@ vector<int> AssignedStack::solution() {
 	}
 	return sol;
 };
-void AssignedStack::clear() { top_ = 0; };
-bool AssignedStack::assiged(const int v) const { return asnd_[v]; };
+void BAssignedStack::clear() { top_ = 0; };
+bool BAssignedStack::assiged(const int v) const { return asnd_[v]; };
 
-ostream & operator<<(ostream & os, AssignedStack & I) {
+ostream & operator<<(ostream & os, BAssignedStack & I) {
 	for (int i = 0; i < I.size(); ++i)
 		os << I[i] << " ";
 	return os;
 }
 
-ostream & operator<<(ostream & os, AssignedStack * I) {
+ostream & operator<<(ostream & os, BAssignedStack * I) {
 	for (int i = 0; i < I->size(); ++i)
 		os << I->at(i) << " ";
 	return os;

@@ -125,11 +125,10 @@ void XBuilder::generateRelations(XModel* model) const {
 			model->add(i, arity, size, semantics, ts_str);
 			XMLString::release(&ts_str);
 		}
-		else
-		{
+		else {
 			model->add(i, arity, size, semantics, "");
 		}
-			XMLString::release(&semantics);
+		XMLString::release(&semantics);
 
 	}
 }

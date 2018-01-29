@@ -70,6 +70,8 @@ const int ABSENT = 0;
 }
 
 const int BITSIZE = 64;
+const int DIV_BIT = 6;
+const int MOD_MASK = 0x3f;
 
 //class dynamic_bitset {
 //public:
@@ -90,8 +92,8 @@ const int BITSIZE = 64;
 
 inline tuple<int, int> GetBitIdx(const int idx) {
 	tuple<int, int> a;
-	get<0>(a) = idx / BITSIZE;
-	get<1>(a) = idx % BITSIZE;
+	get<0>(a) = idx >> DIV_BIT;
+	get<1>(a) = idx & MOD_MASK;
 	return a;
 }
 inline int GetValue(const int i, const int j) {
@@ -196,10 +198,10 @@ public:
 	vector<IntVar *>scope;
 	const vector<vector<int>>& tuples() const { return tuples_; }
 	float weight;
-private:
 	int id_;
 	vector<vector<int>>& tuples_;
 	uint64_t stamp_ = 0;
+private:
 };
 
 class arc {
@@ -267,10 +269,10 @@ public:
 		return os;
 	}
 
-private:
 	Tabular* c_;
 	IntVar* v_;
 	int a_;
+private:
 };
 
 class Network {
@@ -286,9 +288,24 @@ public:
 	static void GetNextValidTuple(IntConVal & c_val, vector<int>& t, const int p);
 
 	//  由于所有变量的域长度不一定相同 所以这里的c-value值不一定真实存在
-	inline int GetIntConValIndex(IntConVal & c_val) const;
-	inline int GetIntConValIndex(const int c_id, const int v_id, const int a);
-	IntConVal GetIntConVal(int index);
+	inline int GetIntConValIndex(IntConVal& c_val) const {
+		return  c_val.c_->id_ * max_arity_ * max_dom_size_ + c_val.c_->index(c_val.v_) * max_dom_size_ + c_val.a_;
+	}
+	inline int GetIntConValIndex(const int c_id, const int v_id, const int a) {
+		const auto tid = tabs[c_id]->index(vars[v_id]);
+		return  c_id * max_arity_ * max_dom_size_ + tid * max_dom_size_ + a;
+	}
+
+	//IntConVal GetIntConVal(int index);
+	//int Network::GetIntConValIndex(const int c_id, const int v_id, const int a)
+	inline IntConVal GetIntConVal(const int index) {
+		const int c_id = index / tabs.size();
+		const int v_id = index % tabs.size() / max_dom_size_;
+		const int a = index % tabs.size() % max_dom_size_;
+		IntConVal c(tabs[c_id], tabs[c_id]->scope[v_id], a);
+		return c;
+	}
+
 	int top() const { return top_; }
 	int tmp() const { return tmp_; }
 	//void RestoreUpto(const int level);

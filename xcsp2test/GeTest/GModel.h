@@ -22,6 +22,7 @@ public:
 	Space* copy(bool share) override;
 	void print(void) const;
 	virtual ~GModel();
+	//vector<int> solution_check(vector<int>& sol);
 };
 
 } /* namespace cp */

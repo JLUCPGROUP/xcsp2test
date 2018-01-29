@@ -11,7 +11,7 @@ namespace cp {
 
 GModel::GModel() {
 	// TODO Auto-generated constructor stub
-
+	
 }
 
 GModel::GModel(bool share, GModel& s) :
@@ -33,5 +33,6 @@ void GModel::print(void) const {
 GModel::~GModel() {
 	// TODO Auto-generated destructor stub
 }
+
 
 } /* namespace cp */

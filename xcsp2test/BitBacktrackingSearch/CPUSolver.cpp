@@ -22,9 +22,9 @@ void AssignedStack::push(BIntVal& v_a) {
 	//	asnd_[v_a.v] = true;
 	//}
 	//else {
-		vals_[top_] = v_a;
-		asnd_[v_a.v] = v_a.aop ? true : false;
-		++top_;
+	vals_[top_] = v_a;
+	asnd_[v_a.v] = v_a.aop ? true : false;
+	++top_;
 	//}
 };
 
@@ -40,7 +40,19 @@ int AssignedStack::capacity() const { return max_size_; }
 bool AssignedStack::full() const { return top_ == max_size_; }
 bool AssignedStack::empty() const { return top_ == 0; }
 BIntVal AssignedStack::operator[](const int i) const { return vals_[i]; };
-BIntVal AssignedStack::at(const int i) const { return vals_[i]; };
+BIntVal AssignedStack::at(const int i) const { return vals_[i]; }
+
+vector<int> AssignedStack::solution() {
+	if (size() == 0) {
+		return vector<int>();
+	}
+	vector<int> sol(size());
+	sol.reserve(max_size_);
+	for (int i = 0; i < size(); ++i) {
+		sol[vals_[i].v] = vals_[i].a;
+	}
+	return sol;
+};
 void AssignedStack::clear() { top_ = 0; };
 bool AssignedStack::assiged(const int v) const { return asnd_[v]; };
 

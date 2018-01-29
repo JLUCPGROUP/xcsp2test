@@ -5,9 +5,9 @@
     <!--<BMFile id ="0">queens-12_ext.xml</BMFile>-->
     <!--<BMFile id ="0">E:/Projects/benchmarks/composed-25-1-2/composed-25-1-2-0_ext.xml</BMFile>-->
     <!--<BMFile id ="0">E:\Projects\benchmarks\driver\driverlogw-01c-sat_ext.xml</BMFile>-->
-    <!--<BMFile id ="0">XMLFileNeg2.xml</BMFile>-->
-    <!--<BMFile id ="0">XMLFileNeg.xml</BMFile>-->
-    <BMFile id ="0">E:/Projects/benchmarks/lard/lard-83-83.xml</BMFile>
+    <!--<BMFile id ="0">E:/Projects/benchmarks/frb53-24/frb53-24-1_ext.xml</BMFile>-->
+    <BMFile id ="0">E:\Projects\benchmarks\qwh-15\qwh-15-106-0_ext.xml</BMFile>
+    <!--<BMFile id ="0">E:\Projects\benchmarks\rand-2-27\rand-27-27-351-163-63021_ext.xml</BMFile>-->
     <!--<BMFile id ="0">E:/Projects/benchmarks/ModelRB/frb30-15/frb30-15/frb30-15-1_ext.xml</BMFile>-->
   </BMFiles>
 </BenchMark>

@@ -132,6 +132,10 @@ void HTab::GetTuple(int idx, vector<int>& src_t, vector<int>& std_t) {
 	}
 }
 
+bool HTab::sat(vector<int>& t) {
+	return binary_search(tuples.begin(), tuples.end(), t);
+}
+
 ostream & operator<<(ostream &os, const vector<HVar*>& a) {
 	for (auto v : a)
 		os << v->id << "[" << v->name << "] ";
@@ -296,6 +300,29 @@ int HModel::calculate(vector<int>& expr, vector<int>& params_len) {
 	}
 
 	return res_stack[0];
+}
+
+vector<HTab*> HModel::solution_check(vector<int>& sol) {
+	if (sol.empty()) {
+		cout << "no solution" << endl;
+		return vector<HTab*>();
+	}
+	vector<int> tuple(max_arity());
+	vector<HTab*> conflict_constraints(tabs.size());
+	conflict_constraints.clear();
+	tuple.clear();
+	for (auto c : tabs) {
+		for (auto v : c->scope) {
+			tuple.push_back(sol[v->id]);
+		}
+		if (!c->sat(tuple)) {
+			cout << "conflict constraint id = " << c->id << endl;
+			conflict_constraints.push_back(c);
+		}
+		tuple.clear();
+	}
+
+	return conflict_constraints;
 }
 
 
@@ -484,8 +511,12 @@ void HModel::neighbor(HTab* t) {
 
 	for (auto x : t->scope)
 		for (auto y : t->scope)
-			if (x != y)
+			if (x != y) {
 				neighborhoods[x->id][y->id].push_back(t->id);
+				if (neighborhoods[x->id][y->id].size() > 1) {
+					have_same_scope_ = true;
+				}
+			}
 }
 
 void HModel::get_scope(vector<string>& scp_str, vector<HVar*>& scp) {

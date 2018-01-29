@@ -280,7 +280,7 @@ public:
 	bool assiged(const int v) const;
 	friend std::ostream& operator<< (std::ostream &os, AssignedStack &I);
 	friend std::ostream& operator<< (std::ostream &os, AssignedStack* I);
-
+	vector<int> solution();
 protected:
 	vector<BIntVal> vals_;
 	vector<bool> asnd_;
@@ -732,6 +732,10 @@ public:
 					++statistics.num_sol;
 					statistics.solve_time = t.elapsed();
 					cout << I << endl;
+					auto a = I.solution();
+					for (auto i : a)
+						cout << i << " ";
+					cout << endl;
 					return statistics;
 				}
 				else {
@@ -791,7 +795,7 @@ static ByteSize GetBitSetSize(const int mds) {
 };
 
 template<class T>
-SearchStatistics binary_search(GModel *gm, const Heuristic::DecisionScheme ds, Heuristic::Var varh, Heuristic::Val valh, const int64_t time_limit, bool nei, const int64_t start_time = 0) {
+SearchStatistics binary_search(GModel *gm, HModel *hm, const Heuristic::DecisionScheme ds, Heuristic::Var varh, Heuristic::Val valh, const int64_t time_limit, bool nei, const int64_t start_time = 0) {
 	CPUSolver<T> s(gm, start_time);
 	SearchStatistics statistics;
 	if (ds == Heuristic::DS_NB) {
@@ -800,6 +804,7 @@ SearchStatistics binary_search(GModel *gm, const Heuristic::DecisionScheme ds, H
 	else if (ds == Heuristic::DS_BI) {
 		statistics = s.MAC(varh, valh, time_limit);
 	}
+	hm->solution_check(s.I.solution());
 	return statistics;
 }
 
@@ -813,6 +818,7 @@ SearchStatistics binary_search(HModel *hm, const Heuristic::DecisionScheme ds, H
 	else if (ds == Heuristic::DS_BI) {
 		statistics = s.MAC(varh, valh, time_limit);
 	}
+	hm->solution_check(s.I.solution());
 	return statistics;
 }
 
@@ -835,6 +841,7 @@ static SearchStatistics StartSearch(HModel* hm, const Heuristic::DecisionScheme 
 	case u225to256:
 		return binary_search<bitset<256>>(hm, ds, varh, valh, time_limit, nei, start_time);
 	default:
+		return binary_search<bitset<1024>>(hm, ds, varh, valh, time_limit, nei, start_time);
 		cout << "out of limit!!" << endl;
 		SearchStatistics s;
 		s.build_time = -1;
@@ -842,25 +849,26 @@ static SearchStatistics StartSearch(HModel* hm, const Heuristic::DecisionScheme 
 	}
 }
 
-static SearchStatistics StartSearch(GModel *gm, const Heuristic::DecisionScheme ds, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, const int64_t start_time = 0) {
+static SearchStatistics  StartSearch(GModel *gm, HModel *hm, const Heuristic::DecisionScheme ds, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, const int64_t start_time = 0) {
 	switch (GetBitSetSize(gm->mds)) {
 	case u1to32:
-		return binary_search<bitset<32>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<32>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u33to64:
-		return binary_search<bitset<64>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<64>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u65to96:
-		return binary_search<bitset<96>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<96>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u97to128:
-		return binary_search<bitset<128>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<128>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u129to160:
-		return binary_search<bitset<160>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<160>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u161to192:
-		return binary_search<bitset<192>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<192>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u193to224:
-		return binary_search<bitset<224>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<224>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	case u225to256:
-		return binary_search<bitset<256>>(gm, ds, varh, valh, time_limit, nei, start_time);
+		return binary_search<bitset<256>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	default:
+		return binary_search<bitset<1024>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 		cout << "out of limit!!" << endl;
 		SearchStatistics s;
 		s.build_time = -1;

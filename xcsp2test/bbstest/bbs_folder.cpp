@@ -47,8 +47,8 @@
 //		SAC_times.push_back(sac_time);
 //		if (result) {
 //			//sat sac
-//			const SearchStatistics statistics = StartSearch(gm, Heuristic::DS_BI, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
-//			//const SearchStatistics statistics = StartSearch(gm,Heuristic::DS_BI,  Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//			const SearchStatistics statistics = StartSearch(gm, hm, Heuristic::DS_NB, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//			//const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, sac_time);
 //			//const SearchStatistics statistics = StartSearch(gm, Heuristic::DS_BI, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
 //			build_times.push_back(statistics.build_time);
 //			search_times.push_back(statistics.solve_time);

@@ -168,6 +168,7 @@ public:
 	bool SAT_STD(vector<int>& t);
 	void Show();
 	void GetTuple(int idx, vector<int>& t, vector<int>& t_idx);
+	bool sat(vector<int>& t);
 private:
 	//临时变量
 	vector<int> tmp_t_;
@@ -197,6 +198,8 @@ public:
 	void show();
 	int regist(string exp_name, function<int(vector<int>&)>);
 	static int calculate(vector<int> &stack, vector<int>& params_len);
+	vector<HTab*> solution_check(vector<int>& sol);
+	bool have_same_scope() const { return have_same_scope_; }
 private:
 	void get_postfix(const string expr, vector<int>& data, vector<int>& params, vector<int>& num_op_params, vector<HVar*>& scp);
 	tuple<ExpType, int> get_type(string expr);
@@ -217,6 +220,7 @@ private:
 	size_t mas_ = 0;
 	int exp_id_ = MIN_USER_OPT;
 	int var_uid_ = MAX_VALUE;
+	bool have_same_scope_ = false;
 };
 
 } /* namespace cp */

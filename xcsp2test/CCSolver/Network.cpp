@@ -151,11 +151,10 @@ bool IntVar::have(const int a, const int p) const {
 int IntVar::head(const int p) const {
 	for (int i = 0; i < num_bit_; ++i)
 		if (bit_doms_[p][i].any()) {
-			uint64_t b = bit_doms_[p][i].to_ullong();
-			int a;
-			__asm bsf eax, b
-			__asm mov a, eax
-			return a;
+			for (int j = 0; j < BITSIZE; ++j) {
+				if (bit_doms_[p][i].test(j))
+					return get_value(i, j);
+			}
 		}
 	//for (int j = 0; j < BITSIZE; ++j) {
 
@@ -365,22 +364,18 @@ void Network::GetNextValidTuple(IntConVal& c_val, vector<int>& t, const int p) {
 	c_val.c()->GetNextValidTuple(v_a, t, p);
 }
 
-int Network::GetIntConValIndex(IntConVal& c_val) const {
-	return  c_val.c()->id() * max_arity_ * max_dom_size_ + c_val.c()->index(c_val.v()) * max_dom_size_ + c_val.a();
-}
+//int Network::GetIntConValIndex(IntConVal& c_val) const {
+//	return  c_val.c()->id() * max_arity_ * max_dom_size_ + c_val.c()->index(c_val.v()) * max_dom_size_ + c_val.a();
+//}
 
-int Network::GetIntConValIndex(const int c_id, const int v_id, const int a) {
-	const auto tid = tabs[c_id]->index(vars[v_id]);
-	return  c_id * max_arity_ * max_dom_size_ + tid * max_dom_size_ + a;
-}
-
-IntConVal Network::GetIntConVal(const int index) {
-	const int c_id = index / tabs.size();
-	const int v_id = index % tabs.size() / max_dom_size_;
-	const int a = index % tabs.size() % max_dom_size_;
-	IntConVal c(tabs[c_id], tabs[c_id]->scope[v_id], a);
-	return c;
-}
+//int Network::GetIntConValIndex(const int c_id, const int v_id, const int a)
+//IntConVal Network::GetIntConVal(const int index) {
+//	const int c_id = index / tabs.size();
+//	const int v_id = index % tabs.size() / max_dom_size_;
+//	const int a = index % tabs.size() % max_dom_size_;
+//	IntConVal c(tabs[c_id], tabs[c_id]->scope[v_id], a);
+//	return c;
+//}
 
 int Network::NewLevel(const int src) {
 	top_ = src + 1;

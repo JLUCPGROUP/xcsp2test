@@ -30,6 +30,12 @@
     <ClCompile Include="sac1_test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="find_shit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="code.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="BMPath.xml">
@@ -38,5 +44,10 @@
     <Xml Include="queens-12_ext.xml">
       <Filter>资源文件</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gen.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

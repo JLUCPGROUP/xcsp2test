@@ -15,8 +15,8 @@ AC3bit::AC3bit(Network * m) :
 				m_->GetIntConValIndex(IntConVal(c, c->scope[1], t[1])) };
 			//const int idx0 = m_->GetIntConValIndex(IntConVal(c, c->scope[0], t[0]));
 			//const int idx1 = m_->GetIntConValIndex(IntConVal(c, c->scope[1], t[1]));
-			auto idx0 = c->scope[0]->get_bit_index(t[0]);
-			auto idx1 = c->scope[0]->get_bit_index(t[1]);
+			auto idx0 = GetBitIdx(t[0]);
+			auto idx1 = GetBitIdx(t[1]);
 			//bitSup_[index[0]][t[0] / BITSIZE].set(t[1] % BITSIZE);
 			//bitSup_[index[1]][t[1] / BITSIZE].set(t[0] % BITSIZE);
 			bitSup_[index[0]][get<0>(idx1)].set(get<1>(idx1));

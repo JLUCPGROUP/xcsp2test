@@ -228,26 +228,20 @@ private:
 class AC {
 public:
 	AC(Network *m);
-	AC(Network *m, const LookAhead look_ahead, const LookBack look_back);
+	//AC(Network *m, const LookAhead look_ahead, const LookBack look_back);
 	virtual ~AC() {};
 	//virtual bool enforce(VarEvt* x_evt, const int level = 0) = 0;
 	virtual ConsistencyState enforce(vector<IntVar*>& x_evt, const int level) = 0;
 	//virtual ConsistencyState enforce_arc(vector<IntVar*>& x_evt, const int level) = 0;
 	ConsistencyState cs;
 	//void q_insert(IntVar* v);
-	void insert(IntVar* v);
 	int del() const { return delete_; }
 protected:
 	//vector<IntVar*> q_;
-	var_que q_;
-	Network *m_;
-	vector<uint64_t> stamp_var_;
-	vector<uint64_t> stamp_tab_;
-	uint64_t t_ = 0;
 	vector<int> tmp_tuple_;
+	Network *m_;
 	int delete_ = 0;
-	LookAhead la_;
-	LookBack lb_;
+	int level_ = 0;
 };
 
 class AC3 :public AC {
@@ -261,10 +255,18 @@ public:
 
 protected:
 	//pro_que<T> q;
-	//arc_que Q;
+	//arc_que Q;	
+	var_que q_;
+	vector<uint64_t> stamp_var_;
+	vector<uint64_t> stamp_tab_;
+	uint64_t t_ = 0;
+
+	LookAhead la_;
+	LookBack lb_;
 	int level_ = 0;
 	virtual bool revise(arc& c_x, const int level);
 	virtual bool seek_support(IntConVal& c_val, const int level);
+	void insert(IntVar* v);
 	//void inital_q_arc();
 	//private:
 	//	void inital_Q_arc();
@@ -420,7 +422,7 @@ protected:
 	bool deletion = false;
 };
 
-class lMaxRPC :public AC3bit {
+class lMaxRPC :public AC {
 public:
 	lMaxRPC(Network *m);
 	ConsistencyState enforce(vector<IntVar*>& x_evt, const int level = 0) override;
@@ -434,6 +436,7 @@ protected:
 	vector<vector<vector<IntVar*>>> pc_nei_;
 	vector<int> last_pc;
 	vector<int> last_ac;
+	vector<vector<bitset<BITSIZE>>> bitSup_;
 };
 
 class MAC {

@@ -90,19 +90,19 @@ IntVar::IntVar(HVar* v, const int num_vars) :
 //}
 
 void IntVar::RemoveValue(const int a, const int p) {
-	const auto index = get_bit_index(a);
+	const auto index = GetBitIdx(a);
 	bit_doms_[p][get<0>(index)].reset(get<1>(index));
 }
 
 void IntVar::ReduceTo(const int a, const int p) {
-	const auto index = get_bit_index(a);
+	const auto index = GetBitIdx(a);
 	for (auto& v : bit_doms_[p])
 		v.reset();
 	bit_doms_[p][get<0>(index)].set(get<1>(index));
 }
 
 void IntVar::AddValue(const int a, const int p) {
-	const auto index = get_bit_index(a);
+	const auto index = GetBitIdx(a);
 	bit_doms_[p][get<0>(index)].set(get<1>(index));
 }
 
@@ -115,7 +115,7 @@ int IntVar::size(const int p) const {
 
 int IntVar::next(const int a, const int p) const {
 	for (int i = (a + 1); i < init_size_; ++i) {
-		const auto index = get_bit_index(i);
+		const auto index = GetBitIdx(i);
 		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
 			return i;
 	}
@@ -125,7 +125,7 @@ int IntVar::next(const int a, const int p) const {
 void IntVar::next_value(int& a, const int p) {
 	++a;
 	for (; a < init_size_; ++a) {
-		const auto index = get_bit_index(a);
+		const auto index = GetBitIdx(a);
 		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
 			return;
 	}
@@ -134,7 +134,7 @@ void IntVar::next_value(int& a, const int p) {
 
 int IntVar::prev(const int a, const int p) const {
 	for (int i = (a - 1); i >= 0; --i) {
-		const auto index = get_bit_index(i);
+		const auto index = GetBitIdx(i);
 		if (bit_doms_[p][get<0>(index)].test(get<1>(index)))
 			return i;
 	}
@@ -144,7 +144,7 @@ int IntVar::prev(const int a, const int p) const {
 bool IntVar::have(const int a, const int p) const {
 	if (a == Limits::INDEX_OVERFLOW)
 		return false;
-	const auto index = get_bit_index(a);
+	const auto index = GetBitIdx(a);
 	return bit_doms_[p][get<0>(index)].test(get<1>(index));
 }
 
@@ -153,7 +153,7 @@ int IntVar::head(const int p) const {
 		if (bit_doms_[p][i].any()) {
 			for (int j = 0; j < BITSIZE; ++j) {
 				if (bit_doms_[p][i].test(j))
-					return get_value(i, j);
+					return GetValue(i, j);
 			}
 		}
 	//for (int j = 0; j < BITSIZE; ++j) {
@@ -169,7 +169,7 @@ int IntVar::tail(const int p) const {
 		if (bit_doms_[p][i].any())
 			for (int j = (BITSIZE - 1); j >= 0; --j)
 				if (bit_doms_[p][i].test(j))
-					return get_value(i, j);
+					return GetValue(i, j);
 	return Limits::INDEX_OVERFLOW;
 }
 
@@ -182,12 +182,12 @@ void IntVar::show(const int p) {
 	cout << endl;
 }
 
-tuple<int, int> IntVar::get_bit_index(const int idx) const {
-	tuple<int, int> a;
-	get<0>(a) = idx / BITSIZE;
-	get<1>(a) = idx % BITSIZE;
-	return a;
-}
+//tuple<int, int> IntVar::get_bit_index(const int idx) const {
+//	tuple<int, int> a;
+//	get<0>(a) = idx / BITSIZE;
+//	get<1>(a) = idx % BITSIZE;
+//	return a;
+//}
 
 int IntVar::GetDelete(const int src, const int dest, bitSetVector& del_vals) {
 	int size = 0;
@@ -220,9 +220,9 @@ void IntVar::copy(const int src, const int dest) {
 	assigned_[dest] = assigned_[src];
 }
 
-int IntVar::get_value(const int i, const int j) {
-	return i*BITSIZE + j;
-}
+//int IntVar::get_value(const int i, const int j) {
+//	return i*BITSIZE + j;
+//}
 
 ///////////////////////////////////////////////////////////////
 const IntVal & IntVal::operator=(const IntVal & rhs) {
@@ -248,12 +248,12 @@ bool IntVal::operator!=(const IntVal & rhs) {
 	return !((this == &rhs) || (v_ == rhs.v_ && a_ == rhs.a_ && aop_ == rhs.aop_));
 }
 
-tuple<int, int> IntVal::get_bit_index() const {
-	tuple<int, int> a;
-	get<0>(a) = a_ / BITSIZE;
-	get<1>(a) = a_ % BITSIZE;
-	return a;
-}
+//tuple<int, int> IntVal::get_bit_index() const {
+//	tuple<int, int> a;
+//	get<0>(a) = a_ / BITSIZE;
+//	get<1>(a) = a_ % BITSIZE;
+//	return a;
+//}
 
 ostream & operator<<(ostream & os, IntVal & v_val) {
 	const string s = (v_val.aop_) ? " = " : " != ";

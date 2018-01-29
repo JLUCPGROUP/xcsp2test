@@ -30,7 +30,7 @@ void Qsac::initial(const int p) {
 }
 
 void Qsac::push(IntVal val) {
-	auto a = val.get_bit_index();
+	auto a = GetBitIdx(val.a_);
 	bitDoms_[val.vid()][get<0>(a)].set(get<1>(a));
 	//auto b = GetBitIdx(val.vid());
 	//vars_assigned_[get<0>(b)].reset(get<1>(b));
@@ -38,8 +38,7 @@ void Qsac::push(IntVal val) {
 
 IntVal Qsac::pop(const Heuristic::Var varh, const Heuristic::Val valh, const int p) {
 	IntVal val = select_IntVal(varh, valh, p);
-
-	auto a = val.get_bit_index();
+	auto a = GetBitIdx(val.a_);
 	bitDoms_[val.vid()][get<0>(a)].reset(get<1>(a));
 	//auto b = GetBitIdx(val.vid());
 	//vars_assigned_[get<0>(b)].set(get<1>(b));
@@ -107,7 +106,7 @@ bool Qsac::all_assigned(AssignedStack& I) const {
 }
 
 bool Qsac::have(IntVal val) {
-	auto a = val.get_bit_index();
+	auto a = GetBitIdx(val.a_);
 	return  bitDoms_[val.vid()][get<0>(a)].test(get<1>(a));
 }
 bool Qsac::have(IntVar* var, const int a) {

@@ -2,10 +2,17 @@
 namespace cp {
 AC3::AC3(Network* m) :
 	AC(m) {
+	q_.initial(m_->vars.size());
+	stamp_var_.resize(m_->vars.size(), 0);
+	stamp_tab_.resize(m_->tabs.size(), 0);
 	//inital_q_arc();
 	//q_.reserve(m->vars.size());
 }
-
+void AC3::insert(IntVar* v) {
+	q_.push(v);
+	++t_;
+	stamp_var_[v->id()] = t_;
+}
 //bool AC3::enforce(VarEvt* x_evt, const int level) {
 //	level_ = level;
 //	q_.clear();

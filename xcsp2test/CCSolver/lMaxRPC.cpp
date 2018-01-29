@@ -4,7 +4,7 @@ using namespace std;
 namespace cp {
 using namespace std;
 
-lMaxRPC::lMaxRPC(Network * m) :AC3bit(m) {
+lMaxRPC::lMaxRPC(Network * m) :AC(m) {
 	//初始化队列
 	q_var_.initial(m_->vars.size());
 	//初始化约束查找矩阵
@@ -33,6 +33,17 @@ lMaxRPC::lMaxRPC(Network * m) :AC3bit(m) {
 
 	last_pc.resize(m_->tabs.size()*m_->max_domain_size()*m_->max_arity(), Limits::INDEX_OVERFLOW);
 	last_ac.resize(m_->tabs.size()*m_->max_domain_size()*m_->max_arity(), Limits::INDEX_OVERFLOW);
+	bitSup_.resize(m_->tabs.size()*m_->max_domain_size()*m_->max_arity(), vector<bitset<BITSIZE>>(m_->max_domain_size(), 0));
+	for (Tabular* c : m_->tabs) {
+		for (auto t : c->tuples()) {
+			const int index[] = { m_->GetIntConValIndex(IntConVal(c, c->scope[0], t[0])),
+				m_->GetIntConValIndex(IntConVal(c, c->scope[1], t[1])) };
+			auto idx0 = GetBitIdx(t[0]);
+			auto idx1 = GetBitIdx(t[1]);
+			bitSup_[index[0]][get<0>(idx1)].set(get<1>(idx1));
+			bitSup_[index[1]][get<0>(idx0)].set(get<1>(idx0));
+		}
+	}
 }
 
 ConsistencyState lMaxRPC::enforce(vector<IntVar*>& x_evt, const int level) {
@@ -149,7 +160,8 @@ bool lMaxRPC::have_PC_wit(IntVar* i, const int a, IntVar* j, const int b, IntVar
 	//const auto c_jk = nei_[j->id()][k->id()];
 	//const int cva_ikia = m_->GetIntConValIndex(c_ik->id(), i->id(), a);
 	//const int cva_ikia = m_->GetIntConValIndex(c_jk->id(), j->id(), b);
-	for (int c = 0; c < bitSup_[cva_ikia].size(); ++c)
+	const int bitdom_size = k->bitDom(level_).size();
+	for (int c = 0; c < bitdom_size; ++c)
 		if ((bitSup_[cva_ikia][c] & bitSup_[cva_jkjb][c] & k->bitDom(level_)[c]).any()) {
 			last_ac[cva_ikia] = c;
 			last_ac[cva_jkjb] = c;

@@ -127,7 +127,7 @@ public:
 	bitSetVector& bitDom(const int p) { return bit_doms_[p]; }
 	int id() const { return id_; }
 	void show(const int p);
-	inline tuple<int, int> get_bit_index(const int idx) const;
+	//inline tuple<int, int> get_bit_index(const int idx) const;
 	vector<int>& values() { return vals_; }
 	int GetDelete(const int src, const int dest, bitSetVector& del_vals);
 	void BackTo(const int dest);
@@ -148,7 +148,7 @@ protected:
 	//vector<int> anti_map;
 	vector<bitSetVector> bit_doms_;
 	bitSetVector bit_tmp_;
-	static inline int get_value(const int i, const int j);
+	//static inline int get_value(const int i, const int j);
 	//vector<uint64_t> tmp_;
 };
 
@@ -171,12 +171,12 @@ public:
 	bool operator!=(const IntVal& rhs);
 	//bool operator<(const IntVar &v);
 	friend std::ostream& operator<< (std::ostream &os, IntVal &v_val);
-	inline tuple<int, int> get_bit_index() const;
+	//inline tuple<int, int> get_bit_index() const;
 	~IntVal() {};
-protected:
 	IntVar* v_;
 	int a_;
 	bool aop_ = true;
+protected:
 };
 
 static const IntVal Nil_Val(nullptr, -1);

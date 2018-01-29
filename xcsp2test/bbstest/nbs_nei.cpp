@@ -31,7 +31,7 @@ int main() {
 
 	cout << "------------------modeling------------------" << endl;
 	//const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-	const SearchStatistics statistics = StartSearch(gm, hm, Heuristic::DS_NB, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+	const SearchStatistics statistics = StartSearch(gm, hm, Heuristic::DS_BI, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
 	//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
 	//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
 	const string  slv_str = (statistics.num_sol > 0) ? "SAT!!" : "UNSAT";

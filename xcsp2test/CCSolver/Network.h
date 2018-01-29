@@ -97,9 +97,24 @@ inline tuple<int, int> GetBitIdx(const int idx) {
 	return a;
 }
 inline int GetValue(const int i, const int j) {
-	return  i*BITSIZE + j;
+	return  i << DIV_BIT + j;
 }
 typedef vector<bitset<BITSIZE>> bitSetVector;
+
+inline uint64_t FirstOne(const uint64_t UseMask) {
+	uint64_t index = UseMask;
+	//将第一个为1位的低位都置1，其它位都置0
+	index = (index - 1)  &  ~index;
+	//得到有多少为1的位
+	index = (index & 0x5555555555555555) + ((index >> 1) & 0x5555555555555555);
+	index = (index & 0x3333333333333333) + ((index >> 2) & 0x3333333333333333);
+	index = (index & 0x0F0F0F0F0F0F0F0F) + ((index >> 4) & 0x0F0F0F0F0F0F0F0F);
+	index = (index & 0x00FF00FF00FF00FF) + ((index >> 8) & 0x00FF00FF00FF00FF);
+	index = (index & 0x0000ffff0000ffff) + ((index >> 16) & 0x0000ffff0000ffff);
+	index = (index & 0xFFFFFFFF) + ((index & 0xFFFFFFFF00000000) >> 32);
+	//得到位数,如果为32则表示全0
+	return index;
+}
 
 class IntVar {
 public:

@@ -149,18 +149,19 @@ bool IntVar::have(const int a, const int p) const {
 }
 
 int IntVar::head(const int p) const {
-	for (int i = 0; i < num_bit_; ++i)
-		if (bit_doms_[p][i].any()) {
-			for (int j = 0; j < BITSIZE; ++j) {
-				if (bit_doms_[p][i].test(j))
-					return GetValue(i, j);
-			}
-		}
-	//for (int j = 0; j < BITSIZE; ++j) {
+	//for (int i = 0; i < num_bit_; ++i)
+	//	if (bit_doms_[p][i].any()) {
+	//		for (int j = 0; j < BITSIZE; ++j) {
+	//			if (bit_doms_[p][i].test(j))
+	//				return GetValue(i, j);
+	//		}
+	//	}
 
-	//	if (bit_doms_[p][i].test(j))
-	//		return get_value(i, j);
-	//}
+	for (size_t i = 0; i < num_bit_; i++) {
+		const uint64_t bd = bit_doms_[p][i].to_ullong();
+		if (bd)
+			return GetValue(i, FirstOne(bd));
+	}
 	return Limits::INDEX_OVERFLOW;
 }
 

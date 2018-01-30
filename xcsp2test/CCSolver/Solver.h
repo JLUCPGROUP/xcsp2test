@@ -61,6 +61,7 @@ struct SearchStatistics {
 	uint64_t build_time = 0;
 	uint64_t solve_time = 0;
 	bool time_out = false;
+	bool pass;
 	//int n_deep = 0;
 };
 
@@ -181,7 +182,7 @@ public:
 	vector<IntVal> vals() const;
 	friend ostream& operator<< (ostream &os, AssignedStack &I);
 	friend ostream& operator<< (ostream &os, AssignedStack* I);
-
+	vector<int> solution();
 protected:
 	Network* gm_;
 	vector<IntVal> vals_;
@@ -478,6 +479,7 @@ public:
 	int sol_count() const { return sol_count_; }
 	void sol_count(const int val) { sol_count_ = val; }
 	bool solution_check() const;
+	AssignedStack I;
 private:
 	int sol_count_ = 0;
 	Network *n_;
@@ -485,7 +487,6 @@ private:
 	vector<IntVar*> x_evt_;
 	//VarEvt* x_evt_;
 	ACAlgorithm ac_algzm_;
-	AssignedStack I;
 	IntVal select_v_value(const int p) const;
 	int select_val(const IntVar* v, const int p) const;
 	IntVar* select_var(const int p) const;

@@ -95,6 +95,18 @@ bool AssignedStack::assiged(const int v) const { return asnd_[v]; }
 bool AssignedStack::assiged(const IntVar* v) const { return assiged(v->id()); }
 vector<IntVal> AssignedStack::vals() const { return vals_; }
 
+vector<int> AssignedStack::solution() {
+	if (size() == 0) {
+		return vector<int>();
+	}
+	vector<int> sol(size());
+	sol.reserve(max_size_);
+	for (int i = 0; i < size(); ++i) {
+		sol[vals_[i].vid()] = vals_[i].a();
+	}
+	return sol;
+}
+
 ostream & operator<<(ostream & os, AssignedStack & I) {
 	for (int i = 0; i < I.size(); ++i)
 		os << I[i] << " ";

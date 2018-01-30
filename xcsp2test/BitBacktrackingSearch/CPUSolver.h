@@ -3,6 +3,8 @@
 #include <bitset>
 #include "Timer.h"
 #include "GModel.h"
+#include "../CCSolver/Network.h"
+#include "../CCSolver/Solver.h"
 using namespace std;
 namespace cp {
 typedef unsigned int u32;
@@ -60,37 +62,37 @@ enum SearchState {
 	//,	S_BACKTRACK
 };
 
-namespace Heuristic {
-enum Var {
-	VRH_LEX,
-	VRH_DOM_MIN,
-	VRH_VWDEG,
-	VRH_DOM_DEG_MIN,
-	VRH_DOM_WDEG_MIN
-};
+//namespace Heuristic {
+//enum Var {
+//	VRH_LEX,
+//	VRH_DOM_MIN,
+//	VRH_VWDEG,
+//	VRH_DOM_DEG_MIN,
+//	VRH_DOM_WDEG_MIN
+//};
+//
+//enum Val {
+//	VLH_MIN,
+//	VLH_MIN_DOM,
+//	VLH_MIN_INC,
+//	VLH_MAX_INC,
+//	VLH_VWDEG
+//};
+//
+//enum DecisionScheme {
+//	DS_BI,
+//	DS_NB
+//};
+//};
 
-enum Val {
-	VLH_MIN,
-	VLH_MIN_DOM,
-	VLH_MIN_INC,
-	VLH_MAX_INC,
-	VLH_VWDEG
-};
-
-enum DecisionScheme {
-	DS_BI,
-	DS_NB
-};
-};
-
-struct SearchStatistics {
-	u64 num_sol = 0;
-	u64 nodes = 0;
-	u64 build_time = 0;
-	u64 solve_time = 0;
-	bool time_out = false;
-	//int n_deep = 0;
-};
+//struct SearchStatistics {
+//	u64 num_sol = 0;
+//	u64 nodes = 0;
+//	u64 build_time = 0;
+//	u64 solve_time = 0;
+//	bool time_out = false;
+//	//int n_deep = 0;
+//};
 
 inline u32 _32f1(u32 v) {
 	static const char msb_256_table[256] =
@@ -133,7 +135,7 @@ public:
 		wdeg.resize(vs_size, vector<int64_t>(vs_size, 1));
 
 		for (size_t i = 0; i < gm->vs.size(); i++) {
-			const IntVar v = gm->vs[i];
+			const Gecode::IntVar v = gm->vs[i];
 			for (IntVarValues j(v); j(); ++j) {
 				//bd[i] |= M1[j.val()];
 				bd[i][j.val()] = 1;
@@ -141,7 +143,7 @@ public:
 				rel(*s, s->vs[i] == j.val());
 				s->status();
 				for (size_t k = 0; k < s->vs.size(); k++) {
-					const IntVar vv = s->vs[k];
+					const Gecode::IntVar vv = s->vs[k];
 					for (IntVarValues l(vv); l(); ++l)
 						bsd[i][j.val()][k][l.val()] = 1;
 				}
@@ -179,6 +181,52 @@ public:
 		}
 
 		nei = hm->neighborhoods;
+		for (int i = 0; i < vs_size; ++i) {
+			for (int j = 0; j < vs_size; ++j) {
+				deg[i] += nei[i][j].size();
+				if (deg[i] > 0) {
+					wdeg[i][j] = 1;
+					wdeg[j][i] = 1;
+				}
+			}
+		}
+	}
+
+	void initial(Network* n, HModel *hm) {
+		AC3bit ac(n);
+		mds = n->max_domain_size();
+		vs_size = n->vars.size();
+		bsd.resize(vs_size, vector<vector<T>>(mds, vector<T>(vs_size)));
+		bd.resize(vs_size, 0);
+		deg.resize(vs_size, 0);
+		wdeg.resize(vs_size, vector<int64_t>(vs_size, 0));
+
+		vector<IntVar*> x_evt;
+		for (auto v : n->vars) {
+			for (auto i : v->values()) {
+				if (v->have(i, 0)) {
+					bd[v->id()][i] = true;
+					n->CopyLevel(0, 1);
+					v->ReduceTo(i, 1);
+					v->assign(true, 1);
+					x_evt.push_back(v);
+					ac.enforce(x_evt, 1);
+					x_evt.clear();
+					for (auto x : n->vars) {
+						for (auto j : x->values()) {
+							if (x->have(j, 1)) {
+								bsd[v->id()][i][x->id()][j] = true;
+							}
+						}
+					}
+					n->ClearLevel(1);
+				}
+
+			}
+		}
+
+		nei = hm->neighborhoods;
+
 		for (int i = 0; i < vs_size; ++i) {
 			for (int j = 0; j < vs_size; ++j) {
 				deg[i] += nei[i][j].size();
@@ -266,6 +314,7 @@ public:
 
 	void initial(GModel* m);
 	void initial(HModel* m);
+	void initial(Network* m);
 	~BAssignedStack() {};
 	void push(BIntVal& v_a);
 	BIntVal pop();
@@ -320,6 +369,16 @@ public:
 		bm_.initial(hm);
 		vs_size_ = hm->vars.size();
 		mds_ = hm->max_domain_size();
+		r_ = bm_.bd;
+		s_.resize(vs_size_ + 1, vector<T>(vs_size_, 0));
+		s_[0].assign(r_.begin(), r_.end());
+		++top_;
+	}
+	void initial(Network* n, HModel* hm, BAssignedStack* I) {
+		I_ = I;
+		bm_.initial(n, hm);
+		vs_size_ = n->vars.size();
+		mds_ = n->max_domain_size();
 		r_ = bm_.bd;
 		s_.resize(vs_size_ + 1, vector<T>(vs_size_, 0));
 		s_[0].assign(r_.begin(), r_.end());
@@ -665,6 +724,12 @@ public:
 		n.initial(hm, &I);
 		statistics.build_time = t.elapsed();
 	}
+	CPUSolver(Network* m, HModel* hm, const int64_t start_time = 0) : start_time(start_time) {
+		Timer t;
+		I.initial(m);
+		n.initial(m, hm, &I);
+		statistics.build_time = t.elapsed();
+	}
 	~CPUSolver() {};
 
 	SearchStatistics MAC(const Heuristic::Var varh, const Heuristic::Val valh, int64_t time_limit) {
@@ -678,6 +743,7 @@ public:
 
 			if (t.elapsed() > time_limit) {
 				//cout << t.elapsed() << endl;
+				statistics.solve_time = t.elapsed();
 				statistics.time_out = true;
 				return statistics;
 			}
@@ -687,9 +753,9 @@ public:
 			SearchState state = n.push_back(val);
 
 			if ((state == S_BRANCH) && I.full()) {
-				cout << I << endl;
-				++statistics.num_sol;
 				statistics.solve_time = t.elapsed();
+				++statistics.num_sol;
+				cout << I << endl;
 				//state = S_FAILED;
 				return statistics;
 			}
@@ -804,7 +870,10 @@ SearchStatistics binary_search(GModel *gm, HModel *hm, const Heuristic::Decision
 	else if (ds == Heuristic::DS_BI) {
 		statistics = s.MAC(varh, valh, time_limit);
 	}
-	hm->solution_check(s.I.solution());
+	if (!statistics.time_out) {
+		hm->solution_check(s.I.solution());
+	}
+	else { cout << "no solution" << endl; }
 	return statistics;
 }
 
@@ -818,7 +887,32 @@ SearchStatistics binary_search(HModel *hm, const Heuristic::DecisionScheme ds, H
 	else if (ds == Heuristic::DS_BI) {
 		statistics = s.MAC(varh, valh, time_limit);
 	}
-	hm->solution_check(s.I.solution());
+	if (!statistics.time_out) {
+		hm->solution_check(s.I.solution());
+	}
+	else { cout << "time out" << endl; }
+	return statistics;
+}
+
+template<class T>
+SearchStatistics binary_search(Network *n, HModel* hm, const Heuristic::DecisionScheme ds, Heuristic::Var varh, Heuristic::Val valh, const int64_t time_limit, bool nei, const int64_t start_time = 0) {
+	CPUSolver<T> s(n, hm, start_time);
+	//if (nei) {
+	//	CPUSolver<T> s(hm, start_time);
+	//}
+	//else { CPUSolver<T> s(n, start_time); }
+	SearchStatistics statistics;
+	if (ds == Heuristic::DS_NB) {
+		statistics = s.search(varh, valh, time_limit, Heuristic::DS_NB, nei);
+	}
+	else if (ds == Heuristic::DS_BI) {
+		statistics = s.MAC(varh, valh, time_limit);
+	}
+	if (!statistics.time_out) {
+		hm->solution_check(s.I.solution());
+	}
+	else { cout << "time out" << endl; }
+
 	return statistics;
 }
 
@@ -869,6 +963,32 @@ static SearchStatistics  StartSearch(GModel *gm, HModel *hm, const Heuristic::De
 		return binary_search<bitset<256>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
 	default:
 		return binary_search<bitset<1024>>(gm, hm, ds, varh, valh, time_limit, nei, start_time);
+		cout << "out of limit!!" << endl;
+		SearchStatistics s;
+		s.build_time = -1;
+		return s;
+	}
+}
+static SearchStatistics  StartSearch(Network *n, HModel *hm, const Heuristic::DecisionScheme ds, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, const int64_t start_time = 0) {
+	switch (GetBitSetSize(n->max_domain_size())) {
+	case u1to32:
+		return binary_search<bitset<32>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u33to64:
+		return binary_search<bitset<64>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u65to96:
+		return binary_search<bitset<96>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u97to128:
+		return binary_search<bitset<128>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u129to160:
+		return binary_search<bitset<160>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u161to192:
+		return binary_search<bitset<192>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u193to224:
+		return binary_search<bitset<224>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	case u225to256:
+		return binary_search<bitset<256>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
+	default:
+		return binary_search<bitset<1024>>(n, hm, ds, varh, valh, time_limit, nei, start_time);
 		cout << "out of limit!!" << endl;
 		SearchStatistics s;
 		s.build_time = -1;

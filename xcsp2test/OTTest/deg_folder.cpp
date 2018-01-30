@@ -156,8 +156,8 @@ int main(const int argc, char ** argv) {
 			ts.Clear();
 		}
 
-		//DecisionBuilder* const db = s.MakePhase(vars, Solver::CHOOSE_MIN_SIZE, Solver::ASSIGN_MIN_VALUE);
-		DecisionBuilder* db = MakeNQueensDecisionBuilder(&s, vars.size(), vars, deg);
+		DecisionBuilder* const db = s.MakePhase(vars, Solver::CHOOSE_MIN_SIZE, Solver::ASSIGN_MIN_VALUE);
+		//DecisionBuilder* db = MakeNQueensDecisionBuilder(&s, vars.size(), vars, deg);
 		SearchLimit* limit = s.MakeTimeLimit(time_limit);
 		MySearchMonitor * const sm = new MySearchMonitor(&s);
 		s.NewSearch(db, limit, sm);

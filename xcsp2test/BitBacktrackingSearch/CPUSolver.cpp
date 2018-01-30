@@ -14,6 +14,13 @@ void BAssignedStack::initial(HModel* m) {
 	asnd_.resize(m->vars.size(), false);
 };
 
+void BAssignedStack::initial(Network* m) {
+	max_size_ = m->vars.size();
+	vals_.resize(m->vars.size());
+	asnd_.resize(m->vars.size(), false);
+};
+
+
 void BAssignedStack::push(BIntVal& v_a) {
 	//const int pre = top_ - 1;
 	////进入的是positive decision 当前栈顶是negative decision

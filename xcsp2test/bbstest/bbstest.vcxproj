@@ -152,6 +152,8 @@
     <ClCompile Include="nbs_folder.cpp" />
     <ClCompile Include="nbs_nei.cpp" />
     <ClCompile Include="nbs_nei_folder.cpp" />
+    <ClCompile Include="new_FCBit2.cpp" />
+    <ClCompile Include="new_FCbit3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="BMPath.xml" />

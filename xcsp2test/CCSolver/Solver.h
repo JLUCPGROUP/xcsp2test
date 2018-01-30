@@ -52,6 +52,7 @@ enum DecisionScheme {
 };
 };
 
+
 struct SearchStatistics {
 	uint64_t num_sol = 0;
 	uint64_t num_positive = 0;
@@ -86,6 +87,15 @@ struct SearchError {
 	IntVar* v = nullptr;
 	IntVal v_a_fail;
 	int level = 0;
+};
+struct SearchScheme {
+	Heuristic::Var vrh;
+	Heuristic::Var vlh;
+	Heuristic::DecisionScheme ds;
+
+	string vrh_str;
+	string vlh_str;
+	string ds_str;
 };
 
 class VarEvt {

@@ -172,9 +172,6 @@
     </Xml>
     <Xml Include="queens-12_ext.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="gen.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

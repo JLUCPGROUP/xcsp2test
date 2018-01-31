@@ -146,6 +146,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="checker.cpp" />
     <ClCompile Include="deg_folder.cpp" />
     <ClCompile Include="folder.cpp" />
     <ClCompile Include="main.cpp" />

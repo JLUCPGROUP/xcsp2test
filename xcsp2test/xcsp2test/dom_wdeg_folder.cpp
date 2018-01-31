@@ -19,7 +19,7 @@ using namespace std;
 typedef unsigned long long u64;
 #define LOGFILE
 const string XPath = "BMPath.xml";
-const int64_t TimeLimit = 1800100;
+const int64_t TimeLimit = 1800000;
 const string bmp_root = "E:\\Projects\\benchmarks\\";
 const string bmp_ext = ".xml";
 void getFilesAll(string path, vector<string>& files);
@@ -69,23 +69,29 @@ int main(const int argc, char ** argv) {
 		positive.push_back(statistics.num_positive);
 		negative.push_back(statistics.num_negative);
 		vector<int> solution = mac.I.solution();
-		auto pass = hm->solution_check(solution).empty();
+		bool conflict = false;
+		if (!statistics.time_out)
+			conflict = hm->solution_check(solution).empty();
 
 		delete hm;
 		delete n;
 #ifdef LOGFILE
 		lofi << f << endl;
-		if (pass) {
-			lofi << "pass!!!!!!!" << endl;
+		if (solution.empty() && !statistics.time_out) {
+			lofi << "so solution!!!!!!!" << endl;
 		}
-		else {
+		else if (conflict) {
 			lofi << "**************error***************" << endl;
 		}
-
-		for (auto i : solution) {
-			lofi << i << " ";
+		else if (statistics.time_out) {
+			lofi << "time out!!" << endl;
 		}
-		lofi << endl;
+
+		if (!solution.empty() && !statistics.time_out) {
+			for (auto i : solution)
+				lofi << i << " ";
+			lofi << endl;
+		}
 #endif
 	}
 
@@ -113,9 +119,9 @@ int main(const int argc, char ** argv) {
 	}
 	lofi << "---------------summary---------------" << endl;
 	lofi << "file :" << argv[1] << " branch = " << ss.ds_str << " heu = " << ss.vrh_str << endl;
-	lofi << "avg time = " << all_time / files.size() << "|" << all_time / files.size() / 1000 << endl;
+	lofi << "avg time = " << all_time / files.size() << " s |" << all_time / files.size() / 1000 << " ms." << endl;
 	lofi << "avg node = " << all_nodes / files.size() << "|" << all_nodes / files.size() / 1000000 << "M." << endl;
-	lofi << "time out = " << count_if(solve_time.begin(), solve_time.end(), [](int x) {return x > TimeLimit - 100; }) << endl;
+	lofi << "time out = " << count_if(solve_time.begin(), solve_time.end(), [](int x) {return x > TimeLimit; }) << endl;
 	lofi << "---------------end---------------" << endl;
 	lofi.close();
 #endif

@@ -32,5 +32,8 @@
     <ClCompile Include="deg_folder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="checker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@ using namespace std;
 typedef unsigned long long u64;
 #define LOGFILE
 const string XPath = "BMPath.xml";
-const int64_t TimeLimit = 1800000;
+const int64_t TimeLimit = 1800100;
 const string bmp_root = "E:\\Projects\\benchmarks\\";
 const string bmp_ext = ".xml";
 void getFilesAll(string path, vector<string>& files);
@@ -27,7 +27,7 @@ bool getScheme(char ** argv, SearchScheme& ss);
 
 int main(const int argc, char ** argv) {
 
-	if (argc <= 3) {
+	if (argc <= 2) {
 		cout << "no argument" << endl;
 		return 0;
 	}
@@ -115,7 +115,7 @@ int main(const int argc, char ** argv) {
 	lofi << "file :" << argv[1] << " branch = " << ss.ds_str << " heu = " << ss.vrh_str << endl;
 	lofi << "avg time = " << all_time / files.size() << "|" << all_time / files.size() / 1000 << endl;
 	lofi << "avg node = " << all_nodes / files.size() << "|" << all_nodes / files.size() / 1000000 << "M." << endl;
-	lofi << "time out = " << count_if(solve_time.begin(), solve_time.end(), [](int x) {return x > TimeLimit - 1; }) << endl;
+	lofi << "time out = " << count_if(solve_time.begin(), solve_time.end(), [](int x) {return x > TimeLimit - 100; }) << endl;
 	lofi << "---------------end---------------" << endl;
 	lofi.close();
 #endif

@@ -310,5 +310,7 @@ bool MAC3::seek_support(QTab* c, QVar* v, const int a, const int level) {
 	}
 	return false;
 }
+
+MAC3bit::MAC3bit(HModel* h) :BacktrackingSearch(h) {}
 }
 

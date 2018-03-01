@@ -51,4 +51,15 @@ public:
 	bool revise(QTab* c, QVar* v, const int level);
 	bool seek_support(QTab* c, QVar* v, int a, const int level);
 };
+
+class MAC3bit :public BacktrackingSearch {
+public:
+	MAC3bit(HModel *h);
+	~MAC3bit() {};
+	PropagationState propagate(vector<QVar*>& x_evt, const int level) override;
+	bool revise(QTab* c, QVar* v, const int level);
+	bool seek_support(QTab* c, QVar* v, int a, const int level);
+protected:
+	
+};
 }

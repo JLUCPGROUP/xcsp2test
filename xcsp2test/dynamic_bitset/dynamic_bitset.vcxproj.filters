@@ -15,34 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="nbs_nei.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="nbs_nei_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="nbs_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="bbs_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="new_FCbit3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="new_FCBit2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="File1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <ClInclude Include="dynamic_bitset.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="BMPath.xml">
-      <Filter>资源文件</Filter>
-    </Xml>
+    <ClCompile Include="dynamic_bitset.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

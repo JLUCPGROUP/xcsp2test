@@ -307,6 +307,15 @@ vector<HTab*> HModel::solution_check(vector<int>& sol) {
 		cout << "no solution" << endl;
 		return vector<HTab*>();
 	}
+	vector<int> a(sol.size());
+	for (int i = 0; i < sol.size(); ++i) {
+		a[i] = vars[i]->anti_map[sol[i]];
+	}
+
+	for (auto c : a)
+		cout << c << " ";
+
+	cout << endl;
 	vector<int> tuple(max_arity());
 	vector<HTab*> conflict_constraints(tabs.size());
 	conflict_constraints.clear();
@@ -322,7 +331,7 @@ vector<HTab*> HModel::solution_check(vector<int>& sol) {
 		tuple.clear();
 	}
 
-	if (conflict_constraints.empty()) 
+	if (conflict_constraints.empty())
 		cout << "pass!" << endl;
 
 	return conflict_constraints;

@@ -18,25 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="nbs_nei.cpp">
+    <ClCompile Include="QModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="nbs_nei_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="nbs_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="bbs_folder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="new_FCbit3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="new_FCBit2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="File1.cpp">
+    <ClCompile Include="BacktrackingSearch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,5 +29,13 @@
     <Xml Include="BMPath.xml">
       <Filter>资源文件</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BacktrackingSearch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

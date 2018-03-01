@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{6EFE5175-7D6D-4AF9-A5F0-41F0DFDD5A1B}</ProjectGuid>
+    <ProjectGuid>{2B27F908-431D-41A9-9481-F5D443CC63A3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>bbstest</RootNamespace>
+    <RootNamespace>dynamicbitset</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -89,14 +89,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)BitBacktrackingSearch;$(SolutionDir)includes;$(GECODEDIR)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(SolutionDir)$(Platform)\$(Configuration)\;$(GECODEDIR)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -115,12 +113,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)BitBacktrackingSearch;$(SolutionDir)includes;$(GECODEDIR)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(SolutionDir)$(Platform)\$(Configuration)\;$(GECODEDIR)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,25 +135,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BitBacktrackingSearch\BitBacktrackingSearch.vcxproj">
-      <Project>{1279ac68-07a1-413b-bc3f-f0ed9175ac64}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\XModel\XModel.vcxproj">
-      <Project>{01c125e8-1bac-484f-9f4b-838fc1b012d0}</Project>
-    </ProjectReference>
+    <ClInclude Include="dynamic_bitset.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bbs_folder.cpp" />
-    <ClCompile Include="File1.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="nbs_folder.cpp" />
-    <ClCompile Include="nbs_nei.cpp" />
-    <ClCompile Include="nbs_nei_folder.cpp" />
-    <ClCompile Include="new_FCBit2.cpp" />
-    <ClCompile Include="new_FCbit3.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="BMPath.xml" />
+    <ClCompile Include="dynamic_bitset.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

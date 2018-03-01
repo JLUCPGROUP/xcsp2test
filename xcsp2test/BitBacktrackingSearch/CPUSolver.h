@@ -160,6 +160,7 @@ public:
 	}
 
 	void initial(HModel *hm) {
+		cout << "nei" << endl;
 		mds = hm->max_domain_size();
 		vs_size = hm->vars.size();
 		bsd.resize(vs_size, vector<vector<T>>(mds, vector<T>(vs_size)));
@@ -170,6 +171,7 @@ public:
 		for (int i = 0; i < hm->vars.size(); ++i) {
 			for (int j = 0; j < hm->vars[i]->vals.size(); ++j) {
 				bd[i][j] = 1;
+				bsd[i][j][i][j] = 1;
 			}
 		}
 
@@ -193,6 +195,7 @@ public:
 	}
 
 	void initial(Network* n, HModel *hm) {
+		cout << "no-nei" << endl;
 		AC3bit ac(n);
 		mds = n->max_domain_size();
 		vs_size = n->vars.size();
@@ -333,7 +336,7 @@ public:
 protected:
 	vector<BIntVal> vals_;
 	vector<bool> asnd_;
-	int top_ = 0;
+	//int top_ = 0;
 	int max_size_;
 };
 
@@ -367,6 +370,7 @@ public:
 	void initial(HModel* hm, BAssignedStack* I) {
 		I_ = I;
 		bm_.initial(hm);
+		//bm_.Show();
 		vs_size_ = hm->vars.size();
 		mds_ = hm->max_domain_size();
 		r_ = bm_.bd;
@@ -377,6 +381,7 @@ public:
 	void initial(Network* n, HModel* hm, BAssignedStack* I) {
 		I_ = I;
 		bm_.initial(n, hm);
+		//bm_.Show();
 		vs_size_ = n->vars.size();
 		mds_ = n->max_domain_size();
 		r_ = bm_.bd;
@@ -755,7 +760,7 @@ public:
 			if ((state == S_BRANCH) && I.full()) {
 				statistics.solve_time = t.elapsed();
 				++statistics.num_sol;
-				//cout << I << endl;
+				cout << I << endl;
 				//state = S_FAILED;
 				return statistics;
 			}
@@ -797,7 +802,7 @@ public:
 				if (I.full()) {
 					statistics.solve_time = t.elapsed();
 					++statistics.num_sol;
-					//cout << I << endl;
+					cout << I << endl;
 					return statistics;
 				}
 				else {

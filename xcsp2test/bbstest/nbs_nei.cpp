@@ -9,7 +9,7 @@
 //#include "SAC1o.h"
 //using namespace cp;
 //using namespace std;
-////#define LOGFILE
+//#define LOGFILE
 //
 //const int TimeLimit = 600000;
 //const string X_PATH = "BMPath.xml";
@@ -20,26 +20,24 @@
 //	builder.GenerateHModel(hm);
 //	GModel* gm = new GModel();
 //	BuildGModel(hm, gm);
+//	//rel(gm*, gm->vs[0] , 0rel(*s, s->vs[i] == j.val()););
+//	rel(*gm, gm->vs[0] == 0);
+//	gm->status();
 //	//hm->show();
-//	//delete hm;
-//	SAC1G sac1(gm);
-//	Timer t;
-//	const bool result = sac1.enforce();
-//	const int64_t sac_time = t.elapsed();
-//
-//
-//	cout << "------------------modeling------------------" << endl;
-//	//const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//	const SearchStatistics statistics = StartSearch(gm, hm, Heuristic::DS_BI, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
-//	//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//	//const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
-//	const string  slv_str = (statistics.num_sol > 0) ? "SAT!!" : "UNSAT";
-//	delete hm;
+//	gm->print();
 //	delete gm;
-//	cout << "|| Build time = " << statistics.build_time << endl;
-//	cout << "------------------solving-------------------" << endl;
-//	cout << slv_str << "|| Solve time = " << statistics.solve_time << "|| nodes = " << statistics.nodes << endl;
-//	cout << "------------------sleeping------------------" << endl;
+//	//vector<int>  a;
+//	//cout << "------------------modeling------------------" << endl;
+//	//const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, true, a, 0);
+//	////const SearchStatistics statistics = StartSearch(gm, hm, Heuristic::DS_BI, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//	////const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
+//	////const SearchStatistics statistics = StartSearch(hm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, 0);
+//	//const string  slv_str = (statistics.num_sol > 0) ? "SAT!!" : "UNSAT";
+//	//delete hm;
+//	//cout << "|| Build time = " << statistics.build_time << endl;
+//	//cout << "------------------solving-------------------" << endl;
+//	//cout << slv_str << "|| Solve time = " << statistics.solve_time << "|| nodes = " << statistics.nodes << endl;
+//	//cout << "------------------sleeping------------------" << endl;
 //
 //	return 0;
 //}

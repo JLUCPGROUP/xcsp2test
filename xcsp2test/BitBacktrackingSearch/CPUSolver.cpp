@@ -4,22 +4,21 @@ using namespace std;
 namespace cp {
 void BAssignedStack::initial(GModel* m) {
 	max_size_ = m->vs.size();
-	vals_.resize(m->vs.size());
+	vals_.reserve(m->vs.size());
 	asnd_.resize(m->vs.size(), false);
 };
 
 void BAssignedStack::initial(HModel* m) {
 	max_size_ = m->vars.size();
-	vals_.resize(m->vars.size());
+	vals_.reserve(m->vars.size());
 	asnd_.resize(m->vars.size(), false);
 };
 
 void BAssignedStack::initial(Network* m) {
 	max_size_ = m->vars.size();
-	vals_.resize(m->vars.size());
+	vals_.reserve(m->vars.size());
 	asnd_.resize(m->vars.size(), false);
 };
-
 
 void BAssignedStack::push(BIntVal& v_a) {
 	//const int pre = top_ - 1;
@@ -29,23 +28,24 @@ void BAssignedStack::push(BIntVal& v_a) {
 	//	asnd_[v_a.v] = true;
 	//}
 	//else {
-	vals_[top_] = v_a;
-	asnd_[v_a.v] = v_a.aop ? true : false;
-	++top_;
+	//vals_[top_] = v_a;
+	vals_.push_back(v_a);
+	asnd_[v_a.v] = v_a.aop;
 	//}
 };
 
 BIntVal BAssignedStack::pop() {
-	--top_;
-	asnd_[vals_[top_].v] = false;
-	return vals_[top_];
+	auto val = vals_.back();
+	vals_.pop_back();
+	asnd_[val.v] = false;
+	return val;
 }
 
-BIntVal BAssignedStack::top() const { return vals_[top_]; };
-int BAssignedStack::size() const { return top_; }
+BIntVal BAssignedStack::top() const { return vals_[vals_.size()]; };
+int BAssignedStack::size() const { return vals_.size(); }
 int BAssignedStack::capacity() const { return max_size_; }
-bool BAssignedStack::full() const { return top_ == max_size_; }
-bool BAssignedStack::empty() const { return top_ == 0; }
+bool BAssignedStack::full() const { return vals_.size() == max_size_; }
+bool BAssignedStack::empty() const { return  vals_.empty(); }
 BIntVal BAssignedStack::operator[](const int i) const { return vals_[i]; };
 BIntVal BAssignedStack::at(const int i) const { return vals_[i]; }
 
@@ -60,7 +60,7 @@ vector<int> BAssignedStack::solution() {
 	}
 	return sol;
 };
-void BAssignedStack::clear() { top_ = 0; };
+void BAssignedStack::clear() { vals_.clear(); asnd_.assign(asnd_.size(), false); };
 bool BAssignedStack::assiged(const int v) const { return asnd_[v]; };
 
 ostream & operator<<(ostream & os, BAssignedStack & I) {

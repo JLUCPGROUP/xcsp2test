@@ -112,7 +112,7 @@ SearchStatistics MAC::enforce(const int time_limits) {
 		}
 
 		IntVal v_a = select_v_value(I.size());
-		//cout << v_a << endl;
+		//cout << "=" << v_a << endl;
 		n_->NewLevel(I.size());
 		I.push(v_a);
 		++statistics_.num_positive;

@@ -194,9 +194,9 @@ bool AC3::revise(arc& c_x, const int p) {
 
 bool AC3::seek_support(IntConVal & c_val, const int p) {
 	m_->GetFirstValidTuple(c_val, tmp_tuple_, p);
-	if (c_val.c()->id() == 200 && c_val.v()->id() == 25) {
-		cout << 123 << endl;
-	}
+	//if (c_val.c()->id() == 200 && c_val.v()->id() == 25) {
+	//	cout << 123 << endl;
+	//}
 	//cout << "c-value" << c_val << endl;
 	while (Existed(tmp_tuple_)) {
 		//cout << "tuple: " << tmp_tuple_[0] << "," << tmp_tuple_[1] << endl;

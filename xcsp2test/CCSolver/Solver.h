@@ -89,6 +89,7 @@ struct SearchError {
 	IntVal v_a_fail;
 	int level = 0;
 };
+
 struct SearchScheme {
 	Heuristic::Var vrh;
 	Heuristic::Var vlh;

@@ -199,7 +199,6 @@ inline int FirstOne(const u64 UseMask) {
 	return int(index);
 }
 
-
 class QVar {
 public:
 	QVar(HVar* v);
@@ -208,7 +207,7 @@ public:
 	void reduce_to(const int a, const int p);
 	int size(const int p) const;
 	inline int next(const int a, const int p) const;
-	inline void next_value(int& a, const int p);
+	void next_value(int& a, const int p);
 	//int prev(const int a, const int p) const;
 	inline bool have(const int a, const int p) const;
 	inline int head(const int p) const;
@@ -237,6 +236,43 @@ private:
 	bitSetVector bit_tmp_;
 	vector<bitSetVector> bit_doms_;
 };
+//class QVar {
+//public:
+//	QVar(HVar* v);
+//	void runtime(const int size);
+//	void remove_value(const int a, const int p);
+//	void reduce_to(const int a, const int p);
+//	int size(const int p) const;
+//	inline int next(const int a, const int p) const;
+//	inline void next_value(int& a, const int p);
+//	//int prev(const int a, const int p) const;
+//	inline bool have(const int a, const int p) const;
+//	inline int head(const int p) const;
+//	//inline bool assigned(const int p) const { return assigned_[p]; }
+//	//inline void assign(const bool a, const int p) { assigned_[p] = a; }
+//	//int tail(const int p) const;
+//	bool faild(const int p) const { return size(p) == 0; };
+//	bitSetVector& bitDom(const int p) { return bit_doms_[p]; }
+//	void show(const int p);
+//	inline void back_to(const int src, const int dest);
+//	void delete_level(const int p);
+//	void copy_level(const int src, const int dest);
+//	//inline int new_level(int src);
+//	void new_level(const int src, const int dest);
+//
+//	const int id;
+//	const int capacity;
+//	const int limit;
+//	const int num_bit;
+//	const vector<int> vals;
+//	//static int tmp;
+//private:
+//	//int top_;
+//	//vector<bool> assigned_;
+//	int* size_;
+//	u64* bit_tmp_;
+//	u64** bit_doms_;
+//};
 
 class QVal {
 public:
@@ -278,7 +314,7 @@ public:
 	QVal operator[](const int i) const;
 	QVal at(const int i) const;
 	void clear();
-	bool assiged(const int v) const;
+	bool assigned(const int v) const;
 	bool assigned(const QVar* v) const;
 	bool solution(vector<int>& sol) const;
 	friend ostream& operator<< (std::ostream &os, assignments_stack &I);
@@ -339,6 +375,7 @@ public:
 };
 
 class QConVal {
+public:
 	QConVal() :c(nullptr), v(nullptr), a(Limits::INDEX_OVERFLOW) {}
 	QConVal(QTab* c, QVar *v, const  int a) : c(c), v(v), a(a) {}
 	QConVal(QTab* c, QVal& va) :c(c), v(va.v), a(va.a) {}

@@ -57,7 +57,7 @@ void QVar::next_value(int& a, const int p) {
 	const u64 b = (bit_doms_[p][get<0>(index)] >> get<1>(index)) >> 1;
 
 	if (b) {
-		a = a + FirstOne(b) + 1;
+		a = a + FirstOne(b);
 		return;
 	}
 
@@ -119,7 +119,125 @@ void QVar::new_level(const int src, const int dest) {
 	//assigned_[dest] = assigned_[src];
 	size_[dest] = size_[src];
 }
-
+//////////////////////////////////////////////////////////////////////////
+//QVar::QVar(HVar* v) :
+//	id(v->id),
+//	capacity(v->vals.size()),
+//	limit(capacity & MOD_MASK),
+//	num_bit(ceil(float(capacity) / BITSIZE)),
+//	vals(v->vals) {
+//	bit_tmp_.resize(num_bit, ULLONG_MAX);
+//	if (limit != BITSIZE)
+//		bit_tmp_.back() >>= BITSIZE - limit;
+//}
+//
+//void QVar::runtime(const int size) {
+//	bit_doms_.resize(size + 3, bit_tmp_);
+//	//assigned_.resize(size + 3, false);
+//	size_.resize(size + 3, -1);
+//	size_[0] = capacity;
+//	//tmp = size + 1;
+//}
+//
+//void QVar::remove_value(const int a, const int p) {
+//	const auto index = GetBitIdx(a);
+//	bit_doms_[p][get<0>(index)] &= U64_MASK0[get<1>(index)];
+//	--size_[p];
+//}
+//
+//void QVar::reduce_to(const int a, const int p) {
+//	const auto index = GetBitIdx(a);
+//	for (auto& v : bit_doms_[p])
+//		v = 0;
+//	bit_doms_[p][get<0>(index)] |= U64_MASK1[get<1>(index)];
+//	size_[p] = 1;
+//}
+//
+//int QVar::size(const int p) const {
+//	return size_[p];
+//}
+//
+//int QVar::next(const int a, const int p) const {
+//	const auto index = GetBitIdx(a);
+//	const u64 b = (bit_doms_[p][get<0>(index)] >> get<1>(index)) >> 1;
+//	if (b)
+//		return a + FirstOne(b) + 1;
+//
+//	for (size_t i = get<0>(index) + 1; i < num_bit; ++i)
+//		if (bit_doms_[p][i])
+//			return GetValue(i, FirstOne(bit_doms_[p][i]));
+//
+//	return Limits::INDEX_OVERFLOW;
+//}
+//
+//void QVar::next_value(int& a, const int p) {
+//	auto index = GetBitIdx(a++);
+//	const u64 b = (bit_doms_[p][get<0>(index)] >> get<1>(index)) >> 1;
+//
+//	if (b) {
+//		a = a + FirstOne(b) + 1;
+//		return;
+//	}
+//
+//	for (size_t i = get<0>(index) + 1; i < num_bit; ++i)
+//		if (bit_doms_[p][i]) {
+//			a = GetValue(i, FirstOne(bit_doms_[p][i]));
+//			return;
+//		}
+//
+//	a = Limits::INDEX_OVERFLOW;
+//}
+//
+//bool QVar::have(const int a, const int p) const {
+//	if (a == Limits::INDEX_OVERFLOW)
+//		return false;
+//	const auto index = GetBitIdx(a);
+//	return bit_doms_[p][get<0>(index)] & U64_MASK1[get<1>(index)];
+//}
+//
+//int QVar::head(const int p) const {
+//	for (size_t i = 0; i < num_bit; ++i)
+//		if (bit_doms_[p][i])
+//			return GetValue(i, FirstOne(bit_doms_[p][i]));
+//
+//	return Limits::INDEX_OVERFLOW;
+//}
+//
+//void QVar::show(const int p) {
+//	cout << "id = " << id << ": ";
+//	for (auto a : vals)
+//		if (have(a, p))
+//			cout << a << " ";
+//	//cout << "[" << assigned_[p] << "]";
+//	cout << endl;
+//}
+//
+//void QVar::back_to(const int src, const int dest) {
+//	//for (int i = dest; i < src; ++i)
+//	//	size_[i] = -1;
+//	//assigned_[i] = false;
+//}
+//
+//void QVar::delete_level(const int p) {
+//	//assigned_[p] = false;
+//	size_[p] = -1;
+//}
+//
+//void QVar::copy_level(const int src, const int dest) {
+//	//bit_doms_[dest].assign(bit_doms_[src].begin(), bit_doms_[src].end());
+//	for (int i = 0; i < num_bit; ++i)
+//		bit_doms_[dest][i] = bit_doms_[src][i];
+//	//assigned_[dest] = assigned_[src];
+//}
+//
+//void QVar::new_level(const int src, const int dest) {
+//	//bit_doms_[dest].assign(bit_doms_[src].begin(), bit_doms_[src].end());
+//	for (int i = 0; i < num_bit; ++i)
+//		bit_doms_[dest][i] = bit_doms_[src][i];
+//	//assigned_[dest] = assigned_[src];
+//	size_[dest] = size_[src];
+//}
+	//////////////////////////////////////////////////////////////////////////////
 const QVal& QVal::operator=(const QVal& rhs) {
 	v = rhs.v;
 	a = rhs.a;
@@ -180,13 +298,13 @@ void assignments_stack::clear() {
 	v_.assign(v_.size(), Limits::INDEX_OVERFLOW);
 };
 
-bool assignments_stack::assiged(const int v) const {
-	return !(v_[v] == Limits::INDEX_OVERFLOW);
-}
-bool assignments_stack::assigned(const QVar* v) const {
-	return !(v_[v->id] == Limits::INDEX_OVERFLOW);
+bool assignments_stack::assigned(const int v) const {
+	return v_[v] != Limits::INDEX_OVERFLOW;
 }
 
+bool assignments_stack::assigned(const QVar* v) const {
+	return v_[v->id] != Limits::INDEX_OVERFLOW;
+}
 
 bool assignments_stack::solution(vector<int>& sol) const {
 	sol.clear();

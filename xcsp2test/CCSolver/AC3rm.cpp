@@ -13,7 +13,7 @@ AC3rm::AC3rm(Network * n) :
 }
 bool AC3rm::seek_support(IntConVal & c_val, const int p) {
 	auto c = c_val.c();
-	const auto index = m_->GetIntConValIndex(c_val);
+	auto index = m_->GetIntConValIndex(c_val);
 	tmp_tuple_ = res_[index];
 	if (c->IsValidTuple(tmp_tuple_, p))
 		return true;
@@ -21,8 +21,10 @@ bool AC3rm::seek_support(IntConVal & c_val, const int p) {
 	m_->GetFirstValidTuple(c_val, tmp_tuple_, p);
 	while (Existed(tmp_tuple_)) {
 		if (c->sat(tmp_tuple_)) {
-			for (auto v : c->scope)
+			for (auto v : c->scope) {
+				index = m_->GetIntConValIndex(IntConVal(c, v, tmp_tuple_[c->index(v)]));
 				res_[index] = tmp_tuple_;
+			}
 			return true;
 		}
 		m_->GetNextValidTuple(c_val, tmp_tuple_, p);

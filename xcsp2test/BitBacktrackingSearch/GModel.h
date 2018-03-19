@@ -7,26 +7,27 @@
 
 #pragma once
 #include <iostream>
-#include <gecode/int.hh>
-#include <gecode/minimodel.hh>
-#include <gecode/search.hh>
+ //#include <int.hh>
+ //#include <minimodel.hh>
+ //#include <search.hh>
 #include "HModel.h"
-
+//#include <gecode/kernel/core.hpp>
+#include <gecode/int.hh>
 namespace cp {
 
-using namespace Gecode;
-using namespace std;
-class GModel: public Space {
-public:
-	IntVarArray vs;
-	int mds;
-	vector<vector<vector<int>>> neighborhoods;
-	GModel();
-	GModel(bool share, GModel& s);
-	Space* copy(bool share) override;
-	void print(void) const;
-	virtual ~GModel();
-};
+	using namespace Gecode;
+	using namespace std;
+	class GModel : public Space {
+	public:
+		IntVarArray vs;
+		int mds;
+		vector<vector<vector<int>>> neighborhoods;
+		GModel();
+		GModel(GModel& s);
+		Space* copy();
+		void print(void) const;
+		virtual ~GModel();
+	};
 
 } /* namespace cp */
 

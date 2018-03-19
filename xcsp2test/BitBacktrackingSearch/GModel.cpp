@@ -9,29 +9,29 @@
 
 namespace cp {
 
-GModel::GModel() {
-	// TODO Auto-generated constructor stub
+	GModel::GModel() {
+		// TODO Auto-generated constructor stub
 
-}
-
-GModel::GModel(bool share, GModel& s) :
-		Space(share, s) {
-	vs.update(*this, share, s.vs);
-}
-
-Space* GModel::copy(bool share) {
-	return new GModel(share, *this);
-}
-
-void GModel::print(void) const {
-	for (size_t i = 0; i < vs.size(); i++) {
-		cout << "(" << i << " = " << vs[i] << ") ";
 	}
-	cout << endl;
-}
 
-GModel::~GModel() {
-	// TODO Auto-generated destructor stub
-}
+	GModel::GModel(GModel& s) :
+		Space(s) {
+		vs.update(*this, s.vs);
+	}
+
+	Space* GModel::copy() {
+		return new GModel(*this);
+	}
+
+	void GModel::print(void) const {
+		for (size_t i = 0; i < vs.size(); i++) {
+			cout << "(" << i << " = " << vs[i] << ") ";
+		}
+		cout << endl;
+	}
+
+	GModel::~GModel() {
+		// TODO Auto-generated destructor stub
+	}
 
 } /* namespace cp */

@@ -158,6 +158,9 @@
   <ItemGroup>
     <Xml Include="BMPath.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="commonline.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

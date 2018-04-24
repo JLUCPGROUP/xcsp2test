@@ -201,7 +201,7 @@ namespace cp {
 			}
 		}
 
-		void initial(Network* n, HModel *hm) {
+		bool initial(Network* n, HModel *hm, const bool nei_, int& buld_time) {
 			AC3bit ac(n);
 			mds = n->max_domain_size();
 			vs_size = n->vars.size();
@@ -209,42 +209,131 @@ namespace cp {
 			bd.resize(vs_size, 0);
 			deg.resize(vs_size, 0);
 			wdeg.resize(vs_size, vector<int64_t>(vs_size, 0));
+			if (nei_) {
+				//cout << "fc" << endl;
+				//fc
+				//Timer t;
+				//vector<IntVar*> x_evt;
+				//for (auto v : n->vars) {
+				//	for (auto i : v->values()) {
+				//		if (v->have(i, 0)) {
+				//			n->CopyLevel(0, 1);
+				//			v->ReduceTo(i, 1);
+				//			v->assign(true, 1);
+				//			x_evt.push_back(v);
+				//			const auto res = ac.enforce(x_evt, 1).state;
+				//			x_evt.clear();
+				//			if (!res) {
+				//				bd[v->id()][i] = false;
+				//				v->RemoveValue(i, 0);
+				//			}
+				//			else {
+				//				bd[v->id()][i] = true;
+				//			}
+				//			n->ClearLevel(1);
+				//		}
+				//		if (v->faild(0)) {
+				//			buld_time = t.elapsed();
+				//			return false;
+				//		}
 
-			vector<IntVar*> x_evt;
-			for (auto v : n->vars) {
-				for (auto i : v->values()) {
-					if (v->have(i, 0)) {
-						bd[v->id()][i] = true;
-						n->CopyLevel(0, 1);
-						v->ReduceTo(i, 1);
-						v->assign(true, 1);
-						x_evt.push_back(v);
-						ac.enforce(x_evt, 1);
-						x_evt.clear();
-						for (auto x : n->vars) {
-							for (auto j : x->values()) {
-								if (x->have(j, 1)) {
-									bsd[v->id()][i][x->id()][j] = true;
+				//	}
+				//}
+				//buld_time = t.elapsed();
+				for (int i = 0; i < hm->vars.size(); ++i) {
+					for (int j = 0; j < hm->vars[i]->vals.size(); ++j) {
+						bd[i][j] = 1;
+					}
+				}
+				nei = hm->neighborhoods;
+
+				for (auto c : hm->tabs) {
+					for (auto tab : c->tuples) {
+						bsd[c->scope[0]->id][tab[0]][c->scope[1]->id].set(tab[1]);
+						bsd[c->scope[1]->id][tab[1]][c->scope[0]->id].set(tab[0]);
+					}
+				}
+
+				nei = hm->neighborhoods;
+				for (int i = 0; i < vs_size; ++i) {
+					for (int j = 0; j < vs_size; ++j) {
+						if (i != j) {
+							// 变量i与j不相同
+							deg[i] += nei[i][j].size();
+							if (!nei[i][j].empty()) {
+								wdeg[i][j] = 1;
+								wdeg[j][i] = 1;
+							}
+							else {
+								for (int a = 0; a < mds; ++a) {
+									bsd[i][a][j].set();
 								}
 							}
 						}
-						n->ClearLevel(1);
-					}
-
-				}
-			}
-
-			nei = hm->neighborhoods;
-
-			for (int i = 0; i < vs_size; ++i) {
-				for (int j = 0; j < vs_size; ++j) {
-					deg[i] += nei[i][j].size();
-					if (deg[i] > 0) {
-						wdeg[i][j] = 1;
-						wdeg[j][i] = 1;
+						else {
+							// 变量i与j相同，对角线上的值都标记1
+							for (int c = 0; c < mds; ++c) {
+								bsd[i][c][j][c] = 1;
+							}
+						}
 					}
 				}
+				//Show();
 			}
+			else {
+				//efc
+				//cout << "efc" << endl;
+				Timer t;
+				vector<IntVar*> x_evt;
+				for (auto v : n->vars) {
+					for (auto i : v->values()) {
+						if (v->have(i, 0)) {
+							n->CopyLevel(0, 1);
+							v->ReduceTo(i, 1);
+							v->assign(true, 1);
+							x_evt.push_back(v);
+							const auto res = ac.enforce(x_evt, 1).state;
+							x_evt.clear();
+							if (!res) {
+								bd[v->id()][i] = false;
+								v->RemoveValue(i, 0);
+							}
+							else {
+								bd[v->id()][i] = true;
+								for (auto x : n->vars) {
+									for (auto j : x->values()) {
+										if (x->have(j, 1)) {
+											bsd[v->id()][i][x->id()][j] = true;
+										}
+									}
+								}
+							}
+							n->ClearLevel(1);
+						}
+						if (v->faild(0)) {
+							buld_time = t.elapsed();
+							return false;
+						}
+
+					}
+				}
+				buld_time = t.elapsed();
+
+				nei = hm->neighborhoods;
+
+				for (int i = 0; i < vs_size; ++i) {
+					for (int j = 0; j < vs_size; ++j) {
+						deg[i] += nei[i][j].size();
+						if (i != j) {
+							wdeg[i][j] = 1;
+							wdeg[j][i] = 1;
+						}
+					}
+				}
+
+				return true;
+			}
+			return true;
 		}
 
 		virtual ~BitSetModel() {};
@@ -383,15 +472,20 @@ namespace cp {
 			s_[0].assign(r_.begin(), r_.end());
 			++top_;
 		}
-		void initial(Network* n, HModel* hm, BAssignedStack* I) {
+
+		bool initial(Network* n, HModel* hm, BAssignedStack* I, const bool nei, int& build_time) {
+			const auto res = bm_.initial(n, hm, nei, build_time);
+			if (!res) {
+				return false;
+			}
 			I_ = I;
-			bm_.initial(n, hm);
 			vs_size_ = n->vars.size();
 			mds_ = n->max_domain_size();
 			r_ = bm_.bd;
 			s_.resize(vs_size_ + 1, vector<T>(vs_size_, 0));
 			s_[0].assign(r_.begin(), r_.end());
 			++top_;
+			return true;
 		}
 
 		SearchState push_back(const BIntVal& val) {
@@ -410,32 +504,32 @@ namespace cp {
 
 			//}
 			//if (val.aop) {
-			if (!nei) {
-				for (size_t i = 0; i < vs_size_; i++) {
-					s_[pre + 1][i] = s_[pre][i] & bm_.bsd[val.v][val.a][i];
-					if (!s_[pre + 1][i].any()) {
-						++bm_.wdeg[val.v][i];
-						++bm_.wdeg[i][val.v];
-						return S_FAILED;
-					}
+			//if (!nei) {
+			for (size_t i = 0; i < vs_size_; i++) {
+				s_[pre + 1][i] = s_[pre][i] & bm_.bsd[val.v][val.a][i];
+				if (!s_[pre + 1][i].any()) {
+					++bm_.wdeg[val.v][i];
+					++bm_.wdeg[i][val.v];
+					return S_FAILED;
 				}
 			}
-			else {
-				for (size_t i = 0; i < vs_size_; i++) {
-					//val.v 与i 是临域
-					if (!bm_.nei[val.v][i].empty()) {
-						s_[pre + 1][i] = s_[pre][i] & bm_.bsd[val.v][val.a][i];
-						if (!s_[pre + 1][i].any()) {
-							++bm_.wdeg[val.v][i];
-							++bm_.wdeg[i][val.v];
-							return S_FAILED;
-						}
-					}
-					else {
-						s_[pre + 1][i] = s_[pre][i];
-					}
-				}
-			}
+			//}
+			//else {
+			//	for (size_t i = 0; i < vs_size_; i++) {
+			//		//val.v 与i 是临域
+			//		if (!bm_.nei[val.v][i].empty()) {
+			//			s_[pre + 1][i] = s_[pre][i] & bm_.bsd[val.v][val.a][i];
+			//			if (!s_[pre + 1][i].any()) {
+			//				++bm_.wdeg[val.v][i];
+			//				++bm_.wdeg[i][val.v];
+			//				return S_FAILED;
+			//			}
+			//		}
+			//		else {
+			//			s_[pre + 1][i] = s_[pre][i];
+			//		}
+			//	}
+			//}
 
 			//}
 			//else {
@@ -727,6 +821,7 @@ namespace cp {
 	template<class T>
 	class CPUSolver {
 	public:
+		bool initial_succss = true;
 		BAssignedStack I;
 		CPUSolver(GModel* gm, const int64_t start_time = 0) : start_time(start_time) {
 			Timer t;
@@ -741,11 +836,17 @@ namespace cp {
 			n.initial(hm, &I);
 			statistics.build_time = t.elapsed();
 		}
-		CPUSolver(Network* m, HModel* hm, const int64_t start_time = 0) : start_time(start_time) {
-			Timer t;
+
+		CPUSolver(Network* m, HModel* hm, const bool nei, const int64_t start_time = 0) : start_time(start_time) {
+			//Timer t;
+			int build_time = 0;
+			auto res = n.initial(m, hm, &I, nei, build_time);
+			statistics.build_time = build_time;
+			//失败
+			if (!res) {
+				initial_succss = false;
+			}
 			I.initial(m);
-			n.initial(m, hm, &I);
-			statistics.build_time = t.elapsed();
 		}
 		~CPUSolver() {};
 
@@ -772,7 +873,7 @@ namespace cp {
 				if ((state == S_BRANCH) && I.full()) {
 					statistics.solve_time = t.elapsed();
 					++statistics.num_sol;
-					cout << I << endl;
+					//cout << I << endl;
 					//state = S_FAILED;
 					return statistics;
 				}
@@ -801,13 +902,14 @@ namespace cp {
 					//cout << t.elapsed() << endl;
 					statistics.solve_time = t.elapsed();
 					statistics.time_out = true;
+					statistics.total_time += statistics.solve_time + statistics.build_time;
 					return statistics;
 				}
 
 				if (d != SearchNode::NullNode) {
 					++statistics.nodes;
 					I.push(d);
-					cout << d << endl;
+					//cout << d << endl;
 					consistent = n.push(d, nei);
 				}
 
@@ -815,7 +917,8 @@ namespace cp {
 					if (I.full()) {
 						statistics.solve_time = t.elapsed();
 						++statistics.num_sol;
-						cout << I << endl;
+						//cout << I << endl;
+						statistics.total_time += statistics.solve_time + statistics.build_time;
 						return statistics;
 					}
 					else {
@@ -827,20 +930,20 @@ namespace cp {
 					n.pop();
 					d = I.pop();
 					d = n.next(d, ds);
-					cout << "next: ";
 				}
 			}
 
 			statistics.solve_time = t.elapsed();
+			statistics.total_time += statistics.solve_time + statistics.build_time;
 			return statistics;
 		}
 
 		NetworkStack<T> n;
 
+		SearchStatistics statistics;
 	private:
 		//GModel* gm_;
 		int64_t start_time;
-		SearchStatistics statistics;
 	};
 
 	static ByteSize GetBitSetSize(const int mds) {
@@ -913,12 +1016,19 @@ namespace cp {
 
 	template<class T>
 	SearchStatistics binary_search(Network *n, HModel* hm, const Heuristic::DecisionScheme ds, Heuristic::Var varh, Heuristic::Val valh, const int64_t time_limit, bool nei, vector<int>& solutions, const int64_t start_time = 0) {
-		CPUSolver<T> s(n, hm, start_time);
+		//int build_time = 0;
+		CPUSolver<T> s(n, hm, nei, start_time);
+
+		SearchStatistics statistics;
+
+		if (!s.initial_succss) {
+			s.statistics.total_time += s.statistics.build_time;
+			return s.statistics;
+		}
 		//if (nei) {
 		//	CPUSolver<T> s(hm, start_time);
 		//}
 		//else { CPUSolver<T> s(n, start_time); }
-		SearchStatistics statistics;
 		if (ds == Heuristic::DS_NB) {
 			statistics = s.search(varh, valh, time_limit, Heuristic::DS_NB, nei);
 		}
@@ -934,6 +1044,7 @@ namespace cp {
 		return statistics;
 	}
 
+	//nei =true;
 	static SearchStatistics StartSearch(HModel* hm, const Heuristic::DecisionScheme ds, const Heuristic::Var varh, const Heuristic::Val valh, const int64_t time_limit, const bool nei, vector<int>& solution, const int64_t start_time = 0) {
 		switch (GetBitSetSize(hm->max_domain_size())) {
 		case u1to32:

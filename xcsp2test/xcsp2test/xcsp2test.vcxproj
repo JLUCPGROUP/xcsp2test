@@ -151,7 +151,8 @@
   <ItemGroup>
     <ClCompile Include="code.cpp" />
     <ClCompile Include="dom_folder.cpp" />
-    <ClCompile Include="dom_wdeg_folder.cpp" />
+    <ClCompile Include="mac3bit_test.cpp" />
+    <ClCompile Include="lmx_test.cpp" />
     <ClCompile Include="lm_domtest.cpp" />
     <ClCompile Include="sac1_test.cpp" />
     <ClCompile Include="sac3_test.cpp" />
@@ -171,6 +172,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="queens-12_ext.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="commonline.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

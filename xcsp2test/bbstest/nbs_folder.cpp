@@ -2,36 +2,53 @@
 //#include <gecode/search.hh>
 //#include <string>
 //#include "BuildGModel.h"
-//#include "SAC1.h"
+////#include "SAC1.h"
 //#include "CPUSolver.h"
 //#include <windows.h>
 //#include <io.h>  
 //#include "XBuilder.h"
+//#include "commonline.h"
+//#include <fstream>
 //using namespace cp;
 //using namespace Gecode;
 //using namespace std;
 //
-//
+//#define LOGFILE
 //const string XPath = "BMPath.xml";
 //const int64_t TimeLimit = 1800000;
-//const string X_PATH = "E:\\Projects\\benchmarks\\";
+//const string bmp_root = R"(E:\Projects\benchmarks\)";
 //const string bmp_ext = ".xml";
-//void getFilesAll(string path, vector<string>& files);
 //
 //
 //int main(const int argc, char ** argv) {
 //
-//	if (argc <= 1) {
+//	if (argc <= 3) {
 //		std::cout << "no argument" << endl;
 //		return 0;
 //	}
-//
+//	SearchScheme ss;
+//	const bool no_error = getScheme(argv, ss);
+//	if (!no_error) {
+//		cout << "error" << endl;
+//		return 0;
+//	}
 //	vector<string> files;
-//	getFilesAll(X_PATH + argv[1], files);
-//	vector<u64> SAC_times;
-//	vector<u64> build_times;
-//	vector<u64> search_times;
-//	vector<u64> nodes;
+//	//getFilesAll(bmp_root + argv[1], files);
+//	const auto tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+//#ifdef LOGFILE
+//	ofstream lofi;
+//	const string bm_res = bmp_root + "res2\\FC\\" + ss.vrh_str + "\\" + argv[1] + "-" + std::to_string(tt) + ".csv";
+//	lofi.open(bm_res, ios::out | ios::trunc);
+//	cout << bm_res << endl;
+//	if (!lofi.is_open())
+//		return 0;
+//	lofi << "files" << "," << "cpu" << "," << "#nodes" << "," << "test" << "," << "solution" << endl;
+//#endif
+//	getFilesAll(bmp_root + argv[1], files);
+//
+//	double ts = 0;
+//	double tn = 0;
+//	u64 to = 0;
 //
 //	for (const auto f : files) {
 //		cout << f << endl;

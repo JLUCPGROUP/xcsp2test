@@ -165,6 +165,7 @@ public:
 	int new_level(int src);
 	void copy(const int src, const int dest);
 	int top_size = 0;
+	int num_bit_;
 protected:
 	int id_;
 	int init_size_;
@@ -172,7 +173,6 @@ protected:
 	uint64_t stamp_ = 0;
 	vector<bool> assigned_;
 	int limit_;
-	int num_bit_;
 	vector<int> vals_;
 	int top_;
 	//unordered_map<int, int> val_map;

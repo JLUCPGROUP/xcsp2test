@@ -411,7 +411,7 @@ public:
 		else {
 			for (size_t i = 0; i < vs_size_; i++) {
 				//val.v Óëi ÊÇÁÙÓò
-				if (!bm_.nei[val.v][i].empty()) {
+				if (!bm_.nei[val.v][i].empty()||val.v==i) {
 					s_[pre + 1][i] = s_[pre][i] & bm_.bsd[val.v][val.a][i];
 					if (!s_[pre + 1][i].any()) {
 						++bm_.wdeg[val.v][i];

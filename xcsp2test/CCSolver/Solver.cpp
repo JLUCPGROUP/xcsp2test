@@ -150,7 +150,7 @@ arc_que::arc_que(const int cons_size, const int max_arity) :
 
 void arc_que::MakeQue(const size_t cons_size, const size_t max_arity) {
 	arity_ = max_arity;
-	m_size_ = max_arity*cons_size + 1;
+	m_size_ = max_arity * cons_size + 1;
 	m_front_ = 0;
 	m_rear_ = 0;
 
@@ -274,6 +274,7 @@ bool var_pri_que::empty() const {
 	return q_.empty();
 }
 
+///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 //bool var_priority_queue::have(IntVar* v) {
 //	return vid_set_[v->id()];

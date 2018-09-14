@@ -6,10 +6,10 @@ RPC3::RPC3(Network *m) :AC(m) {
 	rel_.resize(num_vars, vector<vector<vector<int>>>(num_vars, vector<vector<int>>(max_dom_size, vector<int>(max_dom_size, false))));
 	common_neibor_.resize(num_vars, vector<vector<IntVar*>>(num_vars));
 	//初始化约束查找矩阵
-	nei_.resize(num_vars, vector<vector<Tabular*>>(num_vars, vector<Tabular*>()));
+	neibor_matrix.resize(num_vars, vector<vector<Tabular*>>(num_vars, vector<Tabular*>()));
 	for (const auto c : m->tabs) {
-		nei_[c->scope[0]->id()][c->scope[1]->id()].push_back(c);
-		nei_[c->scope[1]->id()][c->scope[0]->id()].push_back(c);
+		neibor_matrix[c->scope[0]->id()][c->scope[1]->id()].push_back(c);
+		neibor_matrix[c->scope[1]->id()][c->scope[0]->id()].push_back(c);
 	}
 	//set<QVar*> vars_map;
 	vector<bool> vars_in(num_vars, false);
@@ -17,7 +17,7 @@ RPC3::RPC3(Network *m) :AC(m) {
 		for (auto y : m->vars) {
 			if (x != y) {
 				for (auto z : m->vars) {
-					if (!nei_[x->id()][z->id()].empty() && !nei_[y->id()][z->id()].empty()) {
+					if (!neibor_matrix[x->id()][z->id()].empty() && !neibor_matrix[y->id()][z->id()].empty()) {
 						//vars_map.insert(z);
 						if (!vars_in[z->id()]) {
 							vars_in[z->id()] = true;
@@ -30,9 +30,10 @@ RPC3::RPC3(Network *m) :AC(m) {
 		}
 	}
 
+	neighborhood.resize(num_vars);
 	for (const auto x : m->vars)
 		for (const auto y : m->vars)
-			if ((x != y) && !nei_[x->id()][y->id()].empty())
+			if ((x != y) && !neibor_matrix[x->id()][y->id()].empty())
 				neighborhood[x->id()].push_back(y);
 	//initial bitSup
 	//const int n = num_tabs * max_dom_size * max_arity;
@@ -72,7 +73,7 @@ RPC3::RPC3(Network *m) :AC(m) {
 	//}
 
 	/////
-	//q_nei_.initial(num_vars);
+	//q_neibor_matrix.initial(num_vars);
 	//N.resize(num_vars);
 	//生成邻域子网矩阵
 	//for (auto v : vars) {
@@ -91,7 +92,7 @@ RPC3::RPC3(Network *m) :AC(m) {
 	con_que_.initial(num_vars);
 	for (auto x : m->vars) {
 		for (auto y : m->vars) {
-			if (!nei_[x->id()][y->id()].empty()) {
+			if (!neibor_matrix[x->id()][y->id()].empty()) {
 				con_que_.push(variable_pair{ x,y });
 			}
 		}
@@ -125,7 +126,7 @@ ConsistencyState RPC3::enforce(vector<IntVar*>& x_evt, const int p) {
 			const bool valid[] = {
 				vp.y->have(r_1_[vp.x->id()][a][vp.y->id()], p),
 				vp.y->have(r_2_[vp.x->id()][a][vp.y->id()], p) };
-			const auto c = nei_[vp.x->id()][vp.y->id()][0];
+			const auto c = neibor_matrix[vp.x->id()][vp.y->id()][0];
 			//cout << "r1[" << vp.x->id << "," << a << "," << vp.y->id << "] = " << r_1_[vp.x->id()][a][vp.y->id()] << ":" << valid[0] << endl;
 			//cout << "r2[" << vp.x->id << "," << a << "," << vp.y->id << "] = " << r_2_[vp.x->id()][a][vp.y->id()] << ":" << valid[1] << endl;
 			//both r valid
@@ -194,7 +195,7 @@ int RPC3::find_two_support(const IntVar& x, const int a, const IntVar& y, const 
 	bool one_support = (r != Limits::INDEX_OVERFLOW);
 	//const auto c_xy = neibor_matrix[x.id()][y.id()][0];
 
-	for (auto b = y.head(p); b != Limits::INDEX_OVERFLOW; y.next(b, p)) {
+	for (auto b = y.head(p); b != Limits::INDEX_OVERFLOW; b = y.next(b, p)) {
 		//cout << "  test: (" << x.id << "," << a << ")-(" << y.id << "," << last_b << ")" << endl;
 
 		//L4

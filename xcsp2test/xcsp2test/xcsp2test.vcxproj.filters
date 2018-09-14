@@ -54,12 +54,23 @@
       <Filter>资源文件</Filter>
     </Xml>
     <Xml Include="test.xml">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
+    </Xml>
+    <Xml Include="queens-4_ext.xml">
+      <Filter>资源文件</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commonline.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.json">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="exp.txt">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

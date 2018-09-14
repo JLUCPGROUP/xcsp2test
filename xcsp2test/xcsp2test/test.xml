@@ -4,13 +4,13 @@
   <folder>bqwh-15-106</folder>
   <folder>bqwh-18-141</folder>
   <folder>coloring</folder>
-  d-----        2018/1/23     11:43                BH-4-4
-  d-----        2018/1/23     14:11                BH-4-7
-  d-----        2018/1/22     11:50                bqwh-15-106
-  d-----        2018/1/22     11:50                bqwh-18-141
-  d-----        2018/1/24     21:56                coloring
-  d-----        2015/8/16     20:50                composed-25-1-2
-  d-----        2015/5/29      9:26                composed-25-1-25
+BH-4-4
+BH-4-7
+bqwh-15-106
+bqwh-18-141
+coloring
+composed-25-1-2
+composed-25-1-25
   d-----        2015/8/24     10:48                composed-25-1-40
   d-----        2015/8/24     10:48                composed-25-1-80
   d-----        2015/4/18     13:04                composed-25-10-20
@@ -107,23 +107,11 @@
   d-----        2018/1/28     17:59                test4
   d-----        2018/1/27     13:18                tightness0.1
   d-----        2018/1/27     13:19                tightness0.2
-  d-----        2018/1/27     13:34                tightness0.35
-  d-----        2018/1/27     13:32                tightness0.5
-  d-----        2018/1/27     13:36                tightness0.65
-  d-----        2018/1/27     13:38                tightness0.8
-  d-----        2018/1/27     13:37                tightness0.9
-  d-----        2018/1/29      1:45                xcsp
-  d-----        2018/4/23     17:26                新建文件夹
-  -a----        2016/3/12     18:42            442 2.txt
-  -a----        2018/1/31      6:09      140305533 benchmarks.zip
-  -a----         2018/4/2     19:23          32932 queen.zip
-  -a----        2018/1/24      6:27         143048 queenAttacking-8_ext.xml
-  -a----        2018/1/24      6:27         228761 queenAttacking-9_ext.xml
-  -a----        2018/3/20     14:54         291862 queensKnights.zip
-  -a----        2018/1/31      4:15       14061004 rand-2-XX-XX.zip
-  -a----        2018/4/21     22:42         407897 res.zip
-  -a----        2015/1/25     22:01            937 XMLFileNeg.xml
-  -a----        2018/3/16     11:22        1853074 详细数据.zip
+tightness0.35
+tightness0.5
+tightness0.65
+tightness0.8
+tightness0.9
   <folder></folder>
   <folder></folder>
   <folder></folder>

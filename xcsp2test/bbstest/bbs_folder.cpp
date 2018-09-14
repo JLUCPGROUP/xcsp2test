@@ -7,31 +7,47 @@
 //#include <windows.h>
 //#include <io.h>  
 //#include "XBuilder.h"
+//#include "commonline.h"
+//#include <fstream>
 //using namespace cp;
 //using namespace Gecode;
 //using namespace std;
 //
-//
+//#define LOGFILE
 //const string XPath = "BMPath.xml";
 //const int64_t TimeLimit = 1800000;
-//const string X_PATH = "E:\\Projects\\benchmarks\\";
+//const string bmp_root = R"(E:\Projects\benchmarks\)";
 //const string bmp_ext = ".xml";
-//void getFilesAll(string path, vector<string>& files);
-//
 //
 //int main(const int argc, char ** argv) {
 //
-//	if (argc <= 1) {
+//	if (argc <= 3) {
 //		std::cout << "no argument" << endl;
 //		return 0;
 //	}
-//
+//	SearchScheme ss;
+//	const bool no_error = getScheme(argv, ss);
+//	if (!no_error) {
+//		cout << "error" << endl;
+//		return 0;
+//	}
 //	vector<string> files;
-//	getFilesAll(X_PATH + argv[1], files);
-//	vector<u64> SAC_times;
-//	vector<u64> build_times;
-//	vector<u64> search_times;
-//	vector<u64> nodes;
+//	//getFilesAll(bmp_root + argv[1], files);
+//	auto tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+//#ifdef LOGFILE
+//	ofstream lofi;
+//	const string bm_res = bmp_root + "res2\\mac3bit\\" + ss.vrh_str + "\\" + argv[1] + "-" + std::to_string(tt) + ".csv";
+//	lofi.open(bm_res, ios::out | ios::trunc);
+//	cout << bm_res << endl;
+//	if (!lofi.is_open())
+//		return 0;
+//	lofi << "files" << "," << "cpu" << "," << "#nodes" << "," << "test" << "," << "solution" << endl;
+//#endif
+//	getFilesAll(bmp_root + argv[1], files);
+//
+//	double ts = 0;
+//	double tn = 0;
+//	u64 to = 0;
 //
 //	for (const auto f : files) {
 //		cout << f << endl;
@@ -63,44 +79,5 @@
 //		delete hm;
 //	}
 //
-//	cout << "---------------SAC_times---------------" << endl;
-//	for (u64 i : SAC_times) {
-//		cout << i << endl;
-//	}
-//	cout << "---------------build_times---------------" << endl;
-//	for (u64 i : build_times) {
-//		cout << i << endl;
-//	}
-//	cout << "---------------search_times---------------" << endl;
-//	for (u64 i : search_times) {
-//		cout << i << endl;
-//	}
-//	cout << "---------------nodes---------------" << endl;
-//	for (u64 i : nodes) {
-//		cout << i << endl;
-//	}
-//
 //	return 0;
-//}
-//
-//void getFilesAll(const string path, vector<string>& files) {
-//	//文件句柄 
-//	intptr_t  h_file = 0;
-//	//文件信息 
-//	struct _finddata_t fileinfo;
-//	string p;
-//	if ((h_file = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1) {
-//		do {
-//			if ((fileinfo.attrib & _A_SUBDIR)) {
-//				if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0) {
-//					//files.push_back(p.assign(path).append("\\").append(fileinfo.name) );
-//					getFilesAll(p.assign(path).append("\\").append(fileinfo.name), files);
-//				}
-//			}
-//			else {
-//				files.push_back(p.assign(path).append("\\").append(fileinfo.name));
-//			}
-//		} while (_findnext(h_file, &fileinfo) == 0);
-//		_findclose(h_file);
-//	}
 //}

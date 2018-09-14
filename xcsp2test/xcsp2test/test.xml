@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="gb2312" ?>
+<convert>
+  <inputRoot>E:\Projects\benchmarks</inputRoot>
+  <folder>bqwh-15-106</folder>
+  <folder>bqwh-18-141</folder>
+  <folder>coloring</folder>
+  d-----        2018/1/23     11:43                BH-4-4
+  d-----        2018/1/23     14:11                BH-4-7
+  d-----        2018/1/22     11:50                bqwh-15-106
+  d-----        2018/1/22     11:50                bqwh-18-141
+  d-----        2018/1/24     21:56                coloring
+  d-----        2015/8/16     20:50                composed-25-1-2
+  d-----        2015/5/29      9:26                composed-25-1-25
+  d-----        2015/8/24     10:48                composed-25-1-40
+  d-----        2015/8/24     10:48                composed-25-1-80
+  d-----        2015/4/18     13:04                composed-25-10-20
+  d-----        2015/4/18     13:04                composed-75-1-2
+  d-----        2015/8/24     10:48                composed-75-1-25
+  d-----        2015/8/24     10:48                composed-75-1-40
+  d-----        2015/8/24     10:48                composed-75-1-80
+  d-----        2018/3/20     14:56                driver
+  d-----        2006/5/22      0:55                ehi-85
+  d-----        2006/5/22      0:57                ehi-90
+  d-----        2018/1/28     14:30                f01
+  d-----        2018/1/28     14:32                f02
+  d-----        2018/1/28     14:33                f03
+  d-----       2015/12/17     17:29                fapp01-05
+  d-----        2015/4/18     13:04                fapp26-30
+  d-----        2016/1/18     15:25                frb30-15
+  d-----        2006/9/21     16:07                frb53-24
+  d-----        2006/9/21     16:09                frb56-25
+  d-----        2006/5/21     22:30                geom
+  d-----        2015/4/18     13:04                graphs
+  d-----        2015/4/18     13:04                haystacks
+  d-----        2018/1/27     14:58                haystacks_ext
+  d-----        2018/1/23     17:57                haystacks_ext - 副本
+  d-----        2015/4/18     13:04                jobShop-e0ddr1
+  d-----        2018/1/22     15:26                jobShop-e0ddr1_ext
+  d-----        2018/1/22     15:24                jobShop-e0ddr2_ext
+  d-----        2018/1/22     15:28                jobShop-enddr1_ext
+  d-----        2018/1/22     15:30                jobShop-enddr2_ext
+  d-----        2018/1/22     15:30                jobShop-ewddr2_ext
+  d-----        2015/4/18     13:05                langford
+  d-----        2015/4/18     13:04                langford2
+  d-----        2015/4/18     13:05                langford4
+  d-----        2007/6/11     22:13                lard
+  d-----        2015/4/18     13:05                latinSquare
+  d-----        2015/4/18     13:05                marc
+  d-----        2018/1/22      0:55                ModelB
+  d-----        2017/9/29     11:09                ModelRB
+  d-----        2018/3/15     16:18                part0
+  d-----        2018/3/15     16:18                part1
+  d-----        2018/3/15     16:18                part2
+  d-----        2018/3/15     16:18                part3
+  d-----        2018/1/29     13:45                part4
+  d-----        2018/4/13     15:48                pg_test
+  d-----        2018/1/25      0:14                pigeons
+  d-----        2018/4/13     15:55                pigeons_ext
+  d-----        2018/3/20     21:38                qa-6
+  d-----        2018/1/24     14:45                qa_ext
+  d-----        2018/4/22      0:02                qa_test
+  d-----        2018/1/26     19:50                QCP-10
+  d-----        2015/4/18     13:05                QCP-15
+  d-----        2018/1/26     19:50                QCP-20
+  d-----        2018/3/20     15:15                qk_com
+  d-----        2018/3/20     20:59                queen
+  d-----        2015/4/18     13:06                queenAttacking
+  d-----        2015/4/18     13:06                queensKnights
+  d-----        2018/4/22      5:07                queensKnights1_ext
+  d-----        2018/1/28     20:15                queensKnights2_ext
+  d-----        2018/1/28     19:32                queensKnights3_ext
+  d-----        2018/3/20     17:24                queensKnights_ext
+  d-----        2018/1/26     19:50                QWH-10
+  d-----        2018/1/26     19:50                QWH-15
+  d-----        2018/1/26     19:50                QWH-20
+  d-----        2015/4/18     13:06                rand-2-23
+  d-----        2015/4/18     13:06                rand-2-24
+  d-----        2015/8/31      8:57                rand-2-25
+  d-----        2015/4/18     13:06                rand-2-26
+  d-----        2015/5/29     17:05                rand-2-27
+  d-----        2018/1/27     14:43                rand-2-30-15
+  d-----        2018/1/27     14:43                rand-2-30-15-fcd
+  d-----        2018/1/26     19:03                rand-2-40-19
+  d-----        2018/1/26     19:04                rand-2-40-19-fcd
+  d-----        2018/1/26     19:06                rand-2-50-23
+  d-----        2018/4/22      0:36                rand-2-50-23-2
+  d-----        2018/1/26     19:07                rand-2-50-23-fcd
+  d-----        2018/4/22      0:37                rand-2-50-23-fcd-2
+  d-----        2018/3/20      9:34                real
+  d-----         2018/5/6     11:38                res
+  d-----        2018/4/22     17:28                res2
+  d-----        2018/3/13     16:28                res21
+  d-----        2018/4/20     15:50                res22
+  d-----       2017/11/29     15:20                Rlfap
+  d-----        2018/1/22     15:40                rlfapGraphsMod_ext
+  d-----        2018/1/22     15:40                rlfapGraphs_ext
+  d-----       2015/12/17     18:49                rlfapScens
+  d-----       2015/12/17     17:31                rlfapScens11
+  d-----        2018/1/22     15:40                rlfapScens11_ext
+  d-----        2018/1/25      0:22                rlfapScensMod_ext
+  d-----        2018/1/22     15:40                rlfapScens_ext
+  d-----        2018/1/29     12:56                soltest
+  d-----        2018/4/21      3:13                teest
+  d-----        2018/4/23     17:26                test
+  d-----        2018/1/26     15:54                test1
+  d-----        2018/1/26     14:22                test3
+  d-----        2018/1/28     17:59                test4
+  d-----        2018/1/27     13:18                tightness0.1
+  d-----        2018/1/27     13:19                tightness0.2
+  d-----        2018/1/27     13:34                tightness0.35
+  d-----        2018/1/27     13:32                tightness0.5
+  d-----        2018/1/27     13:36                tightness0.65
+  d-----        2018/1/27     13:38                tightness0.8
+  d-----        2018/1/27     13:37                tightness0.9
+  d-----        2018/1/29      1:45                xcsp
+  d-----        2018/4/23     17:26                新建文件夹
+  -a----        2016/3/12     18:42            442 2.txt
+  -a----        2018/1/31      6:09      140305533 benchmarks.zip
+  -a----         2018/4/2     19:23          32932 queen.zip
+  -a----        2018/1/24      6:27         143048 queenAttacking-8_ext.xml
+  -a----        2018/1/24      6:27         228761 queenAttacking-9_ext.xml
+  -a----        2018/3/20     14:54         291862 queensKnights.zip
+  -a----        2018/1/31      4:15       14061004 rand-2-XX-XX.zip
+  -a----        2018/4/21     22:42         407897 res.zip
+  -a----        2015/1/25     22:01            937 XMLFileNeg.xml
+  -a----        2018/3/16     11:22        1853074 详细数据.zip
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder></folder>
+  <folder>BH-4-4</folder>
+  <outputRoot>E:\result</outputRoot>
+  <outputFolder>EFC_exp</outputFolder>
+  <information>info.csv</information>
+</convert>

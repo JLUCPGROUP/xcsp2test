@@ -42,6 +42,9 @@
     <ClCompile Include="mac3bit_test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="exp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="BMPath.xml">
@@ -49,6 +52,9 @@
     </Xml>
     <Xml Include="queens-12_ext.xml">
       <Filter>资源文件</Filter>
+    </Xml>
+    <Xml Include="test.xml">
+      <Filter>源文件</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

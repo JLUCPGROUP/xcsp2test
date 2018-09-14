@@ -34,7 +34,9 @@ namespace cp {
 			VRH_LEX,
 			VRH_DOM_MIN,
 			VRH_VWDEG,
+			VRH_DEG_MIN,
 			VRH_DOM_DEG_MIN,
+			VRH_DOM_DDEG_MIN,
 			VRH_DOM_WDEG_MIN
 		};
 
@@ -60,8 +62,9 @@ namespace cp {
 		uint64_t nodes = 0;
 		uint64_t build_time = 0;
 		uint64_t solve_time = 0;
+		uint64_t total_time = 0;
 		bool time_out = false;
-		bool pass;
+		bool pass = false;
 		//int n_deep = 0;
 	};
 
@@ -89,7 +92,6 @@ namespace cp {
 		IntVal v_a_fail;
 		int level = 0;
 	};
-
 	struct SearchScheme {
 		Heuristic::Var vrh;
 		Heuristic::Var vlh;
@@ -365,6 +367,7 @@ namespace cp {
 		SAC1(Network* n, ACAlgorithm a);
 		virtual bool enforce(vector<IntVar*> x_evt, const int level);
 		virtual ~SAC1();
+		bool one_pass() const;
 		int del() const { return del_; }
 		AC* ac_;
 	protected:
@@ -486,7 +489,11 @@ namespace cp {
 		int sol_count() const { return sol_count_; }
 		void sol_count(const int val) { sol_count_ = val; }
 		bool solution_check() const;
+		void get_solution();
 		AssignedStack I;
+		vector<int> solution;
+		string sol_str;
+		bool one_pass_sac() const;
 	private:
 		int sol_count_ = 0;
 		Network *n_;

@@ -292,4 +292,57 @@ bool var_pri_que::empty() const {
 //	m_data_.push(v);
 //	vid_set_[v->id()] = 1;
 //}
+	/////////////////////////////
+
+bool vars_pair_cir_que::empty() const {
+	return m_front_ == m_rear_;
+}
+
+void vars_pair_cir_que::initial(const int size) {
+	max_size_ = size * size + 1;
+	m_data_.resize(max_size_);
+	id_set_.resize(size, vector<int>(size, false));
+	m_front_ = 0;
+	m_rear_ = 0;
+	size_ = 0;
+	num_vars_ = size;
+}
+
+bool vars_pair_cir_que::full() const {
+	return m_front_ == (m_rear_ + 1) % max_size_;
+}
+
+void vars_pair_cir_que::push(const variable_pair vv) {
+	if (id_set_[vv.x->id()][vv.y->id()])
+		return;
+	m_data_[m_rear_] = vv;
+	m_rear_ = (m_rear_ + 1) % max_size_;
+	id_set_[vv.x->id()][vv.y->id()] = true;
+	++size_;
+}
+
+variable_pair vars_pair_cir_que::pop() {
+	const variable_pair tmp = m_data_[m_front_];
+	m_front_ = (m_front_ + 1) % max_size_;
+	id_set_[tmp.x->id()][tmp.y->id()] = false;
+	--size_;
+	return tmp;
+}
+
+void vars_pair_cir_que::clear() {
+	m_front_ = 0;
+	m_rear_ = 0;
+	size_ = 0;
+	for (auto& v : id_set_) {
+		v.assign(num_vars_, false);
+	}
+}
+
+int vars_pair_cir_que::max_size() const {
+	return max_size_;
+}
+
+int vars_pair_cir_que::size() const {
+	return size_;
+}///////////////////////////////
 }

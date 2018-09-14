@@ -77,7 +77,7 @@ namespace cp {
 						//cout << "delete: (" << i->id << "," << a << ")" << endl;
 						if (i->faild(p)) {
 							//cout << "faild: " << i->id << endl;
-							++nei_[i->id()][j->id()]->weight;
+							++c->weight;
 							cs.state = false;
 							return cs;
 						}

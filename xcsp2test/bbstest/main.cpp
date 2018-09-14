@@ -25,7 +25,7 @@
 //	builder.GenerateHModel(hm);
 //	//GModel* gm = new GModel();
 //	//BuildGModel(hm, gm);
-//	Network *n = new Network(hm);
+//	//Network *n = new Network(hm);
 //	//GModel* dgm = static_cast<GModel*>(gm->clone());
 //	//Search::TimeStop ts(2000);
 //	//Search::Options options;
@@ -58,27 +58,52 @@
 //	//const bool result = (ss != SS_FAILED);
 //	//const int64_t sac_time = t.elapsed();
 //	//SAC3 sac(n, AC_3bit, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN);
-//	SAC1 sac(n, AC_3bit);
-//	Timer t0;
-//	auto result = sac.enforce(n->vars, 0);
-//	auto sac_time = t0.elapsed();
-//	Timer t1;
-//	if (!result) {
-//		cout << "UNSAC || SAC time = " << sac_time << endl;
-//		cout << "--------------------end---------------------" << endl;
-//		delete hm;
-//		return 0;
-//	}
-//	vector<int> a;
+//	//SAC1 sac(n, AC_3bit);
+//	//Timer t0;
+//	//auto result = sac.enforce(n->vars, 0);
+//	//auto sac_time = t0.elapsed();
+//	//Timer t1;
+//	//if (!result) {
+//	//	cout << "UNSAC || SAC time = " << sac_time << endl;
+//	//	cout << "--------------------end---------------------" << endl;
+//	//	delete hm;
+//	//	return 0;
+//	//}
+//	//vector<int> sol;
+//	//cout << "------------------modeling------------------" << endl;
+//	////const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//	////const SearchStatistics statistics = StartSearch(n, hm, Heuristic::DS_NB, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, sol, sac_time);
+//	//const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, sol, 0);
+//	////const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//	//const string  slv_str = (statistics.num_sol > 0) ? "SAT!!" : "UNSAT";
+//	//delete hm;
+//	////delete gm;
+//	//cout << "SAC time = " << sac_time << "|| Build time = " << statistics.build_time << endl;
+//	//cout << "------------------solving-------------------" << endl;
+//	//cout << slv_str << "|| Solve time = " << statistics.solve_time << "|| nodes = " << statistics.nodes << endl;
+//	//cout << "------------------sleeping------------------" << endl;
+//
+//	//SAC1 sac(n, AC_3bit);
+//	//Timer t0;
+//	//auto result = sac.enforce(n->vars, 0);
+//	//auto sac_time = t0.elapsed();
+//	//Timer t1;
+//	//if (!result) {
+//	//	cout << "UNSAC || SAC time = " << sac_time << endl;
+//	//	cout << "--------------------end---------------------" << endl;
+//	//	delete hm;
+//	//	return 0;
+//	//}
+//	vector<int> sol;
 //	cout << "------------------modeling------------------" << endl;
 //	//const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
-//	const SearchStatistics statistics = StartSearch(n, hm, Heuristic::DS_NB, Heuristic::VRH_DOM_MIN, Heuristic::VLH_MIN, TimeLimit, false, a, sac_time);
-//	//const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_DEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
+//	//const SearchStatistics statistics = StartSearch(n, hm, Heuristic::DS_NB, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, sol, sac_time);
+//	const SearchStatistics statistics = StartSearch(hm, Heuristic::DS_NB, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, true, sol, 0);
 //	//const SearchStatistics statistics = StartSearch(gm, Heuristic::VRH_DOM_WDEG_MIN, Heuristic::VLH_MIN, TimeLimit, false, sac_time);
 //	const string  slv_str = (statistics.num_sol > 0) ? "SAT!!" : "UNSAT";
 //	delete hm;
 //	//delete gm;
-//	cout << "SAC time = " << sac_time << "|| Build time = " << statistics.build_time << endl;
+//	cout <<  "Build time = " << statistics.build_time << endl;
 //	cout << "------------------solving-------------------" << endl;
 //	cout << slv_str << "|| Solve time = " << statistics.solve_time << "|| nodes = " << statistics.nodes << endl;
 //	cout << "------------------sleeping------------------" << endl;

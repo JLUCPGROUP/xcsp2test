@@ -184,10 +184,10 @@ namespace cp {
 			for (int i = 0; i < vs_size; ++i) {
 				for (int j = 0; j < vs_size; ++j) {
 					deg[i] += nei[i][j].size();
-					if (!nei[i][j].empty()) {
+					//if (!nei[i][j].empty()) {
 						wdeg[i][j] = 1;
 						wdeg[j][i] = 1;
-					}
+					//}
 				}
 			}
 

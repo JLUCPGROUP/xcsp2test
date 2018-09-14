@@ -231,6 +231,35 @@ private:
 	int size_;
 };
 
+struct variable_pair {
+	IntVar* x;
+	IntVar* y;
+};
+
+class vars_pair_cir_que {
+public:
+	vars_pair_cir_que() {};
+	virtual ~vars_pair_cir_que() {};
+
+	bool empty() const;
+	void initial(const int size);
+	bool full() const;
+	void push(variable_pair vv);
+	variable_pair pop();
+	void clear();
+	int max_size() const;
+	int size() const;
+
+private:
+	vector<variable_pair> m_data_;
+	vector<vector<int>> id_set_;
+	size_t max_size_;
+	int m_front_;
+	int m_rear_;
+	int size_;
+	int num_vars_;
+};
+
 //class var_priority_queue {
 //public:
 //	int& have(const IntVar* v) { return vid_set_[v->id()]; };
@@ -468,6 +497,29 @@ protected:
 	vector<int> last_pc;
 	vector<int> last_ac;
 	vector<vector<bitset<BITSIZE>>> bitSup_;
+};
+
+class RPC3 : public AC {
+public:
+	RPC3(Network *m);
+	~RPC3() {};
+
+	ConsistencyState enforce(vector<IntVar*>& x_evt, const int p) override;
+	bool is_consistent(const IntVar& x, const int a, const IntVar& y, const int b);
+	bool is_consistent(const IntVar& c, const IntVar& x, const int a, const IntVar& y, const int b);
+	int find_two_support(const IntVar& i, const int a, const IntVar& y, const int r, const int p);
+protected:
+	//u64 * * bitSup_;
+	//vars_heap q_nei_;
+	//vector<vector<QTab*>> N;
+	//vector<int> var_mark_;
+	vector<vector<vector<Tabular*>>> nei_;
+	vector<vector<IntVar*>> neighborhood;
+	vars_pair_cir_que con_que_;
+	vector<vector<vector<int>>> r_1_, r_2_;
+	//vector<vector<vector<int>>> rel_;
+	vector<vector<vector<vector<int>>>> rel_;
+	vector<vector<vector<IntVar*>>> common_neibor_;
 };
 
 class MAC {

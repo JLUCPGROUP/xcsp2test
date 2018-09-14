@@ -57,6 +57,9 @@
     <ClCompile Include="AC3rm.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="RPC3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Network.h">

@@ -25,6 +25,29 @@ void getFilesAll(const string path, vector<string>& files) {
 	}
 }
 
+void getFoldersAll(const string path, vector<string>& files) {
+	//文件句柄 
+	intptr_t  h_file = 0;
+	//文件信息 
+	struct _finddata_t fileinfo;
+	string p;
+	if ((h_file = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1) {
+		do {
+			//files.push_back(p.assign(path).append("\\").append(fileinfo.name));
+			if ((fileinfo.attrib & _A_SUBDIR)) {
+				//if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0) {
+				//	//files.push_back(p.assign(path).append("\\").append(fileinfo.name) );
+				//	getFilesAll(p.assign(path).append("\\").append(fileinfo.name), files);
+				//}
+				files.push_back(fileinfo.name);
+			}
+			else {
+			}
+		} while (_findnext(h_file, &fileinfo) == 0);
+		_findclose(h_file);
+	}
+}
+
 bool getScheme(char ** argv, cp::SearchScheme& ss) {
 	ss.ds_str = argv[2];
 	ss.vrh_str = argv[3];
